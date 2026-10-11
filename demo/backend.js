@@ -1,24 +1,24 @@
-import{PGlite as Pe}from"@electric-sql/pglite";import{pgcrypto as Ie}from"@electric-sql/pglite/contrib/pgcrypto";async function re(r,l){for(let u of l)try{await r.exec(u.sql)}catch(h){throw new Error(`\xC9chec de ${u.name} : ${h.message}`)}}function ie(r){for(let l of["query","exec"]){let u=r[l].bind(r);r[l]=(...h)=>r.__gcInTransaction?Promise.reject(new Error(`db.${l}() appel\xE9 pendant une transaction asUser : utiliser \`tx\`, ou sortir l'appel de la transaction.`)):u(...h)}return r}async function E(r,l,u){r.__gcInTransaction=!0;try{return await r.transaction(async h=>(await h.query("select set_config('request.jwt.claim.sub', $1, true)",[l]),await h.query("select set_config('request.jwt.claim.role', 'authenticated', true)"),await h.exec("set local role authenticated"),u(h)))}finally{r.__gcInTransaction=!1}}var K=[{name:"Grossiste Dakar (d\xE9mo)",contact:"M. Ndiaye",phone:"+221 70 000 00 01",lead:3,categories:["Produits secs","Condiments"]},{name:"Mara\xEEchers des Niayes (d\xE9mo)",contact:"Mme Sarr",phone:"+221 70 000 00 02",lead:1,categories:["Fruits et l\xE9gumes"]},{name:"Boucherie Centrale (d\xE9mo)",contact:"M. Diop",phone:"+221 70 000 00 03",lead:2,categories:["Froid - viandes et poissons"]},{name:"Hygi\xE8ne Services Plus (d\xE9mo)",contact:"Mme Fall",phone:"+221 70 000 00 04",lead:5,categories:["Produits d'entretien"]},{name:"Emballages du Cap-Vert (d\xE9mo)",contact:"M. Ba",phone:"+221 70 000 00 05",lead:4,categories:["Consommables"]},{name:"Import Alimentaire Ouest (d\xE9mo)",contact:"M. Kane",phone:"+221 70 000 00 06",lead:7,categories:[]}],we={"Produits secs":900,Condiments:1500,"Fruits et l\xE9gumes":700,"Froid - viandes et poissons":4200,"Produits d'entretien":1800,Consommables:350},ae=["fastfood@demo.local","patisserie@demo.local","petitdej@demo.local","cuisine@demo.local"],ze=["Casse \xE0 la manutention","Produit p\xE9rim\xE9","\xC9cart d'inventaire","Ab\xEEm\xE9 \xE0 la livraison"];function $e(r){let l=r>>>0;return()=>{l=l+1831565813>>>0;let u=l;return u=Math.imul(u^u>>>15,u|1),u^=u+Math.imul(u^u>>>7,u|61),((u^u>>>14)>>>0)/4294967296}}async function oe(r,{org:l,site:u,users:h,departments:R}){let g=$e(20261011),v=e=>e[Math.floor(g()*e.length)],y=(e,n)=>E(r,h[e].id,n),f=async(e,n,i)=>(await e.query(n,i)).rows[0],x=async(e,n,i)=>y(e,async o=>(await o.query(n,i)).rows[0]),w="admin@demo.local",z="direction@demo.local",$="magasin@demo.local",s="achats@demo.local",m=0,_=e=>`demo-${e}-${++m}`,a=async()=>(await r.query("select clock_timestamp() as t")).rows[0].t,d=async(e,n,i=[])=>{await r.query("set session_replication_role = replica");try{for(let[o,c]of[["stock_movements","created_at"],["stock_reservations","created_at"],["receipts","received_at"],["supply_requests","created_at"]])await r.query(`update public.${o} set ${c} = $2 where organization_id = $3 and ${c} >= $1`,[e,n,l]);for(let[o,c]of i)await r.query(o,c)}finally{await r.query("set session_replication_role = origin")}},t=(e,n=9,i=0)=>{let o=new Date;return o.setDate(o.getDate()-e),o.setHours(n,i,0,0),o},b=e=>e.toISOString().slice(0,10),p=(await r.query(`select p.id, p.reference, p.name, p.stock_unit_id, c.name as category, coalesce(p.min_stock, 0) as min_stock
+import{PGlite as Re}from"@electric-sql/pglite";import{pgcrypto as Le}from"@electric-sql/pglite/contrib/pgcrypto";async function re(r,c){for(let l of c)try{await r.exec(l.sql)}catch(h){throw new Error(`\xC9chec de ${l.name} : ${h.message}`)}}function ie(r){for(let c of["query","exec"]){let l=r[c].bind(r);r[c]=(...h)=>r.__gcInTransaction?Promise.reject(new Error(`db.${c}() appel\xE9 pendant une transaction asUser : utiliser \`tx\`, ou sortir l'appel de la transaction.`)):l(...h)}return r}async function E(r,c,l){r.__gcInTransaction=!0;try{return await r.transaction(async h=>(await h.query("select set_config('request.jwt.claim.sub', $1, true)",[c]),await h.query("select set_config('request.jwt.claim.role', 'authenticated', true)"),await h.exec("set local role authenticated"),l(h)))}finally{r.__gcInTransaction=!1}}var K=[{name:"Grossiste Dakar (d\xE9mo)",contact:"M. Ndiaye",phone:"+221 70 000 00 01",lead:3,categories:["Produits secs","Condiments"]},{name:"Mara\xEEchers des Niayes (d\xE9mo)",contact:"Mme Sarr",phone:"+221 70 000 00 02",lead:1,categories:["Fruits et l\xE9gumes"]},{name:"Boucherie Centrale (d\xE9mo)",contact:"M. Diop",phone:"+221 70 000 00 03",lead:2,categories:["Froid - viandes et poissons"]},{name:"Hygi\xE8ne Services Plus (d\xE9mo)",contact:"Mme Fall",phone:"+221 70 000 00 04",lead:5,categories:["Produits d'entretien"]},{name:"Emballages du Cap-Vert (d\xE9mo)",contact:"M. Ba",phone:"+221 70 000 00 05",lead:4,categories:["Consommables"]},{name:"Import Alimentaire Ouest (d\xE9mo)",contact:"M. Kane",phone:"+221 70 000 00 06",lead:7,categories:[]}],we={"Produits secs":900,Condiments:1500,"Fruits et l\xE9gumes":700,"Froid - viandes et poissons":4200,"Produits d'entretien":1800,Consommables:350},ae=["fastfood@demo.local","patisserie@demo.local","petitdej@demo.local","cuisine@demo.local"],ze=["Casse \xE0 la manutention","Produit p\xE9rim\xE9","\xC9cart d'inventaire","Ab\xEEm\xE9 \xE0 la livraison"];function $e(r){let c=r>>>0;return()=>{c=c+1831565813>>>0;let l=c;return l=Math.imul(l^l>>>15,l|1),l^=l+Math.imul(l^l>>>7,l|61),((l^l>>>14)>>>0)/4294967296}}async function oe(r,{org:c,site:l,users:h,departments:C}){let g=$e(20261011),v=e=>e[Math.floor(g()*e.length)],y=(e,n)=>E(r,h[e].id,n),f=async(e,n,i)=>(await e.query(n,i)).rows[0],x=async(e,n,i)=>y(e,async o=>(await o.query(n,i)).rows[0]),w="admin@demo.local",z="direction@demo.local",$="magasin@demo.local",s="achats@demo.local",m=0,_=e=>`demo-${e}-${++m}`,a=async()=>(await r.query("select clock_timestamp() as t")).rows[0].t,d=async(e,n,i=[])=>{await r.query("set session_replication_role = replica");try{for(let[o,u]of[["stock_movements","created_at"],["stock_reservations","created_at"],["receipts","received_at"],["supply_requests","created_at"]])await r.query(`update public.${o} set ${u} = $2 where organization_id = $3 and ${u} >= $1`,[e,n,c]);for(let[o,u]of i)await r.query(o,u)}finally{await r.query("set session_replication_role = origin")}},t=(e,n=9,i=0)=>{let o=new Date;return o.setDate(o.getDate()-e),o.setHours(n,i,0,0),o},b=e=>e.toISOString().slice(0,10),p=(await r.query(`select p.id, p.reference, p.name, p.stock_unit_id, c.name as category, coalesce(p.min_stock, 0) as min_stock
        from public.products p left join public.product_categories c on c.id = p.category_id
-      where p.organization_id = $1 order by p.reference`,[l])).rows,S=async()=>new Map((await r.query("select product_id, on_hand - reserved as available from public.stock_levels where site_id = $1",[u])).rows.map(e=>[e.product_id,Number(e.available)])),C={},P=new Map,L=new Map;await y(w,async e=>{for(let n of K){let i=await f(e,"select id from public.suppliers where organization_id = $1 and name = $2",[l,n.name]);C[n.name]=i?(await f(e,"update public.suppliers set contact_name = $2, phone = $3 where id = $1 returning id",[i.id,n.contact,n.phone])).id:(await f(e,`insert into public.suppliers (organization_id, name, contact_name, phone)
-                          values ($1, $2, $3, $4) returning id`,[l,n.name,n.contact,n.phone])).id}for(let n of p){let i=K.find(k=>k.categories.includes(n.category))??K[0],o=we[n.category]??1e3,c=Math.round(o*(.5+g()*1.5)/25)*25;P.set(n.id,c),L.set(n.id,i.name),await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
+      where p.organization_id = $1 order by p.reference`,[c])).rows,S=async()=>new Map((await r.query("select product_id, on_hand - reserved as available from public.stock_levels where site_id = $1",[l])).rows.map(e=>[e.product_id,Number(e.available)])),P={},R=new Map,j=new Map;await y(w,async e=>{for(let n of K){let i=await f(e,"select id from public.suppliers where organization_id = $1 and name = $2",[c,n.name]);P[n.name]=i?(await f(e,"update public.suppliers set contact_name = $2, phone = $3 where id = $1 returning id",[i.id,n.contact,n.phone])).id:(await f(e,`insert into public.suppliers (organization_id, name, contact_name, phone)
+                          values ($1, $2, $3, $4) returning id`,[c,n.name,n.contact,n.phone])).id}for(let n of p){let i=K.find(q=>q.categories.includes(n.category))??K[0],o=we[n.category]??1e3,u=Math.round(o*(.5+g()*1.5)/25)*25;R.set(n.id,u),j.set(n.id,i.name),await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
                                                lead_time_days, is_preferred, price_updated_at)
-         values ($1, $2, $3, $4, $5, $6, true, now())`,[l,C[i.name],n.id,n.stock_unit_id,c,i.lead]),g()<.25&&await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
+         values ($1, $2, $3, $4, $5, $6, true, now())`,[c,P[i.name],n.id,n.stock_unit_id,u,i.lead]),g()<.25&&await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
                                                  lead_time_days, is_preferred, price_updated_at)
-           values ($1, $2, $3, $4, $5, 7, false, now())`,[l,C["Import Alimentaire Ouest (d\xE9mo)"],n.id,n.stock_unit_id,Math.round(c*1.12/25)*25])}});let F=async(e,n,{urgency:i="normal",slot:o=null,comment:c=null}={})=>y(e,async k=>{let A=R[h[e].department],J=await f(k,`insert into public.requests (department_id, site_id, urgency, needed_slot, comment)
-         values ($1, $2, $3, $4, $5) returning id, reference`,[A,u,i,o,c]);for(let te of n)await k.query("insert into public.request_lines (request_id, product_id, quantity) values ($1, $2, $3)",[J.id,te.product.id,te.quantity]);return await k.query("select public.submit_request($1)",[J.id]),J}),Q=e=>x(z,"select public.approve_request($1, true)",[e]),ve=(e,n)=>x(z,"select public.approve_request($1, false, $2)",[e,n]),W=(e,n=1)=>y($,async i=>{let o=(await i.query("select line_id, reserved from public.v_request_lines where request_id = $1",[e])).rows.filter(c=>Number(c.reserved)>0).map(c=>({line_id:c.line_id,quantity:n===1?Number(c.reserved):Math.max(1,Math.floor(Number(c.reserved)*n))}));return o.length?(await i.query("select public.serve_request($1, $2, $3) as s",[e,JSON.stringify(o),_("serve")])).rows[0].s:null}),Z=(e,n,{approved:i,served:o,neededOn:c,slot:k}={})=>[`update public.requests set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
+           values ($1, $2, $3, $4, $5, 7, false, now())`,[c,P["Import Alimentaire Ouest (d\xE9mo)"],n.id,n.stock_unit_id,Math.round(u*1.12/25)*25])}});let G=async(e,n,{urgency:i="normal",slot:o=null,comment:u=null}={})=>y(e,async q=>{let A=C[h[e].department],J=await f(q,`insert into public.requests (department_id, site_id, urgency, needed_slot, comment)
+         values ($1, $2, $3, $4, $5) returning id, reference`,[A,l,i,o,u]);for(let te of n)await q.query("insert into public.request_lines (request_id, product_id, quantity) values ($1, $2, $3)",[J.id,te.product.id,te.quantity]);return await q.query("select public.submit_request($1)",[J.id]),J}),Q=e=>x(z,"select public.approve_request($1, true)",[e]),ve=(e,n)=>x(z,"select public.approve_request($1, false, $2)",[e,n]),W=(e,n=1)=>y($,async i=>{let o=(await i.query("select line_id, reserved from public.v_request_lines where request_id = $1",[e])).rows.filter(u=>Number(u.reserved)>0).map(u=>({line_id:u.line_id,quantity:n===1?Number(u.reserved):Math.max(1,Math.floor(Number(u.reserved)*n))}));return o.length?(await i.query("select public.serve_request($1, $2, $3) as s",[e,JSON.stringify(o),_("serve")])).rows[0].s:null}),Z=(e,n,{approved:i,served:o,neededOn:u,slot:q}={})=>[`update public.requests set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
             updated_at = coalesce($4::timestamptz, $3::timestamptz, $2::timestamptz),
             approved_at = case when approved_at is null then null else $3::timestamptz end,
             served_at = case when served_at is null then null else $4::timestamptz end,
             needed_on = $5::date
-      where id = $1`,[e,n,i??n,o??null,c??b(n)]],N=async(e,n,{notes:i=null}={})=>y(s,async o=>{let c=await f(o,`insert into public.purchase_orders (supplier_id, site_id, notes)
-                              values ($1, $2, $3) returning id, reference`,[C[e],u,i]);for(let k of n)await o.query(`insert into public.purchase_order_lines (purchase_order_id, product_id, quantity, unit_price)
-                      values ($1, $2, $3, $4)`,[c.id,k.product.id,k.quantity,P.get(k.product.id)]);return c}),U=e=>x(s,"select public.submit_purchase_order($1)",[e]),M=e=>x(z,"select public.approve_purchase_order($1, true)",[e]),V=(e,n)=>x(s,"select public.mark_purchase_order_ordered($1, $2)",[e,n]),ee=(e,n=1,i=null)=>y($,async o=>{let c=(await o.query("select id, quantity_stock - received_quantity as rest from public.purchase_order_lines where purchase_order_id = $1",[e])).rows.map(k=>({line_id:k.id,quantity:n===1?Number(k.rest):Math.max(1,Math.floor(Number(k.rest)*n))}));return(await o.query("select public.receive_purchase_order($1, $2, $3, $4)",[e,JSON.stringify(c),_("receipt"),i])).rows[0]}),O=(e,n,{approved:i,ordered:o,expected:c})=>[`update public.purchase_orders set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
+      where id = $1`,[e,n,i??n,o??null,u??b(n)]],N=async(e,n,{notes:i=null}={})=>y(s,async o=>{let u=await f(o,`insert into public.purchase_orders (supplier_id, site_id, notes)
+                              values ($1, $2, $3) returning id, reference`,[P[e],l,i]);for(let q of n)await o.query(`insert into public.purchase_order_lines (purchase_order_id, product_id, quantity, unit_price)
+                      values ($1, $2, $3, $4)`,[u.id,q.product.id,q.quantity,R.get(q.product.id)]);return u}),U=e=>x(s,"select public.submit_purchase_order($1)",[e]),M=e=>x(z,"select public.approve_purchase_order($1, true)",[e]),V=(e,n)=>x(s,"select public.mark_purchase_order_ordered($1, $2)",[e,n]),ee=(e,n=1,i=null)=>y($,async o=>{let u=(await o.query("select id, quantity_stock - received_quantity as rest from public.purchase_order_lines where purchase_order_id = $1",[e])).rows.map(q=>({line_id:q.id,quantity:n===1?Number(q.rest):Math.max(1,Math.floor(Number(q.rest)*n))}));return(await o.query("select public.receive_purchase_order($1, $2, $3, $4)",[e,JSON.stringify(u),_("receipt"),i])).rows[0]}),O=(e,n,{approved:i,ordered:o,expected:u})=>[`update public.purchase_orders set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
             updated_at = coalesce($4::timestamptz, $3::timestamptz, $2::timestamptz),
             approved_at = case when approved_at is null then null else $3::timestamptz end,
             ordered_at = case when ordered_at is null then null else $4::timestamptz end,
             expected_date = coalesce($5::date, expected_date)
-      where id = $1`,[e,n,i??n,o??null,c??null]],he=async e=>{let n=await S();return p.filter(i=>(n.get(i.id)??0)>=e)},B=async(e,n)=>{let i=await he(n),o=new Map;for(;o.size<Math.min(e,i.length);){let c=v(i);o.set(c.id,{product:c,quantity:1+Math.floor(g()*n)})}return[...o.values()]},be=e=>{let n=new Map;for(let i of e){let o=L.get(i.product.id);n.set(o,[...n.get(o)??[],i])}return n};await d(new Date(0),t(15,7));let j={requests:0,orders:0,losses:0};for(let e=14;e>=1;e--){if(e%3===2){let n=p.filter(o=>o.category!=="Consommables"),i=[];for(let o=0;o<4+Math.floor(g()*4);o++){let c=v(n);i.some(k=>k.product.id===c.id)||i.push({product:c,quantity:10+Math.floor(g()*30)})}for(let[o,c]of be(i)){let k=await a(),A=await N(o,c);await U(A.id),await M(A.id),await V(A.id,b(t(e))),await ee(A.id,1,`BL-${1e3+e*7+j.orders}`),await d(k,t(e,8,30),[O(A.id,t(e+2,10),{approved:t(e+2,15),ordered:t(e+1,9),expected:b(t(e))})]),j.orders++}}for(let n of ae){if(g()<.3)continue;let i=await B(2+Math.floor(g()*3),4);if(!i.length)continue;let o=await a(),c=v(["morning","noon","evening"]),k=await F(n,i,{slot:c,urgency:g()<.1?"urgent":"normal"});await Q(k.id),await W(k.id),await d(o,t(e,10,15),[Z(k.id,t(e+1,16),{approved:t(e,8),served:t(e,10,15),neededOn:b(t(e)),slot:c})]),j.requests++}if(e===9||e===4){let n=await B(2,3),i=await a(),o=await F(v(ae),n);await ve(o.id,e===9?"Doublon avec la demande de la veille":"Quantit\xE9 trop \xE9lev\xE9e pour un samedi"),await d(i,t(e,9),[Z(o.id,t(e+1,17),{approved:t(e,9),neededOn:b(t(e))})])}if(e%4===0){let[n]=await B(1,2);if(n){let i=await a();await x($,"select public.record_stock_movement($1, $2, 'adjustment_out', $3, null, $4, $5)",[u,n.product.id,n.quantity,v(ze),_("loss")]),await d(i,t(e,18)),j.losses++}}}let ye=p.filter(e=>e.category==="Fruits et l\xE9gumes"),qe=p.filter(e=>e.category==="Froid - viandes et poissons"),H=p.filter(e=>e.category==="Produits secs"),ke=p.filter(e=>e.category==="Produits d'entretien"),G=(e,n,i)=>e.slice(0,n).map((o,c)=>({product:o,quantity:i+c*5})),I=await a(),q=await N("Grossiste Dakar (d\xE9mo)",G(H.slice(10),4,20));await U(q.id),await M(q.id),await V(q.id,b(t(2))),await ee(q.id,.5,"BL-2291"),await d(I,t(1,11),[O(q.id,t(5,10),{approved:t(5,14),ordered:t(4,9),expected:b(t(2))})]),I=await a(),q=await N("Boucherie Centrale (d\xE9mo)",G(qe,3,15)),await U(q.id),await M(q.id),await V(q.id,b(t(1))),await d(I,t(3,9),[O(q.id,t(3,9),{approved:t(3,11),ordered:t(3,12),expected:b(t(1))})]),I=await a(),q=await N("Mara\xEEchers des Niayes (d\xE9mo)",G(ye.slice(3),5,10)),await U(q.id),await M(q.id),await V(q.id,b(t(-2))),await d(I,t(1,9),[O(q.id,t(1,9),{approved:t(1,10),ordered:t(1,11),expected:b(t(-2))})]),I=await a(),q=await N("Hygi\xE8ne Services Plus (d\xE9mo)",G(ke,3,6),{notes:"Livrer avant la prestation de vendredi"}),await U(q.id),await M(q.id),await d(I,t(0,8),[O(q.id,t(1,15),{approved:t(0,8)})]),I=await a(),q=await N("Emballages du Cap-Vert (d\xE9mo)",G(p.filter(e=>e.category==="Consommables"),4,50)),await U(q.id),await d(I,t(0,8,30),[O(q.id,t(0,8,30),{})]),j.orders+=5;let xe=[["fastfood@demo.local","submitted",{urgency:"urgent",slot:"noon",comment:"Rush du midi : 200 couverts"}],["patisserie@demo.local","submitted",{slot:"morning"}],["petitdej@demo.local","submitted",{slot:"morning"}],["cuisine@demo.local","approved",{slot:"noon"}],["fastfood@demo.local","approved",{slot:"evening"}],["patisserie@demo.local","partial",{slot:"noon"}]];for(let[e,n,i]of xe){let o=await B(2+Math.floor(g()*3),5),c=await F(e,o,i);n!=="submitted"&&await Q(c.id),n==="partial"&&await W(c.id,.5),j.requests++}{let e=await S(),n=H.find(o=>(e.get(o.id)??0)>0&&(e.get(o.id)??0)<30)??H[0],i=await F("cuisine@demo.local",[{product:n,quantity:Math.ceil((e.get(n.id)??0)+15)}],{slot:"noon",comment:"Prestation sp\xE9ciale : mariage de samedi"});await Q(i.id)}let ne=(await y($,e=>e.query("select product_id, to_order from public.v_supply_needs where site_id = $1 and to_order > 0 order by product_name",[u]))).rows.slice(0,5);ne.length&&await x($,"select public.transmit_supply_needs($1, $2, $3)",[u,JSON.stringify(ne.map(e=>({product_id:e.product_id,quantity:Number(e.to_order)}))),"Point stock du matin"]);let Y=(await y(s,e=>e.query("select line_id, product_id from public.v_open_supply_needs order by product_name"))).rows;if(Y.length>=2){let e=Y[0],n=Y.filter(i=>L.get(i.product_id)===L.get(e.product_id)).slice(0,2);await x(s,"select public.create_purchase_order_from_needs($1, $2)",[n.map(i=>i.line_id),C[L.get(e.product_id)]]),j.orders++}return j}var Ee={"Riz parfume pithibi":18e3,"Oignon locale":11e3,"Pomme de terre":11e3,"Viande locale":4800,"Pate d'arachide":1200,Carotte:1200,Patate:500,"Poivron vert":1800,Yet:4e3,"Netetou en poudre":2e3,Soja:1300,"Piment gouana sofia":5e3,"Poulet blanc":3e3,"Citron vert":1500,Laurier:3e3,Moutarde:9e3,Spaguetty:1e3,"Viande hachee":5e3,"Tomate fraiche":800,"Herbe de province":6e3,"Epice paprika":5e3},Se=["Riz parfume pithibi","Oignon locale","Pomme de terre"],se=[{name:"Maff\xE9 Yapp",category:"Plat chaud",portions:1,sale:2500,target:35,validate:!1,notes:"Relev\xE9 de la fiche SESA du 19/09 (vid\xE9o du 11/10). \xC0 compl\xE9ter : huile, Maggi, poivre moulu et sel fin sont absents du catalogue ; tomate concentr\xE9e, ail, oignon vert, amora et vinaigre attendent le contenu de leur conditionnement. Food cost \xE0 surveiller : la viande seule p\xE8se plus de 80 % du budget mati\xE8re.",steps:`1. Couper la viande en morceaux, assaisonner (ail, poivre, Maggi).
+      where id = $1`,[e,n,i??n,o??null,u??null]],he=async e=>{let n=await S();return p.filter(i=>(n.get(i.id)??0)>=e)},B=async(e,n)=>{let i=await he(n),o=new Map;for(;o.size<Math.min(e,i.length);){let u=v(i);o.set(u.id,{product:u,quantity:1+Math.floor(g()*n)})}return[...o.values()]},be=e=>{let n=new Map;for(let i of e){let o=j.get(i.product.id);n.set(o,[...n.get(o)??[],i])}return n};await d(new Date(0),t(15,7));let I={requests:0,orders:0,losses:0};for(let e=14;e>=1;e--){if(e%3===2){let n=p.filter(o=>o.category!=="Consommables"),i=[];for(let o=0;o<4+Math.floor(g()*4);o++){let u=v(n);i.some(q=>q.product.id===u.id)||i.push({product:u,quantity:10+Math.floor(g()*30)})}for(let[o,u]of be(i)){let q=await a(),A=await N(o,u);await U(A.id),await M(A.id),await V(A.id,b(t(e))),await ee(A.id,1,`BL-${1e3+e*7+I.orders}`),await d(q,t(e,8,30),[O(A.id,t(e+2,10),{approved:t(e+2,15),ordered:t(e+1,9),expected:b(t(e))})]),I.orders++}}for(let n of ae){if(g()<.3)continue;let i=await B(2+Math.floor(g()*3),4);if(!i.length)continue;let o=await a(),u=v(["morning","noon","evening"]),q=await G(n,i,{slot:u,urgency:g()<.1?"urgent":"normal"});await Q(q.id),await W(q.id),await d(o,t(e,10,15),[Z(q.id,t(e+1,16),{approved:t(e,8),served:t(e,10,15),neededOn:b(t(e)),slot:u})]),I.requests++}if(e===9||e===4){let n=await B(2,3),i=await a(),o=await G(v(ae),n);await ve(o.id,e===9?"Doublon avec la demande de la veille":"Quantit\xE9 trop \xE9lev\xE9e pour un samedi"),await d(i,t(e,9),[Z(o.id,t(e+1,17),{approved:t(e,9),neededOn:b(t(e))})])}if(e%4===0){let[n]=await B(1,2);if(n){let i=await a();await x($,"select public.record_stock_movement($1, $2, 'adjustment_out', $3, null, $4, $5)",[l,n.product.id,n.quantity,v(ze),_("loss")]),await d(i,t(e,18)),I.losses++}}}let ye=p.filter(e=>e.category==="Fruits et l\xE9gumes"),ke=p.filter(e=>e.category==="Froid - viandes et poissons"),H=p.filter(e=>e.category==="Produits secs"),qe=p.filter(e=>e.category==="Produits d'entretien"),F=(e,n,i)=>e.slice(0,n).map((o,u)=>({product:o,quantity:i+u*5})),L=await a(),k=await N("Grossiste Dakar (d\xE9mo)",F(H.slice(10),4,20));await U(k.id),await M(k.id),await V(k.id,b(t(2))),await ee(k.id,.5,"BL-2291"),await d(L,t(1,11),[O(k.id,t(5,10),{approved:t(5,14),ordered:t(4,9),expected:b(t(2))})]),L=await a(),k=await N("Boucherie Centrale (d\xE9mo)",F(ke,3,15)),await U(k.id),await M(k.id),await V(k.id,b(t(1))),await d(L,t(3,9),[O(k.id,t(3,9),{approved:t(3,11),ordered:t(3,12),expected:b(t(1))})]),L=await a(),k=await N("Mara\xEEchers des Niayes (d\xE9mo)",F(ye.slice(3),5,10)),await U(k.id),await M(k.id),await V(k.id,b(t(-2))),await d(L,t(1,9),[O(k.id,t(1,9),{approved:t(1,10),ordered:t(1,11),expected:b(t(-2))})]),L=await a(),k=await N("Hygi\xE8ne Services Plus (d\xE9mo)",F(qe,3,6),{notes:"Livrer avant la prestation de vendredi"}),await U(k.id),await M(k.id),await d(L,t(0,8),[O(k.id,t(1,15),{approved:t(0,8)})]),L=await a(),k=await N("Emballages du Cap-Vert (d\xE9mo)",F(p.filter(e=>e.category==="Consommables"),4,50)),await U(k.id),await d(L,t(0,8,30),[O(k.id,t(0,8,30),{})]),I.orders+=5;let xe=[["fastfood@demo.local","submitted",{urgency:"urgent",slot:"noon",comment:"Rush du midi : 200 couverts"}],["patisserie@demo.local","submitted",{slot:"morning"}],["petitdej@demo.local","submitted",{slot:"morning"}],["cuisine@demo.local","approved",{slot:"noon"}],["fastfood@demo.local","approved",{slot:"evening"}],["patisserie@demo.local","partial",{slot:"noon"}]];for(let[e,n,i]of xe){let o=await B(2+Math.floor(g()*3),5),u=await G(e,o,i);n!=="submitted"&&await Q(u.id),n==="partial"&&await W(u.id,.5),I.requests++}{let e=await S(),n=H.find(o=>(e.get(o.id)??0)>0&&(e.get(o.id)??0)<30)??H[0],i=await G("cuisine@demo.local",[{product:n,quantity:Math.ceil((e.get(n.id)??0)+15)}],{slot:"noon",comment:"Prestation sp\xE9ciale : mariage de samedi"});await Q(i.id)}let ne=(await y($,e=>e.query("select product_id, to_order from public.v_supply_needs where site_id = $1 and to_order > 0 order by product_name",[l]))).rows.slice(0,5);ne.length&&await x($,"select public.transmit_supply_needs($1, $2, $3)",[l,JSON.stringify(ne.map(e=>({product_id:e.product_id,quantity:Number(e.to_order)}))),"Point stock du matin"]);let Y=(await y(s,e=>e.query("select line_id, product_id from public.v_open_supply_needs order by product_name"))).rows;if(Y.length>=2){let e=Y[0],n=Y.filter(i=>j.get(i.product_id)===j.get(e.product_id)).slice(0,2);await x(s,"select public.create_purchase_order_from_needs($1, $2)",[n.map(i=>i.line_id),P[j.get(e.product_id)]]),I.orders++}return I}var Ee={"Riz parfume pithibi":18e3,"Oignon locale":11e3,"Pomme de terre":11e3,"Viande locale":4800,"Pate d'arachide":1200,Carotte:1200,Patate:500,"Poivron vert":1800,Yet:4e3,"Netetou en poudre":2e3,Soja:1300,"Piment gouana sofia":5e3,"Poulet blanc":3e3,"Citron vert":1500,Laurier:3e3,Moutarde:9e3,Spaguetty:1e3,"Viande hachee":5e3,"Tomate fraiche":800,"Herbe de province":6e3,"Epice paprika":5e3},Se=["Riz parfume pithibi","Oignon locale","Pomme de terre"],se=[{name:"Maff\xE9 Yapp",category:"Plat chaud",portions:1,sale:2500,target:35,validate:!1,notes:"Relev\xE9 de la fiche SESA du 19/09 (vid\xE9o du 11/10). \xC0 compl\xE9ter : huile, Maggi, poivre moulu et sel fin sont absents du catalogue ; tomate concentr\xE9e, ail, oignon vert, amora et vinaigre attendent le contenu de leur conditionnement. Food cost \xE0 surveiller : la viande seule p\xE8se plus de 80 % du budget mati\xE8re.",steps:`1. Couper la viande en morceaux, assaisonner (ail, poivre, Maggi).
 2. Faire revenir dans l'huile, ajouter l'oignon et la tomate concentr\xE9e.
 3. D\xE9layer la p\xE2te d'arachide, mouiller, laisser mijoter 45 min.
 4. Ajouter carotte, patate douce, pomme de terre ; cuire 20 min.
@@ -30,15 +30,15 @@ import{PGlite as Pe}from"@electric-sql/pglite";import{pgcrypto as Ie}from"@elect
 5. Servir avec le riz.`,lines:[["Poulet blanc",2,"kg"],["Oignon locale",1.5,"kg"],["Citron vert",300,"g"],["Riz parfume pithibi",1.5,"kg"],["Piment gouana sofia",50,"g"],["Laurier",10,"g"],["Poivron vert",200,"g"]]},{name:"Spaghetti bolognaise",category:"Plat chaud",portions:10,sale:2500,target:30,validate:!0,notes:"Fiche de d\xE9monstration.",steps:`1. Faire revenir la viande hach\xE9e.
 2. Ajouter carotte et tomate concass\xE9e, les herbes et le paprika ; mijoter 30 min.
 3. Cuire les spaghetti al dente.
-4. Napper de sauce au service.`,lines:[["Spaguetty",1.2,"kg"],["Viande hachee",1,"kg"],["Tomate fraiche",800,"g"],["Carotte",300,"g"],["Herbe de province",10,"g"],["Epice paprika",10,"g"]]}];async function ue(r,{org:l,users:u}){let h=u["admin@demo.local"].id,R=u["cuisine@demo.local"].id,g=u["direction@demo.local"].id,v=new Map((await r.query("select id, name from public.products where organization_id = $1",[l])).rows.map(s=>[s.name,s.id])),y=new Map((await r.query("select id, code from public.units where organization_id is null or organization_id = $1",[l])).rows.map(s=>[s.code,s.id])),f=s=>{let m=v.get(s);if(!m)throw new Error(`Produit de d\xE9monstration introuvable au catalogue : ${s}`);return m};await E(r,h,async s=>{for(let[m,_]of Object.entries(Ee))await s.query("update public.supplier_products set unit_price = $2 where product_id = $1 and is_preferred",[f(m),_]);for(let m of Se)await s.query(`insert into public.product_unit_conversions (product_id, unit_id, factor, is_validated)
-         values ($1, $2, 0.04, true) on conflict (product_id, unit_id) do nothing`,[f(m),y.get("kg")])});let x=u["magasin@demo.local"].id,w=(await r.query("select id from public.sites where organization_id = $1 limit 1",[l])).rows[0].id,z=[...new Set(se.flatMap(s=>s.lines.map(([m])=>m)))];await E(r,x,async s=>{for(let m of z){let{rows:[_]}=await s.query(`select p.id, u.dimension, coalesce(l.on_hand - l.reserved, 0) as available
+4. Napper de sauce au service.`,lines:[["Spaguetty",1.2,"kg"],["Viande hachee",1,"kg"],["Tomate fraiche",800,"g"],["Carotte",300,"g"],["Herbe de province",10,"g"],["Epice paprika",10,"g"]]}];async function le(r,{org:c,users:l}){let h=l["admin@demo.local"].id,C=l["cuisine@demo.local"].id,g=l["direction@demo.local"].id,v=new Map((await r.query("select id, name from public.products where organization_id = $1",[c])).rows.map(s=>[s.name,s.id])),y=new Map((await r.query("select id, code from public.units where organization_id is null or organization_id = $1",[c])).rows.map(s=>[s.code,s.id])),f=s=>{let m=v.get(s);if(!m)throw new Error(`Produit de d\xE9monstration introuvable au catalogue : ${s}`);return m};await E(r,h,async s=>{for(let[m,_]of Object.entries(Ee))await s.query("update public.supplier_products set unit_price = $2 where product_id = $1 and is_preferred",[f(m),_]);for(let m of Se)await s.query(`insert into public.product_unit_conversions (product_id, unit_id, factor, is_validated)
+         values ($1, $2, 0.04, true) on conflict (product_id, unit_id) do nothing`,[f(m),y.get("kg")])});let x=l["magasin@demo.local"].id,w=(await r.query("select id from public.sites where organization_id = $1 limit 1",[c])).rows[0].id,z=[...new Set(se.flatMap(s=>s.lines.map(([m])=>m)))];await E(r,x,async s=>{for(let m of z){let{rows:[_]}=await s.query(`select p.id, u.dimension, coalesce(l.on_hand - l.reserved, 0) as available
            from public.products p join public.units u on u.id = p.stock_unit_id
            left join public.stock_levels l on l.product_id = p.id and l.site_id = $2
-          where p.id = $1`,[f(m),w]);Number(_.available)>0||await s.query("select public.record_stock_movement($1, $2, 'receipt', $3, null, 'R\xE9approvisionnement (d\xE9mo)', $4)",[w,_.id,_.dimension==="package"?4:15,`demo-recipe-stock-${_.id}`])}});let $=0;for(let s of se){let m=await E(r,R,async _=>{let{id:a}=(await _.query(`insert into public.recipes (name, category, portions, sale_price, target_food_cost_pct, steps, notes)
-         values ($1, $2, $3, $4, $5, $6, $7) returning id`,[s.name,s.category,s.portions,s.sale,s.target,s.steps,s.notes])).rows[0],d=0;for(let[t,b,p]of s.lines)await _.query("insert into public.recipe_lines (recipe_id, product_id, quantity, unit_id, position) values ($1, $2, $3, $4, $5)",[a,f(t),b,y.get(p),d++]);return a});s.validate&&await E(r,g,_=>_.query("select public.validate_recipe($1)",[m])),$++}return $}var T=[{email:"admin@demo.local",id:"10000000-0000-0000-0000-000000000001",role:"owner",label:"Administrateur",icon:"admin"},{email:"direction@demo.local",id:"10000000-0000-0000-0000-000000000002",role:"ops_director",label:"Production",icon:"director"},{email:"magasin@demo.local",id:"10000000-0000-0000-0000-000000000003",role:"storekeeper",label:"Stock",icon:"store"},{email:"achats@demo.local",id:"10000000-0000-0000-0000-000000000004",role:"purchasing",label:"Achats",icon:"purchase"},{email:"cuisine@demo.local",id:"10000000-0000-0000-0000-000000000005",role:"kitchen",label:"Cuisine centrale",icon:"kitchen",department:"Cuisine centrale"},{email:"fastfood@demo.local",id:"10000000-0000-0000-0000-000000000006",role:"requester",label:"Service Fast food",icon:"service",department:"Fast food"},{email:"patisserie@demo.local",id:"10000000-0000-0000-0000-000000000007",role:"requester",label:"Service P\xE2tisserie",icon:"service",department:"P\xE2tisserie"},{email:"petitdej@demo.local",id:"10000000-0000-0000-0000-000000000008",role:"requester",label:"Service Petit d\xE9jeuner",icon:"service",department:"Petit d\xE9jeuner"}],Re=["Fast food","P\xE2tisserie","Petit d\xE9jeuner","Cuisine centrale"];function ce(r){let l=2166136261;for(let u of r)l=Math.imul(l^u.charCodeAt(0),16777619);return(l>>>0)/4294967295}async function le(r,{rows:l,history:u=!0}){let h=async(a,d)=>(await r.query(a,d)).rows[0],R=T[0];for(let a of T)await r.query("insert into auth.users (id, email, raw_user_meta_data) values ($1, $2, $3)",[a.id,a.email,{full_name:a.label}]);let{org:g}=await h("select platform.provision_organization($1, 'gescatering', 'SESA Catering (d\xE9mo)') as org",[R.id]);await r.query("select public.init_catering_organization($1)",[g]);let v=async a=>(await h("select id from platform.roles where is_system and key = $1",[a])).id,y=(await h("select id from public.sites where organization_id = $1",[g])).id,f={};for(let a of Re)f[a]=(await h("insert into public.departments (organization_id, site_id, name) values ($1, $2, $3) returning id",[g,y,a])).id;for(let a of T.slice(1)){let{id:d}=await h(`insert into platform.memberships (user_id, organization_id, role_id, status, joined_at)
-       values ($1, $2, $3, 'active', now()) returning id`,[a.id,g,await v(a.role)]);a.department&&await r.query("insert into platform.membership_scopes (membership_id, scope_type, scope_id) values ($1, 'department', $2)",[d,f[a.department]])}let x=await E(r,R.id,async a=>{let d=(await a.query("select public.stage_catalog_import($1, 'revue-demo.xlsx', $2) as id",[g,JSON.stringify(l)])).rows[0].id;return(await a.query("select public.confirm_catalog_import($1) as r",[d])).rows[0].r}),w=(await r.query("select id, reference from public.products where organization_id = $1 order by reference",[g])).rows,z=T.find(a=>a.role==="storekeeper"),$=0;await E(r,R.id,async a=>{for(let d of w){let t=ce(d.reference);t<.5&&await a.query("update public.products set min_stock = $2 where id = $1",[d.id,Math.ceil(t*20)+2])}}),await E(r,z.id,async a=>{for(let d of w){let t=ce(d.reference+":stock");t<.7&&(await a.query("select public.record_stock_movement($1, $2, 'receipt', $3, null, 'Stock initial (d\xE9mo)', $4)",[y,d.id,Math.ceil(t*60),`demo-init-${d.reference}`]),$++)}}),await r.query("insert into public.suppliers (organization_id, name, phone) values ($1, 'Grossiste Dakar (d\xE9mo)', '+221 00 000 00 00')",[g]);let s=Object.fromEntries(T.map(a=>[a.email,a])),m=u?await oe(r,{org:g,site:y,users:s,departments:f}):null,_=u?await ue(r,{org:g,users:s}):0;return{org:g,site:y,departments:f,imported:x,stocked:$,products:w.length,activity:m,recipes:_}}var Ce=new Set(["requests","request_lines","v_request_lines","v_request_consolidation","v_stock_position","v_supply_needs","products","product_categories","departments","sites","units","supply_request_lines","supply_requests","purchase_orders","purchase_order_lines","suppliers","catering_settings","stock_movements","v_open_supply_needs","v_purchase_orders","v_purchase_order_lines","receipts","supplier_products","recipes","recipe_lines","v_recipes","v_recipe_lines","product_unit_conversions"]),de=new Set(["requests","request_lines","purchase_orders","purchase_order_lines","recipes","recipe_lines"]),D=/^[a-z_][a-z0-9_]*$/,pe={eq:"=",neq:"<>",gt:">",gte:">=",lt:"<",lte:"<="};function _e(r){let l=new Map(T.map(v=>[v.email,v])),u=new Map;async function h(v){if(!u.has(v)){let y=await r.query(`select a.name, format_type(a.type, null) as type
+          where p.id = $1`,[f(m),w]);Number(_.available)>0||await s.query("select public.record_stock_movement($1, $2, 'receipt', $3, null, 'R\xE9approvisionnement (d\xE9mo)', $4)",[w,_.id,_.dimension==="package"?4:15,`demo-recipe-stock-${_.id}`])}});let $=0;for(let s of se){let m=await E(r,C,async _=>{let{id:a}=(await _.query(`insert into public.recipes (name, category, portions, sale_price, target_food_cost_pct, steps, notes)
+         values ($1, $2, $3, $4, $5, $6, $7) returning id`,[s.name,s.category,s.portions,s.sale,s.target,s.steps,s.notes])).rows[0],d=0;for(let[t,b,p]of s.lines)await _.query("insert into public.recipe_lines (recipe_id, product_id, quantity, unit_id, position) values ($1, $2, $3, $4, $5)",[a,f(t),b,y.get(p),d++]);return a});s.validate&&await E(r,g,_=>_.query("select public.validate_recipe($1)",[m])),$++}return $}var T=[{email:"admin@demo.local",id:"10000000-0000-0000-0000-000000000001",role:"owner",label:"Administrateur",icon:"admin"},{email:"direction@demo.local",id:"10000000-0000-0000-0000-000000000002",role:"ops_director",label:"Production",icon:"director"},{email:"magasin@demo.local",id:"10000000-0000-0000-0000-000000000003",role:"storekeeper",label:"Stock",icon:"store"},{email:"achats@demo.local",id:"10000000-0000-0000-0000-000000000004",role:"purchasing",label:"Achats",icon:"purchase"},{email:"cuisine@demo.local",id:"10000000-0000-0000-0000-000000000005",role:"kitchen",label:"Cuisine centrale",icon:"kitchen",department:"Cuisine centrale"},{email:"fastfood@demo.local",id:"10000000-0000-0000-0000-000000000006",role:"requester",label:"Service Fast food",icon:"service",department:"Fast food"},{email:"patisserie@demo.local",id:"10000000-0000-0000-0000-000000000007",role:"requester",label:"Service P\xE2tisserie",icon:"service",department:"P\xE2tisserie"},{email:"petitdej@demo.local",id:"10000000-0000-0000-0000-000000000008",role:"requester",label:"Service Petit d\xE9jeuner",icon:"service",department:"Petit d\xE9jeuner"}],Ce=["Fast food","P\xE2tisserie","Petit d\xE9jeuner","Cuisine centrale"];function ue(r){let c=2166136261;for(let l of r)c=Math.imul(c^l.charCodeAt(0),16777619);return(c>>>0)/4294967295}async function ce(r,{rows:c,history:l=!0}){let h=async(a,d)=>(await r.query(a,d)).rows[0],C=T[0];for(let a of T)await r.query("insert into auth.users (id, email, raw_user_meta_data) values ($1, $2, $3)",[a.id,a.email,{full_name:a.label}]);let{org:g}=await h("select platform.provision_organization($1, 'gescatering', 'SESA Catering (d\xE9mo)') as org",[C.id]);await r.query("select public.init_catering_organization($1)",[g]);let v=async a=>(await h("select id from platform.roles where is_system and key = $1",[a])).id,y=(await h("select id from public.sites where organization_id = $1",[g])).id,f={};for(let a of Ce)f[a]=(await h("insert into public.departments (organization_id, site_id, name) values ($1, $2, $3) returning id",[g,y,a])).id;for(let a of T.slice(1)){let{id:d}=await h(`insert into platform.memberships (user_id, organization_id, role_id, status, joined_at)
+       values ($1, $2, $3, 'active', now()) returning id`,[a.id,g,await v(a.role)]);a.department&&await r.query("insert into platform.membership_scopes (membership_id, scope_type, scope_id) values ($1, 'department', $2)",[d,f[a.department]])}let x=await E(r,C.id,async a=>{let d=(await a.query("select public.stage_catalog_import($1, 'revue-demo.xlsx', $2) as id",[g,JSON.stringify(c)])).rows[0].id;return(await a.query("select public.confirm_catalog_import($1) as r",[d])).rows[0].r}),w=(await r.query("select id, reference from public.products where organization_id = $1 order by reference",[g])).rows,z=T.find(a=>a.role==="storekeeper"),$=0;await E(r,C.id,async a=>{for(let d of w){let t=ue(d.reference);t<.5&&await a.query("update public.products set min_stock = $2 where id = $1",[d.id,Math.ceil(t*20)+2])}}),await E(r,z.id,async a=>{for(let d of w){let t=ue(d.reference+":stock");t<.7&&(await a.query("select public.record_stock_movement($1, $2, 'receipt', $3, null, 'Stock initial (d\xE9mo)', $4)",[y,d.id,Math.ceil(t*60),`demo-init-${d.reference}`]),$++)}}),await r.query("insert into public.suppliers (organization_id, name, phone) values ($1, 'Grossiste Dakar (d\xE9mo)', '+221 00 000 00 00')",[g]);let s=Object.fromEntries(T.map(a=>[a.email,a])),m=l?await oe(r,{org:g,site:y,users:s,departments:f}):null,_=l?await le(r,{org:g,users:s}):0;return{org:g,site:y,departments:f,imported:x,stocked:$,products:w.length,activity:m,recipes:_}}var Pe=new Set(["requests","request_lines","v_request_lines","v_request_consolidation","v_stock_position","v_supply_needs","products","product_categories","departments","sites","units","supply_request_lines","supply_requests","purchase_orders","purchase_order_lines","suppliers","catering_settings","stock_movements","v_open_supply_needs","v_purchase_orders","v_purchase_order_lines","receipts","supplier_products","recipes","recipe_lines","v_recipes","v_recipe_lines","product_unit_conversions","v_recipe_templates","recipe_ingredient_products"]),de=new Set(["requests","request_lines","purchase_orders","purchase_order_lines","recipes","recipe_lines"]),D=/^[a-z_][a-z0-9_]*$/,pe={eq:"=",neq:"<>",gt:">",gte:">=",lt:"<",lte:"<="};function _e(r){let c=new Map(T.map(v=>[v.email,v])),l=new Map;async function h(v){if(!l.has(v)){let y=await r.query(`select a.name, format_type(a.type, null) as type
            from pg_proc p, unnest(p.proargnames, p.proargtypes::oid[]) with ordinality as a(name, type, n)
-          where p.pronamespace = 'public'::regnamespace and p.proname = $1`,[v]);u.set(v,new Map(y.rows.map(f=>[f.name,f.type])))}return u.get(v)}async function R({method:v,path:y,body:f={},user:x}){let w=new URL(y,"http://demo.local/"),z=w.pathname.split("/").filter(Boolean);if(z[0]==="users"&&v==="GET")return{status:200,body:T.map(({id:m,..._})=>_)};let $=l.get(x);if(!$)return{status:401,body:{message:"Choisir un compte de d\xE9monstration."}};let s=z[1];if(!s||!D.test(s))return{status:400,body:{message:"Nom invalide"}};if(z[0]==="from"&&v==="GET"){if(!Ce.has(s))return{status:403,body:{message:"Relation non expos\xE9e"}};let m=[],_=[],a="",d=500;for(let[p,S]of w.searchParams)if(p==="order"){let[C,P]=S.split(".");if(!D.test(C))return{status:400,body:{message:"Tri invalide"}};a=` order by ${C} ${P==="desc"?"desc":"asc"}`}else if(p==="limit")d=Math.min(Number(S)||500,1e3);else{if(!D.test(p))return{status:400,body:{message:"Filtre invalide"}};let C=S.indexOf("."),P=S.slice(0,C),L=S.slice(C+1);if(P==="in")_.push(L.replace(/^\(|\)$/g,"").split(",").filter(Boolean)),m.push(`${p}::text = any($${_.length}::text[])`);else if(pe[P])_.push(L),m.push(`${p}::text ${pe[P]} $${_.length}`);else return{status:400,body:{message:`Op\xE9rateur inconnu : ${P}`}}}let t=`select * from public.${s}${m.length?" where "+m.join(" and "):""}${a} limit ${d}`;return{status:200,body:await E(r,$.id,async p=>(await p.query(t,_)).rows)}}if(z[0]==="insert"&&v==="POST")return de.has(s)?{status:201,body:await E(r,$.id,async _=>{let a=[];for(let d of f.rows??[]){let t=Object.keys(d);if(!t.length||!t.every(p=>D.test(p)))throw new Error("Colonnes invalides");let b=await _.query(`insert into public.${s} (${t.join(", ")}) values (${t.map((p,S)=>`$${S+1}`).join(", ")}) returning *`,t.map(p=>d[p]));a.push(b.rows[0])}return a})}:{status:403,body:{message:"Table non \xE9crivable"}};if((z[0]==="update"||z[0]==="delete")&&v==="POST"){if(!de.has(s))return{status:403,body:{message:"Table non \xE9crivable"}};let{id:m,values:_={}}=f;if(!m)return{status:400,body:{message:"Identifiant manquant"}};let a=await E(r,$.id,async d=>{if(z[0]==="delete")return(await d.query(`delete from public.${s} where id = $1 returning *`,[m])).rows;let t=Object.keys(_);if(!t.length||!t.every(b=>D.test(b)))throw new Error("Colonnes invalides");return(await d.query(`update public.${s} set ${t.map((b,p)=>`${b} = $${p+2}`).join(", ")} where id = $1 returning *`,[m,...t.map(b=>_[b])])).rows});return a.length?{status:200,body:a}:{status:403,body:{message:"Modification impossible : cette ligne n'est plus modifiable."}}}if(z[0]==="rpc"&&v==="POST"){let m=await h(s),_=f.args??{},a=Object.keys(_);if(!a.every(p=>D.test(p)&&m.has(p)))return{status:400,body:{message:"Arguments invalides pour "+s}};let d=a.map(p=>m.get(p)==="jsonb"?JSON.stringify(_[p]):_[p]),t=`select * from public.${s}(${a.map((p,S)=>`${p} => $${S+1}`).join(", ")})`;return{status:200,body:await E(r,$.id,async p=>(await p.query(t,d)).rows)}}return{status:404,body:{message:"Introuvable"}}}let g=Promise.resolve();return function(y){let f=async()=>{try{return await R(y)}catch(w){return{status:w.code==="42501"?403:w.code==="P0002"?404:400,body:{message:w.message,code:w.code??null,hint:w.hint??null}}}},x=g.then(f,f);return g=x,x}}var me=[{name:"local/supabase_shim.sql",sql:`-- =====================================================================
+          where p.pronamespace = 'public'::regnamespace and p.proname = $1`,[v]);l.set(v,new Map(y.rows.map(f=>[f.name,f.type])))}return l.get(v)}async function C({method:v,path:y,body:f={},user:x}){let w=new URL(y,"http://demo.local/"),z=w.pathname.split("/").filter(Boolean);if(z[0]==="users"&&v==="GET")return{status:200,body:T.map(({id:m,..._})=>_)};let $=c.get(x);if(!$)return{status:401,body:{message:"Choisir un compte de d\xE9monstration."}};let s=z[1];if(!s||!D.test(s))return{status:400,body:{message:"Nom invalide"}};if(z[0]==="from"&&v==="GET"){if(!Pe.has(s))return{status:403,body:{message:"Relation non expos\xE9e"}};let m=[],_=[],a="",d=500;for(let[p,S]of w.searchParams)if(p==="order"){let[P,R]=S.split(".");if(!D.test(P))return{status:400,body:{message:"Tri invalide"}};a=` order by ${P} ${R==="desc"?"desc":"asc"}`}else if(p==="limit")d=Math.min(Number(S)||500,1e3);else{if(!D.test(p))return{status:400,body:{message:"Filtre invalide"}};let P=S.indexOf("."),R=S.slice(0,P),j=S.slice(P+1);if(R==="in")_.push(j.replace(/^\(|\)$/g,"").split(",").filter(Boolean)),m.push(`${p}::text = any($${_.length}::text[])`);else if(pe[R])_.push(j),m.push(`${p}::text ${pe[R]} $${_.length}`);else return{status:400,body:{message:`Op\xE9rateur inconnu : ${R}`}}}let t=`select * from public.${s}${m.length?" where "+m.join(" and "):""}${a} limit ${d}`;return{status:200,body:await E(r,$.id,async p=>(await p.query(t,_)).rows)}}if(z[0]==="insert"&&v==="POST")return de.has(s)?{status:201,body:await E(r,$.id,async _=>{let a=[];for(let d of f.rows??[]){let t=Object.keys(d);if(!t.length||!t.every(p=>D.test(p)))throw new Error("Colonnes invalides");let b=await _.query(`insert into public.${s} (${t.join(", ")}) values (${t.map((p,S)=>`$${S+1}`).join(", ")}) returning *`,t.map(p=>d[p]));a.push(b.rows[0])}return a})}:{status:403,body:{message:"Table non \xE9crivable"}};if((z[0]==="update"||z[0]==="delete")&&v==="POST"){if(!de.has(s))return{status:403,body:{message:"Table non \xE9crivable"}};let{id:m,values:_={}}=f;if(!m)return{status:400,body:{message:"Identifiant manquant"}};let a=await E(r,$.id,async d=>{if(z[0]==="delete")return(await d.query(`delete from public.${s} where id = $1 returning *`,[m])).rows;let t=Object.keys(_);if(!t.length||!t.every(b=>D.test(b)))throw new Error("Colonnes invalides");return(await d.query(`update public.${s} set ${t.map((b,p)=>`${b} = $${p+2}`).join(", ")} where id = $1 returning *`,[m,...t.map(b=>_[b])])).rows});return a.length?{status:200,body:a}:{status:403,body:{message:"Modification impossible : cette ligne n'est plus modifiable."}}}if(z[0]==="rpc"&&v==="POST"){let m=await h(s),_=f.args??{},a=Object.keys(_);if(!a.every(p=>D.test(p)&&m.has(p)))return{status:400,body:{message:"Arguments invalides pour "+s}};let d=a.map(p=>m.get(p)==="jsonb"?JSON.stringify(_[p]):_[p]),t=`select * from public.${s}(${a.map((p,S)=>`${p} => $${S+1}`).join(", ")})`;return{status:200,body:await E(r,$.id,async p=>(await p.query(t,d)).rows)}}return{status:404,body:{message:"Introuvable"}}}let g=Promise.resolve();return function(y){let f=async()=>{try{return await C(y)}catch(w){return{status:w.code==="42501"?403:w.code==="P0002"?404:400,body:{message:w.message,code:w.code??null,hint:w.hint??null}}}},x=g.then(f,f);return g=x,x}}var me=[{name:"local/supabase_shim.sql",sql:`-- =====================================================================
 --  Simulation locale de Supabase \u2014 UNIQUEMENT pour les tests (PGlite)
 --
 --  Reproduit ce dont les migrations et la RLS d\xE9pendent :
@@ -3171,6 +3171,8 @@ begin
   select p_organization_id, c.name, c.kind, c.icon, c.sort_order
     from (values
       ('Ingr\xE9dients alimentaires', 'food',          '\u{1F955}', 10),
+      ('Fast food',                'food',          '\u{1F354}', 15),
+      ('P\xE2tisserie',               'food',          '\u{1F9C1}', 18),
       ('Produits d''entretien',    'maintenance',   '\u{1F9F4}', 20),
       ('Produits de nettoyage',    'cleaning',      '\u{1F9FD}', 30),
       ('Consommables',             'consumable',    '\u{1F964}', 40),
@@ -6793,4 +6795,1682 @@ revoke all on function public.validate_recipe(uuid), public.reopen_recipe(uuid, 
 grant execute on function public.validate_recipe(uuid), public.reopen_recipe(uuid, text),\r
   public.duplicate_recipe(uuid) to authenticated;\r
 revoke all on function gescatering_internal.assign_recipe_reference() from public, anon, authenticated;\r
-`}],ge=[{reference:"CDT-001",name:"Crevette sechee",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 2"},{reference:"CDT-002",name:"Guedj beurre",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 3"},{reference:"CDT-003",name:"Guedj kong",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 4"},{reference:"CDT-004",name:"Keithia",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 5"},{reference:"CDT-005",name:"Kong fume",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 6"},{reference:"CDT-006",name:"Pagne",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 7"},{reference:"CDT-007",name:"Yet",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 8"},{reference:"CDT-008",name:"Yet bou sew",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 9"},{reference:"CSM-003",name:"Carton pizza",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 12"},{reference:"CSM-004",name:"Charbon",category:"Consommables",category_kind:"consumable",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 13"},{reference:"CSM-005",name:"Gant",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 14"},{reference:"CSM-006",name:"Gobelet cafe",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 15"},{reference:"CSM-008",name:"Moule gratin",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 17"},{reference:"CSM-009",name:"Papier alu gm",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 18"},{reference:"CSM-010",name:"Papier film",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"paquet",package_factor:"",source:"Revue ligne 19"},{reference:"CSM-011",name:"Papier sandwich",category:"Consommables",category_kind:"consumable",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 20"},{reference:"CSM-012",name:"Pick brochette deco",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 21"},{reference:"CSM-013",name:"Pick brochette gm",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 22"},{reference:"CSM-014",name:"Pot pizza gobelets",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 23"},{reference:"CSM-015",name:"Sachet croissant",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 24"},{reference:"CSM-016",name:"Sachet emporte",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 25"},{reference:"CSM-017",name:"Sachet jaune de 100f",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 26"},{reference:"CSM-018",name:"Serviette de table",category:"Consommables",category_kind:"consumable",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 27"},{reference:"ENT-001",name:"Ballaie",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 51"},{reference:"ENT-002",name:"Creme a recurer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 52"},{reference:"ENT-003",name:"Eau de javel",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 53"},{reference:"ENT-004",name:"Eponge en fer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 54"},{reference:"ENT-005",name:"Lave vitre",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 55"},{reference:"ENT-006",name:"Madar gm",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 56"},{reference:"ENT-007",name:"Raclette",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 57"},{reference:"ENT-008",name:"Serpillere",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 58"},{reference:"FRO-001",name:"Capitaine",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 59"},{reference:"FRO-002",name:"Poisson dorade",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 60"},{reference:"FRO-003",name:"Poisson gm",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 61"},{reference:"FRO-004",name:"Poisson lotte",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 62"},{reference:"FRO-005",name:"Poulet blanc",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 63"},{reference:"FRO-006",name:"Poulets",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 64"},{reference:"FRO-007",name:"Viande hachee",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 65"},{reference:"FRO-009",name:"Viande locale",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 67"},{reference:"LEG-001",name:"Bissap kouthia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 68"},{reference:"LEG-002",name:"Brocolis",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 69"},{reference:"LEG-003",name:"Carotte",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 70"},{reference:"LEG-004",name:"Chou",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 71"},{reference:"LEG-005",name:"Citron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 72"},{reference:"LEG-006",name:"Concombre",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 73"},{reference:"LEG-007",name:"Courgette",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 74"},{reference:"LEG-008",name:"Gombon",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 75"},{reference:"LEG-009",name:"Haricot vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 76"},{reference:"LEG-010",name:"Manioc",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 77"},{reference:"LEG-011",name:"Oignon vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 78"},{reference:"LEG-012",name:"Patate",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 79"},{reference:"LEG-013",name:"Peril ordinnaire",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 80"},{reference:"LEG-014",name:"Persil chinois",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 81"},{reference:"LEG-015",name:"Petit bpois surgele",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 82"},{reference:"LEG-016",name:"Piment gouana sofia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 83"},{reference:"LEG-018",name:"Poivron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 85"},{reference:"LEG-019",name:"Salade",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"bassine",purchase_unit:"",package_factor:"",source:"Revue ligne 86"},{reference:"LEG-020",name:"Tomate fraiche",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 87"},{reference:"SEC-003",name:"Ail",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 90"},{reference:"SEC-004",name:"Amora",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 91"},{reference:"SEC-005",name:"Ataya",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 92"},{reference:"SEC-006",name:"Athieke",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 93"},{reference:"SEC-009",name:"Bouye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 96"},{reference:"SEC-011",name:"Calamar",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 98"},{reference:"SEC-012",name:"Canette pressesa",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 99"},{reference:"SEC-013",name:"Carry",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 100"},{reference:"SEC-014",name:"Champignon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 101"},{reference:"SEC-015",name:"Citron liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 102"},{reference:"SEC-017",name:"Creme liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 104"},{reference:"SEC-018",name:"Crevette n\xB01",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 105"},{reference:"SEC-019",name:"Crevette n\xB02",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 106"},{reference:"SEC-021",name:"Curcuman",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 108"},{reference:"SEC-023",name:"Epice curry",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 110"},{reference:"SEC-024",name:"Epice paprika",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 111"},{reference:"SEC-025",name:"Epice thyn",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 112"},{reference:"SEC-026",name:"Essence menthe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 113"},{reference:"SEC-027",name:"Essence vanille",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 114"},{reference:"SEC-028",name:"Farine patissier",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 115"},{reference:"SEC-029",name:"Fleur d'orange",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 116"},{reference:"SEC-030",name:"Foster mangue",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 117"},{reference:"SEC-031",name:"Foster vimto",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 118"},{reference:"SEC-035",name:"Herbe de province",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 122"},{reference:"SEC-039",name:"Jambon",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 126"},{reference:"SEC-040",name:"Ketchup",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 127"},{reference:"SEC-041",name:"Lait en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"sac",package_factor:"",source:"Revue ligne 128"},{reference:"SEC-042",name:"Laurier",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 129"},{reference:"SEC-043",name:"Lentille",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 130"},{reference:"SEC-045",name:"Maicedoine",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 132"},{reference:"SEC-046",name:"Mayonnaise",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 133"},{reference:"SEC-047",name:"Moutarde",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 134"},{reference:"SEC-048",name:"Netetou en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 135"},{reference:"SEC-049",name:"Niebe",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 136"},{reference:"SEC-050",name:"Noflaye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 137"},{reference:"SEC-051",name:"\u0152uf",category:"Produits secs",category_kind:"food",stock_unit:"tablette",purchase_unit:"",package_factor:"",source:"Revue ligne 138"},{reference:"SEC-052",name:"Oignon blanc",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 139"},{reference:"SEC-053",name:"Oignon locale",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 140"},{reference:"SEC-054",name:"Olive",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 141"},{reference:"SEC-055",name:"Olive noire gm",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 142"},{reference:"SEC-056",name:"Oro",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 143"},{reference:"SEC-057",name:"Pain arabe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 144"},{reference:"SEC-058",name:"Pate d'arachide",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 145"},{reference:"SEC-059",name:"Petit pois",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 146"},{reference:"SEC-060",name:"Piment en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 147"},{reference:"SEC-061",name:"Poisson frire",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 148"},{reference:"SEC-063",name:"Pomme de terre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 150"},{reference:"SEC-065",name:"Riz parfume pithibi",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 152"},{reference:"SEC-066",name:"Sauce algerienne",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 153"},{reference:"SEC-067",name:"Sauce chili",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 154"},{reference:"SEC-068",name:"Saucisson",category:"Produits secs",category_kind:"food",stock_unit:"barre",purchase_unit:"",package_factor:"",source:"Revue ligne 155"},{reference:"SEC-069",name:"Sel grain",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 156"},{reference:"SEC-070",name:"Soja",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 157"},{reference:"SEC-071",name:"Spaguetty",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 158"},{reference:"SEC-072",name:"Sucre en morceaux",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 159"},{reference:"SEC-073",name:"Sucre en poudre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 160"},{reference:"SEC-074",name:"Sunquick",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 161"},{reference:"SEC-075",name:"Tacos",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 162"},{reference:"SEC-076",name:"Tamarin",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 163"},{reference:"SEC-077",name:"Tandori",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 164"},{reference:"SEC-078",name:"Thon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 165"},{reference:"SEC-079",name:"Tomate concentree",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 166"},{reference:"SEC-080",name:"Vermicelle",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 167"},{reference:"SEC-081",name:"Vinaigre",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 168"}];var fe,X=(async()=>{let r=performance.now(),l=new Pe({extensions:{pgcrypto:Ie}});await re(l,me),ie(l);let u=await le(l,{rows:ge});fe=_e(l),console.info(`[GesCatering] d\xE9monstration pr\xEAte en ${Math.round(performance.now()-r)} ms`,`\u2014 ${u.products} produits, ${u.stocked} en stock`)})();X.catch(r=>console.error("[GesCatering] la d\xE9monstration n'a pas pu d\xE9marrer",r));window.gcDemo={ready:X,async call(r,l,u,h){await X;let R=await fe({method:r,path:l,body:u?JSON.parse(u):{},user:h||void 0});return JSON.stringify(R)}};
+`},{name:"migrations/C0011__recipe_catalogue.sql",sql:`-- =====================================================================
+--  C0011 \u2014 Catalogue de plats : amorcer une fiche technique
+--
+--  Le concepteur de fiches part d'une page blanche : le chef saisit vingt
+--  lignes avant de voir le premier co\xFBt. Ce module lui donne un POINT DE
+--  D\xC9PART \u2014 un catalogue de plats, en grammage par portion, que la base
+--  rattache aux produits de SON stock. Le contenu est dans C0012.
+--
+--  Trois principes, et ce sont eux qui rendent la chose utilisable :
+--
+--   1. Une fiche engendr\xE9e est une PROPOSITION. Elle na\xEEt en brouillon,
+--      la cuisine corrige les grammages, la Production valide le co\xFBt.
+--      Rien n'entre dans un chiffrage sans ces deux gestes.
+--   2. On ne DEVINE jamais un produit. Un ingr\xE9dient se rattache par une
+--      correspondance d\xE9cid\xE9e par la maison, ou par un synonyme exact.
+--      Deux candidats possibles \u21D2 aucun : la ligne se signale \xAB \xE0
+--      compl\xE9ter \xBB plut\xF4t que d'engager le mauvais produit dans un co\xFBt.
+--      C'est le choix de \`convert_to_stock_unit\` : refuser, pas deviner.
+--   3. Le catalogue ne CR\xC9E jamais de produit. Un ingr\xE9dient absent du
+--      stock reste absent, et la liste des manques est pr\xE9cis\xE9ment ce que
+--      la g\xE9n\xE9ration fait appara\xEEtre \u2014 elle vaut audit du r\xE9f\xE9rentiel.
+--
+--  Le catalogue livr\xE9 est au niveau du PRODUIT (\`organization_id\` null),
+--  comme les unit\xE9s ; une maison peut y ajouter ses propres plats.
+--
+--  \u26A0\uFE0F Ce que ce module ne sait pas, et ne peut pas savoir : les grammages
+--     que la maison sert r\xE9ellement. Il les propose, il ne les constate
+--     pas. Les sorties de stock, elles, les constatent \u2014 c'est une source
+--     plus juste, et un chantier distinct.
+-- =====================================================================
+
+
+-- ---------------------------------------------------------------------
+--  1. NORMALISATION DES LIBELL\xC9S
+--
+--  Le catalogue client s'\xE9crit sans accents et sans r\xE9gularit\xE9 : \xAB Pate
+--  d'arachide \xBB, \xAB Netetou en poudre \xBB, \xAB Oignon locale \xBB. Toute
+--  comparaison passe donc par cette forme : minuscules, accents retir\xE9s,
+--  ponctuation remplac\xE9e par une espace, espaces r\xE9duits \xE0 une seule.
+-- ---------------------------------------------------------------------
+create or replace function gescatering_internal.normalize_label(p_text text)
+returns text
+language sql
+immutable
+set search_path = ''
+as $fn$
+  select nullif(
+    trim(regexp_replace(
+      translate(
+        replace(replace(lower(coalesce(p_text, '')), '\u0153', 'oe'), '\xE6', 'ae'),
+        '\xE0\xE2\xE4\xE1\xE3\xE5\xE7\xE9\xE8\xEA\xEB\xED\xEC\xEE\xEF\xF1\xF3\xF2\xF4\xF6\xF5\xFA\xF9\xFB\xFC\xFD\xFF',
+        'aaaaaaceeeeiiiinooooouuuuyy'),
+      '[^a-z0-9]+', ' ', 'g')),
+    '');
+$fn$;
+
+comment on function gescatering_internal.normalize_label(text) is
+  'Forme comparable d''un libell\xE9 : minuscules, sans accents, ponctuation en espaces. '
+  'Rapproche le vocabulaire du catalogue de plats des noms r\xE9els des produits.';
+
+create index if not exists idx_products_normalized_name
+  on public.products (organization_id, gescatering_internal.normalize_label(name));
+
+
+-- ---------------------------------------------------------------------
+--  2. LE CATALOGUE DE PLATS
+--
+--  Les quantit\xE9s sont POUR UNE PORTION, dans une unit\xE9 de base (g, ml,
+--  pi\xE8ce) : la g\xE9n\xE9ration multiplie par le nombre de couverts demand\xE9.
+--  C'est la seule forme qui se transpose d'un client \xE0 l'autre.
+-- ---------------------------------------------------------------------
+create table if not exists public.recipe_templates (
+  id              uuid primary key default gen_random_uuid(),
+  -- null = catalogue livr\xE9 avec le produit ; sinon, plat propre \xE0 la maison.
+  organization_id uuid references platform.organizations(id) on delete cascade,
+  key             text not null check (key ~ '^[a-z][a-z0-9_]*$'),
+  name            text not null check (length(trim(name)) > 0),
+  category        text,              -- align\xE9 sur les cat\xE9gories de fiches
+  service         text not null default 'cuisine'
+                    check (service in ('cuisine', 'fast_food', 'patisserie', 'petit_dejeuner')),
+  steps           text,
+  notes           text,
+  sort_order      integer not null default 0,
+  is_active       boolean not null default true,
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now(),
+  constraint uq_recipe_templates_key unique nulls not distinct (organization_id, key)
+);
+
+create table if not exists public.recipe_template_lines (
+  id                   uuid primary key default gen_random_uuid(),
+  template_id          uuid not null references public.recipe_templates(id) on delete cascade,
+  ingredient_key       text not null check (ingredient_key ~ '^[a-z][a-z0-9_]*$'),
+  -- Quantit\xE9 NETTE mise en \u0153uvre, pour une portion.
+  quantity_per_portion numeric(14,4) not null check (quantity_per_portion > 0),
+  unit_code            text not null check (unit_code in ('g', 'ml', 'piece')),
+  -- Perte au parage ou \xE0 l'\xE9pluchage : le brut sorti du magasin vaut
+  -- net / (1 \u2212 perte). C'est ce qui explique qu'un kilo d'oignon n'en
+  -- donne que 850 grammes dans la marmite.
+  loss_pct             numeric(5,2) not null default 0 check (loss_pct >= 0 and loss_pct < 95),
+  role                 text not null default 'autre'
+                         check (role in ('base', 'proteine', 'legume', 'assaisonnement',
+                                         'matiere_grasse', 'accompagnement', 'autre')),
+  is_optional          boolean not null default false,
+  position             integer not null default 0,
+  note                 text,
+  constraint uq_template_line unique (template_id, ingredient_key)
+);
+
+create index if not exists idx_template_lines_template on public.recipe_template_lines (template_id);
+
+
+-- ---------------------------------------------------------------------
+--  3. LE VOCABULAIRE
+--
+--  Un ingr\xE9dient g\xE9n\xE9rique (\xAB oignon \xBB) et toutes les fa\xE7ons de l'\xE9crire
+--  dans un catalogue r\xE9el. L'unicit\xE9 du synonyme est VOLONTAIRE : un m\xEAme
+--  mot ne peut pas d\xE9signer deux ingr\xE9dients, sinon le rattachement
+--  deviendrait un tirage au sort.
+-- ---------------------------------------------------------------------
+create table if not exists public.ingredient_aliases (
+  id              uuid primary key default gen_random_uuid(),
+  organization_id uuid references platform.organizations(id) on delete cascade,
+  ingredient_key  text not null check (ingredient_key ~ '^[a-z][a-z0-9_]*$'),
+  -- Toujours stock\xE9 sous forme normalis\xE9e (trigger ci-dessous).
+  alias           text not null check (length(trim(alias)) > 0),
+  priority        integer not null default 100,
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now(),
+  constraint uq_ingredient_alias unique nulls not distinct (organization_id, alias)
+);
+
+create index if not exists idx_aliases_key on public.ingredient_aliases (ingredient_key);
+
+create or replace function gescatering_internal.normalize_alias()
+returns trigger
+language plpgsql
+set search_path = ''
+as $fn$
+begin
+  new.alias := gescatering_internal.normalize_label(new.alias);
+  if new.alias is null then
+    raise exception 'Synonyme vide.' using errcode = '22023';
+  end if;
+  return new;
+end $fn$;
+
+drop trigger if exists trg_aliases_normalize on public.ingredient_aliases;
+create trigger trg_aliases_normalize before insert or update on public.ingredient_aliases
+  for each row execute function gescatering_internal.normalize_alias();
+
+
+-- ---------------------------------------------------------------------
+--  4. LA CORRESPONDANCE APPRISE
+--
+--  Le chef corrige un rattachement UNE fois ; la maison s'en souvient.
+--  C'est la seule table de ce module qui porte une d\xE9cision humaine, et
+--  elle prime sur tout le reste.
+-- ---------------------------------------------------------------------
+create table if not exists public.recipe_ingredient_products (
+  organization_id uuid not null references platform.organizations(id) on delete cascade,
+  ingredient_key  text not null check (ingredient_key ~ '^[a-z][a-z0-9_]*$'),
+  product_id      uuid not null,
+  decided_by      uuid references auth.users(id) on delete set null default auth.uid(),
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now(),
+  primary key (organization_id, ingredient_key),
+  constraint fk_rip_product foreign key (product_id, organization_id)
+    references public.products (id, organization_id) on delete cascade
+);
+
+
+-- ---------------------------------------------------------------------
+--  5. TRIGGERS DU SOCLE
+-- ---------------------------------------------------------------------
+do $do$
+begin
+  perform platform.attach_updated_at('public', 'recipe_templates');
+  perform platform.attach_updated_at('public', 'recipe_template_lines');
+  perform platform.attach_updated_at('public', 'ingredient_aliases');
+  perform platform.attach_updated_at('public', 'recipe_ingredient_products');
+  -- Pas d'attach_org_default sur le catalogue livr\xE9 : organization_id null
+  -- y est une valeur l\xE9gitime, pas un oubli.
+  perform platform.attach_org_immutability('public', 'recipe_ingredient_products');
+  perform platform.attach_org_default('public', 'recipe_ingredient_products');
+end $do$;
+
+
+-- ---------------------------------------------------------------------
+--  6. RLS
+--
+--  Catalogue et vocabulaire : lecture pour qui voit le r\xE9f\xE9rentiel, le
+--  livr\xE9 comme le maison (m\xEAme r\xE8gle que \`units\`). \xC9criture : la maison
+--  n'\xE9crit que ses propres lignes, jamais celles du catalogue livr\xE9.
+-- ---------------------------------------------------------------------
+alter table public.recipe_templates            enable row level security;
+alter table public.recipe_template_lines       enable row level security;
+alter table public.ingredient_aliases          enable row level security;
+alter table public.recipe_ingredient_products  enable row level security;
+
+do $do$
+declare t text;
+begin
+  foreach t in array array['recipe_templates', 'ingredient_aliases'] loop
+    execute format('drop policy if exists %1$s_select on public.%1$I', t);
+    execute format(
+      'create policy %1$s_select on public.%1$I for select to authenticated '
+      || 'using (organization_id is null or organization_id = any (platform.current_org_ids()))', t);
+
+    execute format('drop policy if exists %1$s_insert on public.%1$I', t);
+    execute format(
+      'create policy %1$s_insert on public.%1$I for insert to authenticated '
+      || 'with check (organization_id is not null '
+      || '            and platform.has_permission(organization_id, ''recipe.manage''))', t);
+
+    execute format('drop policy if exists %1$s_update on public.%1$I', t);
+    execute format(
+      'create policy %1$s_update on public.%1$I for update to authenticated '
+      || 'using      (organization_id is not null '
+      || '            and platform.has_permission(organization_id, ''recipe.manage'')) '
+      || 'with check (organization_id is not null '
+      || '            and platform.has_permission(organization_id, ''recipe.manage''))', t);
+
+    execute format('revoke delete, truncate on public.%I from anon, authenticated', t);
+    execute format('revoke all on public.%I from anon', t);
+  end loop;
+end $do$;
+
+-- Les lignes suivent la visibilit\xE9 de leur plat.
+drop policy if exists recipe_template_lines_select on public.recipe_template_lines;
+create policy recipe_template_lines_select on public.recipe_template_lines
+  for select to authenticated
+  using (exists (select 1 from public.recipe_templates t where t.id = template_id));
+drop policy if exists recipe_template_lines_write on public.recipe_template_lines;
+create policy recipe_template_lines_write on public.recipe_template_lines
+  for all to authenticated
+  using (exists (select 1 from public.recipe_templates t
+                  where t.id = template_id and t.organization_id is not null
+                    and platform.has_permission(t.organization_id, 'recipe.manage')))
+  with check (exists (select 1 from public.recipe_templates t
+                       where t.id = template_id and t.organization_id is not null
+                         and platform.has_permission(t.organization_id, 'recipe.manage')));
+revoke truncate on public.recipe_template_lines from anon, authenticated;
+revoke all on public.recipe_template_lines from anon;
+
+-- Correspondance apprise : visible par qui voit le catalogue, d\xE9cid\xE9e par
+-- qui tient les fiches.
+drop policy if exists recipe_ingredient_products_select on public.recipe_ingredient_products;
+create policy recipe_ingredient_products_select on public.recipe_ingredient_products
+  for select to authenticated
+  using (platform.has_permission(organization_id, 'catalog.read'));
+drop policy if exists recipe_ingredient_products_write on public.recipe_ingredient_products;
+create policy recipe_ingredient_products_write on public.recipe_ingredient_products
+  for all to authenticated
+  using      (platform.has_permission(organization_id, 'recipe.manage'))
+  with check (platform.has_permission(organization_id, 'recipe.manage'));
+revoke truncate on public.recipe_ingredient_products from anon, authenticated;
+revoke all on public.recipe_ingredient_products from anon;
+
+grant select on public.recipe_templates, public.recipe_template_lines,
+                public.ingredient_aliases to authenticated;
+grant select, insert, update, delete on public.recipe_ingredient_products to authenticated;
+grant insert, update on public.recipe_templates, public.ingredient_aliases to authenticated;
+grant insert, update, delete on public.recipe_template_lines to authenticated;
+
+
+-- ---------------------------------------------------------------------
+--  7. L'ORGANISATION DE L'APPELANT
+--
+--  Membre de plusieurs organisations : on refuse de choisir, exactement
+--  comme \`platform.set_organization_id_default\`.
+-- ---------------------------------------------------------------------
+create or replace function gescatering_internal.caller_org()
+returns uuid
+language sql
+stable
+security definer
+set search_path = ''
+as $fn$
+  select case when array_length(platform.current_org_ids(), 1) = 1
+              then (platform.current_org_ids())[1] end;
+$fn$;
+
+
+-- ---------------------------------------------------------------------
+--  8. LE RATTACHEMENT \u2014 le c\u0153ur du module
+--
+--  Trois passes, de la plus s\xFBre \xE0 la plus souple, et un refus par
+--  d\xE9faut. Jamais de produit retenu faute d'alternative.
+-- ---------------------------------------------------------------------
+create or replace function gescatering_internal.match_ingredient(p_org uuid, p_key text)
+returns uuid
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $fn$
+declare
+  v_product uuid;
+  v_ids     uuid[];
+begin
+  if p_org is null or p_key is null then
+    return null;
+  end if;
+
+  -- 1. La d\xE9cision de la maison prime sur tout.
+  select product_id into v_product
+    from public.recipe_ingredient_products
+   where organization_id = p_org and ingredient_key = p_key;
+  if v_product is not null then
+    return v_product;
+  end if;
+
+  -- 2. Synonyme EXACTEMENT \xE9gal au nom du produit.
+  select p.id into v_product
+    from public.products p
+    join public.ingredient_aliases a
+      on a.alias = gescatering_internal.normalize_label(p.name)
+   where p.organization_id = p_org
+     and p.is_active
+     and a.ingredient_key = p_key
+     and (a.organization_id is null or a.organization_id = p_org)
+   order by a.priority, p.name
+   limit 1;
+  if v_product is not null then
+    return v_product;
+  end if;
+
+  -- 3. Synonyme en T\xCATE du nom : \xAB oignon \xBB \u2192 \xAB Oignon locale \xBB.
+  --    Sont \xE9cart\xE9s les produits qui sont le synonyme exact d'un AUTRE
+  --    ingr\xE9dient, sans quoi \xAB oignon \xBB attraperait \xAB Oignon vert \xBB.
+  --    Et s'il reste deux candidats, on n'en prend aucun.
+  with candidat as (
+    select distinct p.id
+      from public.products p
+      join public.ingredient_aliases a
+        on gescatering_internal.normalize_label(p.name) like a.alias || ' %'
+     where p.organization_id = p_org
+       and p.is_active
+       and a.ingredient_key = p_key
+       and (a.organization_id is null or a.organization_id = p_org)
+       and not exists (
+         select 1 from public.ingredient_aliases o
+          where o.alias = gescatering_internal.normalize_label(p.name)
+            and o.ingredient_key <> p_key
+            and (o.organization_id is null or o.organization_id = p_org))
+  )
+  select array_agg(id) into v_ids from candidat;
+
+  if array_length(v_ids, 1) = 1 then
+    return v_ids[1];
+  end if;
+  return null;
+end $fn$;
+
+-- Enveloppe pour la vue : l'organisation n'est PAS un param\xE8tre, sinon un
+-- membre pourrait sonder le catalogue d'une autre maison en la passant.
+create or replace function gescatering_internal.match_for_caller(p_key text)
+returns uuid
+language sql
+stable
+security definer
+set search_path = ''
+as $fn$
+  select gescatering_internal.match_ingredient(gescatering_internal.caller_org(), p_key);
+$fn$;
+
+comment on function gescatering_internal.match_ingredient(uuid, text) is
+  'Produit du stock correspondant \xE0 un ingr\xE9dient du catalogue, ou NULL. '
+  'Correspondance d\xE9cid\xE9e > synonyme exact > synonyme en t\xEAte de nom. '
+  'Ambigu\xEFt\xE9 = NULL : la ligne se signale au chef au lieu d''\xEAtre devin\xE9e.';
+
+
+-- ---------------------------------------------------------------------
+--  9. PR\xC9SENTATION DES QUANTIT\xC9S
+--
+--  Une fiche de 100 couverts qui annonce \xAB 15 000 g de riz \xBB est juste et
+--  illisible. On remonte au kilo et au litre d\xE8s que c'est plus clair.
+-- ---------------------------------------------------------------------
+create or replace function gescatering_internal.display_unit(p_unit_code text, p_quantity numeric)
+returns text
+language sql
+immutable
+set search_path = ''
+as $fn$
+  select case when p_unit_code = 'g'  and p_quantity >= 1000 then 'kg'
+              when p_unit_code = 'ml' and p_quantity >= 1000 then 'l'
+              else p_unit_code end;
+$fn$;
+
+create or replace function gescatering_internal.display_quantity(p_unit_code text, p_quantity numeric)
+returns numeric
+language sql
+immutable
+set search_path = ''
+as $fn$
+  select greatest(
+    round(case when p_unit_code in ('g', 'ml') and p_quantity >= 1000
+               then p_quantity / 1000 else p_quantity end, 3),
+    0.001);
+$fn$;
+
+
+-- ---------------------------------------------------------------------
+--  10. CE QUE LE CATALOGUE PROPOSE \u2014 vue de choix
+--
+--  Pour chaque plat : combien de lignes, et combien se rattachent d\xE9j\xE0 au
+--  stock de cette maison. Le chef voit d'avance ce qui l'attend.
+-- ---------------------------------------------------------------------
+create or replace view public.v_recipe_templates
+with (security_invoker = true)
+as
+  select t.id,
+         t.organization_id,
+         t.key,
+         t.name,
+         t.category,
+         t.service,
+         t.sort_order,
+         t.notes,
+         t.organization_id is null                 as is_shipped,
+         count(l.id)                               as line_count,
+         count(l.id) filter (where l.is_optional)  as optional_count,
+         count(m.product_id)                       as matched_count,
+         string_agg(replace(l.ingredient_key, '_', ' '), ', ' order by l.position)
+           filter (where m.product_id is null and not l.is_optional) as missing_keys
+    from public.recipe_templates t
+    left join public.recipe_template_lines l on l.template_id = t.id
+    left join lateral (
+      select gescatering_internal.match_for_caller(l.ingredient_key) as product_id
+    ) m on true
+   where t.is_active
+   group by t.id, t.organization_id, t.key, t.name, t.category, t.service, t.sort_order, t.notes;
+
+grant select on public.v_recipe_templates to authenticated;
+
+
+-- ---------------------------------------------------------------------
+--  11. APER\xC7U \u2014 ce que donnerait la g\xE9n\xE9ration, avant de l'\xE9crire
+--
+--  Le chef voit la correspondance AVANT que quoi que ce soit n'existe.
+--  C'est ce qui fait de la g\xE9n\xE9ration une proposition, et non un fait.
+-- ---------------------------------------------------------------------
+create or replace function public.preview_recipe_template(
+  p_template_id uuid,
+  p_portions    numeric default 10
+)
+returns table (
+  line_position   integer,
+  ingredient_key  text,
+  role            text,
+  is_optional     boolean,
+  quantity        numeric,
+  unit_code       text,
+  product_id      uuid,
+  product_name    text,
+  stock_unit_code text,
+  decided         boolean,
+  note            text
+)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $fn$
+declare
+  v_org uuid;
+begin
+  v_org := gescatering_internal.caller_org();
+  if v_org is null then
+    raise exception 'Aucune organisation active pour cet utilisateur.' using errcode = '42501';
+  end if;
+  if not platform.has_permission(v_org, 'catalog.read') then
+    raise exception 'Droit insuffisant pour consulter le catalogue de plats.' using errcode = '42501';
+  end if;
+  if p_portions is null or p_portions <= 0 then
+    raise exception 'Indiquer un nombre de couverts sup\xE9rieur \xE0 z\xE9ro.' using errcode = '22023';
+  end if;
+  if not exists (select 1 from public.recipe_templates t
+                  where t.id = p_template_id and t.is_active
+                    and (t.organization_id is null or t.organization_id = v_org)) then
+    raise exception 'Plat introuvable au catalogue.' using errcode = 'P0002';
+  end if;
+
+  return query
+    with ligne as (
+      select l.position as pos, l.ingredient_key as ikey, l.role as irole,
+             l.is_optional as iopt, l.note as inote, l.unit_code as base_unit,
+             -- Brut sorti du magasin : le net divis\xE9 par le rendement.
+             l.quantity_per_portion / (1 - l.loss_pct / 100) * p_portions as brut,
+             gescatering_internal.match_ingredient(v_org, l.ingredient_key) as pid
+        from public.recipe_template_lines l
+       where l.template_id = p_template_id
+    )
+    select g.pos,
+           g.ikey,
+           g.irole,
+           g.iopt,
+           gescatering_internal.display_quantity(g.base_unit, g.brut),
+           gescatering_internal.display_unit(g.base_unit, g.brut),
+           g.pid,
+           p.name,
+           u.code,
+           exists (select 1 from public.recipe_ingredient_products d
+                    where d.organization_id = v_org and d.ingredient_key = g.ikey),
+           g.inote
+      from ligne g
+      left join public.products p on p.id = g.pid
+      left join public.units    u on u.id = p.stock_unit_id
+     order by g.pos;
+end $fn$;
+
+
+-- ---------------------------------------------------------------------
+--  12. G\xC9N\xC9RATION \u2014 une fiche en BROUILLON, et rien de plus
+--
+--  Ce que la fonction \xE9crit : un brouillon, ses lignes rattachables, et
+--  une note qui dit d'o\xF9 il vient et ce qui lui manque. Ce qu'elle
+--  n'\xE9crit jamais : un produit, un prix, une validation.
+-- ---------------------------------------------------------------------
+create or replace function public.create_recipe_from_template(
+  p_template_id uuid,
+  p_portions    numeric default 10,
+  p_name        text    default null,
+  p_sale_price  numeric default null
+)
+returns uuid
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $fn$
+declare
+  v_org    uuid;
+  v_tpl    public.recipe_templates;
+  v_recipe uuid;
+  v_unit   uuid;
+  r        record;
+  v_pos    integer := 0;
+  v_taken  uuid[]  := '{}';
+  v_manque text[]  := '{}';
+  v_fusion text[]  := '{}';
+  v_note   text;
+begin
+  v_org := gescatering_internal.caller_org();
+  if v_org is null then
+    raise exception 'Aucune organisation active pour cet utilisateur.' using errcode = '42501';
+  end if;
+  if not platform.has_permission(v_org, 'recipe.manage') then
+    raise exception 'Droit insuffisant pour cr\xE9er une fiche technique.' using errcode = '42501';
+  end if;
+  if p_portions is null or p_portions <= 0 then
+    raise exception 'Indiquer un nombre de couverts sup\xE9rieur \xE0 z\xE9ro.' using errcode = '22023';
+  end if;
+
+  select * into v_tpl from public.recipe_templates
+   where id = p_template_id and is_active
+     and (organization_id is null or organization_id = v_org);
+  if v_tpl.id is null then
+    raise exception 'Plat introuvable au catalogue.' using errcode = 'P0002';
+  end if;
+
+  insert into public.recipes (organization_id, name, category, portions, sale_price,
+                              target_food_cost_pct, steps, created_by)
+  values (v_org, coalesce(nullif(trim(p_name), ''), v_tpl.name), v_tpl.category, p_portions,
+          p_sale_price, 35, v_tpl.steps, auth.uid())
+  returning id into v_recipe;
+
+  for r in
+    select l.ingredient_key as ikey, l.unit_code as base_unit, l.is_optional as iopt,
+           l.note as inote,
+           l.quantity_per_portion / (1 - l.loss_pct / 100) * p_portions as brut,
+           gescatering_internal.match_ingredient(v_org, l.ingredient_key) as pid
+      from public.recipe_template_lines l
+     where l.template_id = p_template_id
+     order by l.position
+  loop
+    if r.pid is null then
+      -- Ingr\xE9dient sans produit au stock : on le NOMME, on ne l'invente pas.
+      if not r.iopt then
+        v_manque := v_manque || replace(r.ikey, '_', ' ');
+      end if;
+      continue;
+    end if;
+    if r.pid = any (v_taken) then
+      -- Deux ingr\xE9dients du mod\xE8le d\xE9signent le m\xEAme produit chez ce
+      -- client : on garde la premi\xE8re ligne, et on le dit.
+      v_fusion := v_fusion || replace(r.ikey, '_', ' ');
+      continue;
+    end if;
+
+    select id into v_unit from public.units
+     where organization_id is null
+       and code = gescatering_internal.display_unit(r.base_unit, r.brut);
+
+    insert into public.recipe_lines (organization_id, recipe_id, product_id, quantity, unit_id, position, note)
+    values (v_org, v_recipe, r.pid,
+            gescatering_internal.display_quantity(r.base_unit, r.brut), v_unit, v_pos, r.inote);
+    v_pos   := v_pos + 1;
+    v_taken := v_taken || r.pid;
+  end loop;
+
+  if v_pos = 0 then
+    raise exception 'Aucun ingr\xE9dient de \xAB % \xBB ne correspond \xE0 un produit du catalogue : la fiche serait vide.',
+      v_tpl.name using errcode = '22023',
+      hint = 'Faire ajouter ces produits au catalogue, ou rattacher les ingr\xE9dients \xE0 la main.';
+  end if;
+
+  v_note := format('Propos\xE9e depuis le catalogue (%s) le %s, pour %s couvert(s). '
+                   || 'Grammages \xE0 v\xE9rifier par la cuisine avant validation.',
+                   v_tpl.name, to_char(current_date, 'DD/MM/YYYY'),
+                   -- \xAB 100 \xBB, pas \xAB 100. \xBB : to_char laisse le point des d\xE9cimales.
+                   case when p_portions = trunc(p_portions) then trunc(p_portions)::text
+                        else trim(to_char(p_portions, 'FM999999.99')) end);
+  if array_length(v_manque, 1) > 0 then
+    v_note := v_note || format(E'\\nSans produit au catalogue, \xE0 compl\xE9ter : %s.',
+                               array_to_string(v_manque, ', '));
+  end if;
+  if array_length(v_fusion, 1) > 0 then
+    v_note := v_note || format(E'\\nD\xE9j\xE0 couvert par une autre ligne : %s.',
+                               array_to_string(v_fusion, ', '));
+  end if;
+  if v_tpl.notes is not null then
+    v_note := v_note || E'\\n' || v_tpl.notes;
+  end if;
+
+  update public.recipes set notes = v_note where id = v_recipe;
+  return v_recipe;
+end $fn$;
+
+comment on function public.create_recipe_from_template(uuid, numeric, text, numeric) is
+  'Cr\xE9e une fiche technique en BROUILLON depuis un plat du catalogue. '
+  'Ne cr\xE9e aucun produit : les ingr\xE9dients absents du stock sont nomm\xE9s dans la note.';
+
+
+-- ---------------------------------------------------------------------
+--  13. LA CORRECTION DU CHEF \u2014 faite une fois, retenue
+-- ---------------------------------------------------------------------
+create or replace function public.set_ingredient_product(
+  p_ingredient_key text,
+  p_product_id     uuid
+)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $fn$
+declare v_org uuid;
+begin
+  v_org := gescatering_internal.caller_org();
+  if v_org is null then
+    raise exception 'Aucune organisation active pour cet utilisateur.' using errcode = '42501';
+  end if;
+  if not platform.has_permission(v_org, 'recipe.manage') then
+    raise exception 'Droit insuffisant pour modifier le catalogue de plats.' using errcode = '42501';
+  end if;
+
+  if p_product_id is null then
+    delete from public.recipe_ingredient_products
+     where organization_id = v_org and ingredient_key = p_ingredient_key;
+    return;
+  end if;
+
+  if not exists (select 1 from public.products
+                  where id = p_product_id and organization_id = v_org and is_active) then
+    raise exception 'Produit introuvable au catalogue.' using errcode = 'P0002';
+  end if;
+
+  insert into public.recipe_ingredient_products (organization_id, ingredient_key, product_id, decided_by)
+  values (v_org, p_ingredient_key, p_product_id, auth.uid())
+  on conflict (organization_id, ingredient_key)
+    do update set product_id = excluded.product_id, decided_by = excluded.decided_by;
+end $fn$;
+
+
+-- ---------------------------------------------------------------------
+--  14. EXPOSITION
+-- ---------------------------------------------------------------------
+revoke all on function gescatering_internal.normalize_alias() from public, anon, authenticated;
+revoke all on function gescatering_internal.match_ingredient(uuid, text) from public, anon, authenticated;
+revoke all on function gescatering_internal.match_for_caller(text) from public, anon;
+grant execute on function gescatering_internal.match_for_caller(text) to authenticated;
+revoke all on function gescatering_internal.caller_org() from public, anon;
+grant execute on function gescatering_internal.caller_org() to authenticated;
+revoke all on function gescatering_internal.normalize_label(text) from public, anon;
+grant execute on function gescatering_internal.normalize_label(text) to authenticated;
+revoke all on function gescatering_internal.display_unit(text, numeric),
+                       gescatering_internal.display_quantity(text, numeric) from public, anon;
+grant execute on function gescatering_internal.display_unit(text, numeric),
+                          gescatering_internal.display_quantity(text, numeric) to authenticated;
+revoke all on function public.preview_recipe_template(uuid, numeric),
+                       public.create_recipe_from_template(uuid, numeric, text, numeric),
+                       public.set_ingredient_product(text, uuid) from public, anon;
+grant execute on function public.preview_recipe_template(uuid, numeric),
+                          public.create_recipe_from_template(uuid, numeric, text, numeric),
+                          public.set_ingredient_product(text, uuid) to authenticated;
+`},{name:"migrations/C0012__recipe_catalogue_data.sql",sql:`-- =====================================================================
+--  C0012 \u2014 Le catalogue livr\xE9 : vocabulaire et plats
+--
+--  Deux contenus, et ils sont de nature diff\xE9rente :
+--
+--   \u2022 LE VOCABULAIRE (\xA71) : un ingr\xE9dient g\xE9n\xE9rique et toutes les fa\xE7ons
+--     de l'\xE9crire dans un catalogue r\xE9el. Il est cal\xE9 sur des noms
+--     r\xE9ellement rencontr\xE9s en restauration collective s\xE9n\xE9galaise \u2014
+--     \xAB Pate d'arachide \xBB, \xAB Netetou en poudre \xBB, \xAB Oignon locale \xBB,
+--     \xAB Gombon \xBB, \xAB Piment gouana sofia \xBB \u2014 et compl\xE9t\xE9 par les \xE9critures
+--     standard, pour qu'un autre client se rattache aussi.
+--
+--   \u2022 LES PLATS (\xA72) : 32 plats, en quantit\xE9 NETTE par portion, avec leur
+--     perte au parage. Ce sont des grammages de m\xE9tier, pas les
+--     grammages d'une maison : ils donnent un brouillon honn\xEAte, que la
+--     cuisine corrige. Une portion = un couvert adulte de collective.
+--
+--  \u26A0\uFE0F Les quantit\xE9s servent de POINT DE D\xC9PART. La maison qui sert 180 g
+--     de riz sec par couvert n'a pas tort : elle a sa grammaire. C'est
+--     pourquoi la fiche engendr\xE9e na\xEEt en brouillon et que la validation
+--     reste un geste humain.
+--
+--  \u26A0\uFE0F Un ingr\xE9dient volontairement laiss\xE9 sans \xE9quivalent chez beaucoup
+--     de clients (huile, beurre, levure, fromage, Maggi, poivre, pain de
+--     burger, farine de bl\xE9, huile de palme) n'est PAS une erreur : la
+--     g\xE9n\xE9ration le nomme comme \xAB \xE0 compl\xE9ter \xBB, et cette liste vaut
+--     audit du r\xE9f\xE9rentiel produits.
+-- =====================================================================
+
+
+-- ---------------------------------------------------------------------
+--  1. LE VOCABULAIRE
+--
+--  \`priority\` tranche quand plusieurs synonymes existent chez le m\xEAme
+--  client : le plus petit gagne. Les \xE9critures locales sont donc
+--  prioritaires sur les \xE9critures g\xE9n\xE9riques.
+-- ---------------------------------------------------------------------
+insert into public.ingredient_aliases (organization_id, ingredient_key, alias, priority) values
+  -- C\xE9r\xE9ales, f\xE9culents et farines
+  (null, 'riz_brise',          'Riz parfume pithibi',       10),
+  (null, 'riz_brise',          'Riz brise',                 20),
+  (null, 'riz_brise',          'Riz',                       90),
+  (null, 'spaghetti',          'Spaguetty',                 10),
+  (null, 'spaghetti',          'Spaghetti',                 20),
+  (null, 'spaghetti',          'Pates alimentaires',        30),
+  (null, 'vermicelle',         'Vermicelle',                10),
+  (null, 'couscous_thiere',    'Thiere',                    10),
+  (null, 'couscous_thiere',    'Sankhal',                   20),
+  (null, 'couscous_thiere',    'Couscous',                  30),
+  (null, 'attieke',            'Athieke',                   10),
+  (null, 'attieke',            'Attieke',                   20),
+  (null, 'farine_patissiere',  'Farine patissier',          10),
+  (null, 'farine_patissiere',  'Farine patissiere',         20),
+  (null, 'farine_patissiere',  'Farine',                    90),
+  (null, 'farine_ble',         'Farine de ble',             10),
+  (null, 'farine_ble',         'Farine boulangere',         20),
+  (null, 'pain_arabe',         'Pain arabe',                10),
+  (null, 'pain_arabe',         'Pain libanais',             20),
+  (null, 'pain_burger',        'Pain burger',               10),
+  (null, 'pain_burger',        'Pain hamburger',            20),
+  (null, 'pain_burger',        'Buns',                      30),
+  (null, 'tacos_galette',      'Tacos',                     10),
+  (null, 'tacos_galette',      'Galette tacos',             20),
+
+  -- Viandes, volailles, poissons
+  (null, 'viande_boeuf_os',    'Viande locale',             10),
+  (null, 'viande_boeuf_os',    'Viande de boeuf',           20),
+  (null, 'viande_boeuf_os',    'Boeuf',                     30),
+  (null, 'viande_boeuf_os',    'Viande',                    90),
+  (null, 'viande_hachee',      'Viande hachee',             10),
+  (null, 'poulet',             'Poulet blanc',              10),
+  (null, 'poulet',             'Poulets',                   20),
+  (null, 'poulet',             'Poulet',                    90),
+  (null, 'poisson_entier',     'Poisson gm',                10),
+  (null, 'poisson_entier',     'Poisson dorade',            20),
+  (null, 'poisson_entier',     'Poisson lotte',             30),
+  (null, 'poisson_entier',     'Poisson',                   90),
+  (null, 'poisson_frire',      'Poisson frire',             10),
+  (null, 'capitaine',          'Capitaine',                 10),
+  (null, 'jambon',             'Jambon',                    10),
+  (null, 'saucisson',          'Saucisson',                 10),
+  (null, 'thon',               'Thon',                      10),
+  (null, 'calamar',            'Calamar',                   10),
+  (null, 'crevette',           'Crevette n 1',              10),
+  (null, 'crevette',           'Crevette n 2',              20),
+  (null, 'crevette',           'Crevette',                  90),
+  (null, 'oeuf',               'Oeuf',                      10),
+  (null, 'oeuf',               'Oeufs',                     20),
+
+  -- Poissons s\xE9ch\xE9s et condiments s\xE9n\xE9galais
+  (null, 'yet',                'Yet',                       10),
+  (null, 'yet',                'Yet bou sew',               20),
+  (null, 'guedj',              'Guedj beurre',              10),
+  (null, 'guedj',              'Guedj kong',                20),
+  (null, 'guedj',              'Guedj',                     90),
+  (null, 'kong_fume',          'Kong fume',                 10),
+  (null, 'crevette_sechee',    'Crevette sechee',           10),
+  (null, 'netetou',            'Netetou en poudre',         10),
+  (null, 'netetou',            'Netetou',                   20),
+  (null, 'pagne',              'Pagne',                     10),
+  (null, 'keithia',            'Keithia',                   10),
+
+  -- L\xE9gumes et fruits
+  (null, 'oignon',             'Oignon locale',             10),
+  (null, 'oignon',             'Oignon blanc',              20),
+  (null, 'oignon',             'Oignon',                    90),
+  (null, 'oignon_vert',        'Oignon vert',               10),
+  (null, 'tomate_fraiche',     'Tomate fraiche',            10),
+  (null, 'tomate_fraiche',     'Tomate',                    90),
+  (null, 'tomate_concentree',  'Tomate concentree',         10),
+  (null, 'tomate_concentree',  'Concentre de tomate',       20),
+  (null, 'tomate_concentree',  'Double concentre de tomate',30),
+  (null, 'carotte',            'Carotte',                   10),
+  (null, 'chou',               'Chou',                      10),
+  (null, 'manioc',             'Manioc',                    10),
+  (null, 'pomme_de_terre',     'Pomme de terre',            10),
+  (null, 'pomme_de_terre',     'Pommes de terre',           20),
+  (null, 'patate_douce',       'Patate',                    10),
+  (null, 'patate_douce',       'Patate douce',              20),
+  (null, 'gombo',              'Gombon',                    10),
+  (null, 'gombo',              'Gombo',                     20),
+  (null, 'aubergine_amere',    'Diakhatou',                 10),
+  (null, 'aubergine_amere',    'Aubergine amere',           20),
+  (null, 'poivron_vert',       'Poivron vert',              10),
+  (null, 'poivron_vert',       'Poivron',                   90),
+  (null, 'piment_frais',       'Piment gouana sofia',       10),
+  (null, 'piment_frais',       'Piment frais',              20),
+  (null, 'piment_frais',       'Piment',                    90),
+  (null, 'piment_poudre',      'Piment en poudre',          10),
+  (null, 'ail',                'Ail',                       10),
+  (null, 'persil',             'Peril ordinnaire',          10),
+  (null, 'persil',             'Persil',                    90),
+  (null, 'coriandre',          'Persil chinois',            10),
+  (null, 'coriandre',          'Coriandre',                 20),
+  (null, 'salade',             'Salade',                    10),
+  (null, 'salade',             'Laitue',                    20),
+  (null, 'concombre',          'Concombre',                 10),
+  (null, 'courgette',          'Courgette',                 10),
+  (null, 'haricot_vert',       'Haricot vert',              10),
+  (null, 'petit_pois',         'Petit pois',                10),
+  (null, 'petit_pois',         'Petit bpois surgele',       20),
+  (null, 'brocoli',            'Brocolis',                  10),
+  (null, 'champignon',         'Champignon',                10),
+  (null, 'olive_verte',        'Olive',                     10),
+  (null, 'olive_noire',        'Olive noire gm',            10),
+  (null, 'olive_noire',        'Olive noire',               20),
+  (null, 'citron_vert',        'Citron vert',               10),
+  (null, 'citron_liquide',     'Citron liquide',            10),
+  (null, 'citron_liquide',     'Jus de citron',             20),
+  (null, 'maicedoine',         'Maicedoine',                10),
+  (null, 'maicedoine',         'Macedoine',                 20),
+  (null, 'niebe',              'Niebe',                     10),
+  (null, 'niebe',              'Haricot niebe',             20),
+  (null, 'lentille',           'Lentille',                  10),
+  (null, 'tamarin',            'Tamarin',                   10),
+  (null, 'bissap',             'Bissap kouthia',            10),
+  (null, 'bissap',             'Bissap',                    20),
+  (null, 'bouye',              'Bouye',                     10),
+  (null, 'noflaye',            'Noflaye',                   10),
+
+  -- Mati\xE8res grasses (souvent absentes des catalogues : c'est voulu)
+  (null, 'huile',              'Huile',                     10),
+  (null, 'huile',              'Huile vegetale',            20),
+  (null, 'huile',              'Huile de tournesol',        30),
+  (null, 'huile',              'Huile d arachide',          40),
+  (null, 'huile_palme',        'Huile de palme',            10),
+  (null, 'huile_palme',        'Huile rouge',               20),
+  (null, 'beurre',             'Beurre',                    10),
+  (null, 'margarine',          'Margarine',                 10),
+
+  -- Assaisonnements et sauces
+  (null, 'sel',                'Sel grain',                 10),
+  (null, 'sel',                'Sel fin',                   20),
+  (null, 'sel',                'Sel',                       90),
+  (null, 'poivre',             'Poivre moulu',              10),
+  (null, 'poivre',             'Poivre noir',               20),
+  (null, 'poivre',             'Poivre',                    90),
+  (null, 'bouillon_cube',      'Maggi',                     10),
+  (null, 'bouillon_cube',      'Bouillon cube',             20),
+  (null, 'bouillon_cube',      'Jumbo',                     30),
+  (null, 'bouillon_cube',      'Cube',                      40),
+  (null, 'laurier',            'Laurier',                   10),
+  (null, 'moutarde',           'Moutarde',                  10),
+  (null, 'vinaigre',           'Vinaigre',                  10),
+  (null, 'soja_sauce',         'Soja',                      10),
+  (null, 'soja_sauce',         'Sauce soja',                20),
+  (null, 'amora',              'Amora',                     10),
+  (null, 'mayonnaise',         'Mayonnaise',                10),
+  (null, 'ketchup',            'Ketchup',                   10),
+  (null, 'sauce_chili',        'Sauce chili',               10),
+  (null, 'sauce_algerienne',   'Sauce algerienne',          10),
+  (null, 'curry',              'Epice curry',               10),
+  (null, 'curry',              'Carry',                     20),
+  (null, 'curry',              'Curry',                     30),
+  (null, 'curcuma',            'Curcuman',                  10),
+  (null, 'curcuma',            'Curcuma',                   20),
+  (null, 'paprika',            'Epice paprika',             10),
+  (null, 'paprika',            'Paprika',                   20),
+  (null, 'thym',               'Epice thyn',                10),
+  (null, 'thym',               'Thym',                      20),
+  (null, 'herbes_provence',    'Herbe de province',         10),
+  (null, 'herbes_provence',    'Herbes de provence',        20),
+  (null, 'tandoori',           'Tandori',                   10),
+  (null, 'tandoori',           'Tandoori',                  20),
+  (null, 'pate_arachide',      'Pate d arachide',           10),
+  (null, 'pate_arachide',      'Pate d arachide pure',      20),
+
+  -- P\xE2tisserie, laitages, boissons
+  (null, 'sucre',              'Sucre en poudre',           10),
+  (null, 'sucre',              'Sucre',                     90),
+  (null, 'sucre_morceaux',     'Sucre en morceaux',         10),
+  (null, 'lait_poudre',        'Lait en poudre',            10),
+  (null, 'lait_poudre',        'Lait poudre',               20),
+  (null, 'lait_frais',         'Lait frais',                10),
+  (null, 'lait_frais',         'Lait',                      90),
+  (null, 'creme_liquide',      'Creme liquide',             10),
+  (null, 'creme_liquide',      'Creme fraiche',             20),
+  (null, 'fromage_rape',       'Fromage rape',              10),
+  (null, 'fromage_rape',       'Mozzarella',                20),
+  (null, 'fromage_rape',       'Fromage',                   90),
+  (null, 'levure',             'Levure boulangere',         10),
+  (null, 'levure',             'Levure chimique',           20),
+  (null, 'levure',             'Levure',                    90),
+  (null, 'vanille',            'Essence vanille',           10),
+  (null, 'vanille',            'Extrait de vanille',        20),
+  (null, 'vanille',            'Vanille',                   90),
+  (null, 'essence_menthe',     'Essence menthe',            10),
+  (null, 'fleur_oranger',      'Fleur d orange',            10),
+  (null, 'fleur_oranger',      'Eau de fleur d oranger',    20),
+  (null, 'chocolat',           'Chocolat patissier',        10),
+  (null, 'chocolat',           'Chocolat noir',             20),
+  (null, 'chocolat',           'Chocolat',                  90),
+  (null, 'cacao',             'Cacao en poudre',            10),
+  (null, 'cacao',             'Cacao',                      20),
+  (null, 'cafe',               'Cafe moulu',                10),
+  (null, 'cafe',               'Cafe',                      90),
+  (null, 'the_vert',           'Ataya',                     10),
+  (null, 'the_vert',           'The vert',                  20),
+  (null, 'sunquick',           'Sunquick',                  10),
+
+  -- Emballages : en fast-food, l'emballage est un co\xFBt par pi\xE8ce, pas un
+  -- frais g\xE9n\xE9ral. Il a donc sa place dans la fiche technique.
+  (null, 'carton_pizza',       'Carton pizza',              10),
+  (null, 'pot_pizza',          'Pot pizza gobelets',        10),
+  (null, 'papier_sandwich',    'Papier sandwich',           10),
+  (null, 'sachet_emporte',     'Sachet emporte',            10),
+  (null, 'sachet_croissant',   'Sachet croissant',          10),
+  (null, 'pick_brochette',     'Pick brochette gm',         10),
+  (null, 'pick_brochette',     'Pick brochette',            20),
+  (null, 'gobelet',            'Gobelet cafe',              10),
+  (null, 'gobelet',            'Gobelet',                   90),
+  (null, 'charbon',            'Charbon',                   10)
+on conflict on constraint uq_ingredient_alias do update
+  set ingredient_key = excluded.ingredient_key,
+      priority       = excluded.priority;
+
+
+-- ---------------------------------------------------------------------
+--  2. LES PLATS
+-- ---------------------------------------------------------------------
+insert into public.recipe_templates (organization_id, key, name, category, service, sort_order, steps, notes) values
+
+  -- ---- Cuisine centrale : riz et plats s\xE9n\xE9galais ----
+  (null, 'thiebou_dieune_rouge', 'Thi\xE9bou dieune rouge', 'Plat chaud', 'cuisine', 10,
+   E'1. Nettoyer et farcir le poisson (ail, persil, piment).\\n'
+   '2. Faire revenir l''oignon \xE0 l''huile, ajouter la tomate concentr\xE9e et cuire le concentr\xE9.\\n'
+   '3. Mouiller, ajouter yet, guedj et n\xE9t\xE9tou ; cuire le poisson puis le r\xE9server.\\n'
+   '4. Cuire les l\xE9gumes dans le bouillon, les r\xE9server au chaud.\\n'
+   '5. Verser le riz lav\xE9 dans le bouillon, couvrir, cuire 25 \xE0 30 min \xE0 feu doux.\\n'
+   '6. Dresser le riz, le poisson et les l\xE9gumes ; servir le piment \xE0 part.',
+   'Plat unique : 150 g de riz sec par couvert. Le bouillon doit \xEAtre rectifi\xE9 AVANT le riz \u2014 '
+   'apr\xE8s, le sel ne se reprend plus.'),
+
+  (null, 'thiebou_dieune_blanc', 'Thi\xE9bou dieune blanc', 'Plat chaud', 'cuisine', 20,
+   E'1. Nettoyer et farcir le poisson.\\n'
+   '2. Monter un bouillon clair : oignon, huile, yet, guedj, n\xE9t\xE9tou, ail, persil.\\n'
+   '3. Cuire le poisson, le r\xE9server ; cuire les l\xE9gumes dans le bouillon.\\n'
+   '4. Cuire le riz dans le bouillon filtr\xE9, 25 \xE0 30 min.\\n'
+   '5. Dresser ; citron et piment \xE0 part.',
+   'Sans tomate concentr\xE9e : la couleur vient du bouillon, pas du concentr\xE9.'),
+
+  (null, 'thiebou_yapp', 'Thi\xE9bou yapp (riz \xE0 la viande)', 'Plat chaud', 'cuisine', 30,
+   E'1. Saisir la viande \xE0 l''huile avec l''ail et le poivre.\\n'
+   '2. Ajouter l''oignon, puis la tomate concentr\xE9e ; cuire le concentr\xE9 5 min.\\n'
+   '3. Mouiller, ajouter laurier et n\xE9t\xE9tou, mijoter 45 min.\\n'
+   '4. Ajouter les l\xE9gumes, cuire 20 min, les r\xE9server.\\n'
+   '5. Cuire le riz dans le bouillon, 25 min.\\n'
+   '6. Dresser riz, viande et l\xE9gumes.',
+   'Viande avec os : le poids inclut l''os, comme \xE0 l''achat.'),
+
+  (null, 'thiebou_guinar', 'Thi\xE9bou guinar (riz au poulet)', 'Plat chaud', 'cuisine', 40,
+   E'1. Assaisonner le poulet (ail, poivre, bouillon) et le saisir.\\n'
+   '2. Faire revenir l''oignon, ajouter la tomate concentr\xE9e.\\n'
+   '3. Mouiller, remettre le poulet, mijoter 30 min.\\n'
+   '4. Cuire les l\xE9gumes dans le bouillon, r\xE9server.\\n'
+   '5. Cuire le riz dans le bouillon, 25 min.',
+   'Poulet d\xE9coup\xE9 en 8 : environ 200 g par couvert, os compris.'),
+
+  (null, 'maffe_yapp', 'Maf\xE9 viande', 'Plat chaud', 'cuisine', 50,
+   E'1. Couper la viande en morceaux, assaisonner (ail, poivre, bouillon).\\n'
+   '2. Faire revenir \xE0 l''huile, ajouter l''oignon et la tomate concentr\xE9e.\\n'
+   '3. D\xE9layer la p\xE2te d''arachide dans de l''eau chaude, verser et mouiller.\\n'
+   '4. Mijoter 45 min \xE0 feu doux en remuant \u2014 la p\xE2te attache.\\n'
+   '5. Ajouter pomme de terre, carotte et patate douce ; cuire 20 min.\\n'
+   '6. Rectifier (yet, n\xE9t\xE9tou, piment) ; servir avec le riz cuit \xE0 part.',
+   'La viande p\xE8se le plus lourd dans le co\xFBt mati\xE8re : surveiller le food cost de cette seule ligne. '
+   'La p\xE2te d''arachide doit cuire au moins 40 min, sinon elle reste am\xE8re.'),
+
+  (null, 'maffe_guinar', 'Maf\xE9 poulet', 'Plat chaud', 'cuisine', 60,
+   E'1. Assaisonner et saisir le poulet.\\n'
+   '2. Faire revenir l''oignon, ajouter la tomate concentr\xE9e.\\n'
+   '3. D\xE9layer la p\xE2te d''arachide, verser, mouiller, mijoter 30 min.\\n'
+   '4. Ajouter les l\xE9gumes, cuire 20 min.\\n'
+   '5. Rectifier ; servir avec le riz.',
+   'Moins long que le maf\xE9 viande : le poulet ne demande que 30 min.'),
+
+  (null, 'yassa_poulet', 'Yassa poulet', 'Plat chaud', 'cuisine', 70,
+   E'1. Mariner le poulet la veille : citron, oignon \xE9minc\xE9, moutarde, ail, piment.\\n'
+   '2. Griller ou saisir le poulet, le r\xE9server.\\n'
+   '3. Confire l''oignon de la marinade \xE0 l''huile, 30 min \xE0 feu doux, avec le laurier.\\n'
+   '4. Ajouter un trait de vinaigre, remettre le poulet, mijoter 15 min.\\n'
+   '5. Servir sur le riz blanc.',
+   'Le yassa EST un plat d''oignon : 180 g par couvert, et l''oignon doit confire, pas frire. '
+   'Marinade la veille \u2014 c''est elle qui fait le go\xFBt, pas la cuisson.'),
+
+  (null, 'yassa_poisson', 'Yassa poisson', 'Plat chaud', 'cuisine', 80,
+   E'1. Mariner le poisson 2 h : citron, moutarde, ail, piment.\\n'
+   '2. Frire le poisson, le r\xE9server.\\n'
+   '3. Confire l''oignon \xE0 l''huile 30 min avec le laurier et la marinade.\\n'
+   '4. D\xE9glacer au vinaigre, remettre le poisson 5 min.\\n'
+   '5. Servir sur le riz blanc.',
+   'Le poisson ne retourne dans l''oignon qu''au dernier moment, sinon il se d\xE9fait.'),
+
+  (null, 'domoda_viande', 'Domoda', 'Plat chaud', 'cuisine', 90,
+   E'1. Saisir la viande, ajouter l''oignon puis la tomate concentr\xE9e.\\n'
+   '2. Mouiller et mijoter 45 min.\\n'
+   '3. D\xE9layer la farine \xE0 froid, verser en pluie pour lier la sauce.\\n'
+   '4. Ajouter les l\xE9gumes, cuire 20 min.\\n'
+   '5. Acidifier au citron en fin de cuisson ; servir avec le riz.',
+   'La farine se d\xE9laie TOUJOURS \xE0 froid, sinon la sauce fait des grumeaux. '
+   'L''acidit\xE9 du citron s''ajoute hors du feu.'),
+
+  (null, 'soupou_kandia', 'Soupou kandia', 'Plat chaud', 'cuisine', 100,
+   E'1. Hacher le gombo tr\xE8s fin (ou le r\xE2per).\\n'
+   '2. Cuire poisson, crevettes s\xE9ch\xE9es, guedj et kong dans un bouillon court.\\n'
+   '3. Ajouter le gombo et l''huile de palme ; cuire 30 min sans couvrir.\\n'
+   '4. Rectifier (yet, n\xE9t\xE9tou, piment).\\n'
+   '5. Servir sur le riz blanc.',
+   'Sans huile de palme, ce n''est pas un soupou kandia. Ne jamais couvrir : le gombo noircit.'),
+
+  (null, 'thiou_rouge', 'Thiou rouge', 'Plat chaud', 'cuisine', 110,
+   E'1. Saisir la viande, ajouter l''oignon.\\n'
+   '2. Cuire la tomate concentr\xE9e 5 min, mouiller largement.\\n'
+   '3. Mijoter 45 min, ajouter les l\xE9gumes, cuire 25 min.\\n'
+   '4. Rectifier ; servir la sauce et les l\xE9gumes sur le riz blanc.',
+   'Sauce plus longue en bouche que le thi\xE9bou : le concentr\xE9 doit cuire, pas bouillir.'),
+
+  (null, 'caldou', 'Caldou', 'Plat chaud', 'cuisine', 120,
+   E'1. Monter un bouillon clair : oignon, poivron, ail, piment, huile.\\n'
+   '2. Pocher le poisson 12 min dans ce bouillon.\\n'
+   '3. Acidifier franchement au citron, hors du feu.\\n'
+   '4. Servir avec le riz blanc.',
+   'Sauce claire, jamais li\xE9e. Le citron s''ajoute hors du feu, sinon il devient amer.'),
+
+  (null, 'ndambe', 'Ndamb\xE9', 'Plat chaud', 'cuisine', 130,
+   E'1. Tremper le ni\xE9b\xE9 la veille, le cuire 1 h sans sel.\\n'
+   '2. Faire revenir l''oignon, ajouter la tomate concentr\xE9e et l''huile.\\n'
+   '3. R\xE9unir, saler, mijoter 20 min.\\n'
+   '4. Servir en plat ou en garniture de pain.',
+   'Le sel en d\xE9but de cuisson durcit le ni\xE9b\xE9 : saler \xE0 la fin. Plat le moins cher du r\xE9pertoire.'),
+
+  (null, 'vermicelle_viande', 'Vermicelle \xE0 la viande', 'Plat chaud', 'cuisine', 140,
+   E'1. Saisir la viande, ajouter l''oignon et la tomate concentr\xE9e.\\n'
+   '2. Mouiller, mijoter 40 min.\\n'
+   '3. Cuire le vermicelle \xE0 la vapeur ou dans le bouillon.\\n'
+   '4. Ajouter carotte et petits pois.\\n'
+   '5. R\xE9unir au service.',
+   'Le vermicelle gonfle : 120 g sec par couvert suffisent.'),
+
+  (null, 'spaghetti_bolognaise', 'Spaghetti bolognaise', 'Plat chaud', 'cuisine', 150,
+   E'1. Faire revenir la viande hach\xE9e \xE0 l''huile, l''\xE9grener.\\n'
+   '2. Ajouter oignon, ail et carotte en brunoise.\\n'
+   '3. Ajouter tomate fra\xEEche et concentr\xE9, herbes et paprika ; mijoter 30 min.\\n'
+   '4. Cuire les spaghetti al dente.\\n'
+   '5. Napper au service, jamais \xE0 l''avance.',
+   'Napper au service : des p\xE2tes m\xE9lang\xE9es \xE0 la sauce \xE0 l''avance se d\xE9litent.'),
+
+  (null, 'poisson_firire', 'Poisson frit (firire) et oignons', 'Plat chaud', 'cuisine', 160,
+   E'1. Mariner le poisson (ail, citron, piment, sel).\\n'
+   '2. Le frire \xE0 l''huile chaude, l''\xE9goutter.\\n'
+   '3. Confire l''oignon avec un peu de tomate concentr\xE9e et de moutarde.\\n'
+   '4. Servir avec le riz blanc et l''oignon \xE0 part.',
+   'Huile de friture : compter la consommation r\xE9elle, pas le volume du bain.'),
+
+  -- ---- Fast food : une portion = une pi\xE8ce vendue ----
+  (null, 'burger_boeuf', 'Hamburger b\u0153uf', 'Fast food', 'fast_food', 200,
+   E'1. Fa\xE7onner le steak (120 g), assaisonner au dernier moment.\\n'
+   '2. Griller 2 min par face, toaster le pain.\\n'
+   '3. Monter : sauce, salade, tomate, steak, oignon, sauce.\\n'
+   '4. Emballer imm\xE9diatement.',
+   'Une portion = un burger. Assaisonner le steak avant la cuisson le fait rendre son eau.'),
+
+  (null, 'chawarma_poulet', 'Chawarma poulet', 'Fast food', 'fast_food', 210,
+   E'1. Mariner le poulet \xE9minc\xE9 (curry, paprika, ail, citron) 2 h.\\n'
+   '2. Le saisir \xE0 feu vif \xE0 la plancha.\\n'
+   '3. Garnir le pain : sauces, crudit\xE9s, poulet.\\n'
+   '4. Rouler serr\xE9, passer au grill 1 min.',
+   'Une portion = un chawarma. Le pain se garnit chaud, sinon il casse en roulant.'),
+
+  (null, 'pizza_margherita', 'Pizza margherita', 'Fast food', 'fast_food', 220,
+   E'1. P\xE9trir la p\xE2te (farine, eau, levure, sel, huile), laisser pousser 1 h 30.\\n'
+   '2. Abaisser \xE0 28 cm, garnir de sauce tomate.\\n'
+   '3. Ajouter le fromage et les herbes.\\n'
+   '4. Cuire 8 \xE0 10 min \xE0 four tr\xE8s chaud.',
+   'Une portion = une pizza de 28 cm. La p\xE2te doit pousser : une pizza press\xE9e est une pizza dure.'),
+
+  (null, 'pizza_reine', 'Pizza reine', 'Fast food', 'fast_food', 230,
+   E'1. Pr\xE9parer et pousser la p\xE2te.\\n'
+   '2. Garnir : sauce tomate, fromage, jambon, champignons, olives.\\n'
+   '3. Cuire 8 \xE0 10 min \xE0 four tr\xE8s chaud.',
+   'Une portion = une pizza de 28 cm.'),
+
+  (null, 'tacos_poulet', 'Tacos poulet', 'Fast food', 'fast_food', 240,
+   E'1. Saisir le poulet marin\xE9, frire les pommes de terre en b\xE2tonnets.\\n'
+   '2. Garnir la galette : sauce, poulet, frites, fromage.\\n'
+   '3. Plier en rectangle, presser au grill 2 min par face.',
+   'Une portion = un tacos. Presser au grill soude la galette : sans cela, il s''ouvre.'),
+
+  (null, 'sandwich_thon', 'Sandwich thon', 'Fast food', 'fast_food', 250,
+   E'1. \xC9goutter le thon, le lier \xE0 la mayonnaise et au citron.\\n'
+   '2. Garnir le pain : crudit\xE9s, thon, olives.\\n'
+   '3. Emballer.',
+   'Une portion = un sandwich. Thon mal \xE9goutt\xE9 = pain d\xE9tremp\xE9 en dix minutes.'),
+
+  (null, 'brochette_boeuf', 'Brochette de b\u0153uf', 'Fast food', 'fast_food', 260,
+   E'1. D\xE9tailler la viande en cubes de 25 g, mariner (moutarde, ail, paprika, huile).\\n'
+   '2. Monter en alternant viande, oignon et poivron.\\n'
+   '3. Griller 3 min par face sur braise vive.',
+   'Une portion = une brochette. Prendre un morceau sans os : le poids d''achat de la viande avec os '
+   'ne donne pas le poids embroch\xE9.'),
+
+  (null, 'poulet_frit_frites', 'Poulet frit et frites', 'Fast food', 'fast_food', 270,
+   E'1. Mariner le poulet (paprika, curry, ail, sel) 2 h.\\n'
+   '2. Le fariner, frire 12 min \xE0 170 \xB0C.\\n'
+   '3. Frire les pommes de terre en deux bains.\\n'
+   '4. Dresser, ketchup \xE0 part.',
+   'Une portion = un quart de poulet et sa garniture.'),
+
+  -- ---- P\xE2tisserie : une portion = une pi\xE8ce ou une part ----
+  (null, 'croissant', 'Croissant', 'P\xE2tisserie', 'patisserie', 300,
+   E'1. P\xE9trir la d\xE9trempe, la laisser reposer au froid 1 h.\\n'
+   '2. Incorporer le beurre, donner 3 tours simples avec repos au froid.\\n'
+   '3. D\xE9tailler les triangles, rouler, laisser pousser 1 h 30.\\n'
+   '4. Dorer \xE0 l''\u0153uf, cuire 15 min \xE0 190 \xB0C.',
+   'Une portion = un croissant d''environ 60 g. Le beurre est le poste de co\xFBt dominant : '
+   'un croissant sans beurre de tourage n''est pas un croissant.'),
+
+  (null, 'pain_chocolat', 'Pain au chocolat', 'P\xE2tisserie', 'patisserie', 310,
+   E'1. M\xEAme p\xE2te lev\xE9e feuillet\xE9e que le croissant.\\n'
+   '2. D\xE9tailler des rectangles, poser deux barres de chocolat, rouler.\\n'
+   '3. Pousser 1 h 30, dorer, cuire 15 min \xE0 190 \xB0C.',
+   'Une portion = une pi\xE8ce. M\xEAme p\xE2te que le croissant : mutualiser le tourage.'),
+
+  (null, 'cake_nature', 'Cake nature', 'P\xE2tisserie', 'patisserie', 320,
+   E'1. Cr\xE9mer beurre et sucre, ajouter les \u0153ufs un \xE0 un.\\n'
+   '2. Incorporer farine et levure tamis\xE9es, puis le lait et la vanille.\\n'
+   '3. Cuire 45 min \xE0 160 \xB0C en moule \xE0 cake.\\n'
+   '4. Laisser refroidir avant de trancher.',
+   'Une portion = une part. Trancher ti\xE8de \xE9crase la mie.'),
+
+  (null, 'beignet_sucre', 'Beignet sucr\xE9', 'P\xE2tisserie', 'patisserie', 330,
+   E'1. P\xE9trir une p\xE2te lev\xE9e souple, pousser 1 h.\\n'
+   '2. D\xE9tailler, laisser d\xE9tendre 20 min.\\n'
+   '3. Frire 2 min par face \xE0 170 \xB0C.\\n'
+   '4. Rouler dans le sucre \xE0 la sortie.',
+   'Une portion = une pi\xE8ce. Le sucre s''applique chaud, sinon il n''adh\xE8re pas.'),
+
+  (null, 'gateau_chocolat', 'G\xE2teau au chocolat', 'P\xE2tisserie', 'patisserie', 340,
+   E'1. Fondre chocolat et beurre au bain-marie.\\n'
+   '2. Blanchir \u0153ufs et sucre, r\xE9unir.\\n'
+   '3. Incorporer farine, cacao et levure tamis\xE9s.\\n'
+   '4. Cuire 25 min \xE0 170 \xB0C \u2014 c\u0153ur encore souple.',
+   'Une portion = une part. Trop cuit, il devient sec : sortir quand le centre tremble encore.'),
+
+  -- ---- Petit d\xE9jeuner ----
+  (null, 'omelette_legumes', 'Omelette aux l\xE9gumes', 'Petit d\xE9jeuner', 'petit_dejeuner', 400,
+   E'1. Suer oignon, poivron et tomate \xE0 l''huile.\\n'
+   '2. Battre les \u0153ufs, saler, poivrer, ajouter le persil.\\n'
+   '3. Verser sur la garniture, cuire \xE0 feu doux 4 min.\\n'
+   '4. Plier et servir aussit\xF4t.',
+   'Une portion = deux \u0153ufs. \xC0 feu doux : une omelette saisie devient caoutchouteuse.'),
+
+  (null, 'cafe_au_lait', 'Caf\xE9 au lait', 'Petit d\xE9jeuner', 'petit_dejeuner', 410,
+   E'1. Pr\xE9parer le caf\xE9.\\n'
+   '2. D\xE9layer le lait en poudre dans un peu d''eau chaude, compl\xE9ter.\\n'
+   '3. Sucrer et servir br\xFBlant.',
+   'Une portion = une tasse de 20 cl. Le gobelet compte dans le co\xFBt d''une vente \xE0 emporter.'),
+
+  (null, 'bouillie_bouye', 'Bouillie au bouye (lakh)', 'Petit d\xE9jeuner', 'petit_dejeuner', 420,
+   E'1. Cuire le couscous de mil \xE0 la vapeur, 2 passages.\\n'
+   '2. D\xE9layer la pulpe de bouye, la tamiser.\\n'
+   '3. R\xE9unir avec le lait et le sucre, parfumer \xE0 la vanille.\\n'
+   '4. Servir frais ou ti\xE8de.',
+   'Une portion = un bol. Tamiser le bouye : les fibres passent mal au service.')
+
+on conflict on constraint uq_recipe_templates_key do update
+  set name       = excluded.name,
+      category   = excluded.category,
+      service    = excluded.service,
+      sort_order = excluded.sort_order,
+      steps      = excluded.steps,
+      notes      = excluded.notes;
+
+
+-- ---------------------------------------------------------------------
+--  3. LES LIGNES \u2014 quantit\xE9 NETTE par portion, et perte au parage
+--
+--  Le brut sorti du magasin vaut net / (1 \u2212 perte). Les pertes retenues
+--  sont les pertes de m\xE9tier : oignon 10 %, carotte 12 %, chou 12 %,
+--  ail 15 %, pomme de terre et patate 20 %, manioc 25 %, poisson entier
+--  20 % (\xE9caillage et vidage).
+-- ---------------------------------------------------------------------
+insert into public.recipe_template_lines
+  (template_id, ingredient_key, quantity_per_portion, unit_code, loss_pct, role, is_optional, position, note)
+select t.id, d.ikey, d.qty, d.unit, d.loss, d.irole, d.opt, d.pos, d.note
+  from (values
+    -- Thi\xE9bou dieune rouge
+    ('thiebou_dieune_rouge', 'riz_brise',         150::numeric, 'g',  0::numeric, 'base',           false, 1,  null::text),
+    ('thiebou_dieune_rouge', 'poisson_entier',    180, 'g', 20, 'proteine',       false, 2,  'Dorade, capitaine ou lotte selon le march\xE9'),
+    ('thiebou_dieune_rouge', 'tomate_concentree',  25, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('thiebou_dieune_rouge', 'oignon',             50, 'g', 10, 'legume',         false, 4,  null),
+    ('thiebou_dieune_rouge', 'huile',              25, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('thiebou_dieune_rouge', 'chou',               60, 'g', 12, 'legume',         false, 6,  null),
+    ('thiebou_dieune_rouge', 'carotte',            50, 'g', 12, 'legume',         false, 7,  null),
+    ('thiebou_dieune_rouge', 'manioc',             50, 'g', 25, 'legume',         false, 8,  null),
+    ('thiebou_dieune_rouge', 'patate_douce',       40, 'g', 20, 'legume',         false, 9,  null),
+    ('thiebou_dieune_rouge', 'aubergine_amere',    30, 'g', 10, 'legume',         true,  10, 'Diakhatou, si la saison le permet'),
+    ('thiebou_dieune_rouge', 'gombo',              20, 'g',  5, 'legume',         true,  11, null),
+    ('thiebou_dieune_rouge', 'ail',                 3, 'g', 15, 'assaisonnement', false, 12, null),
+    ('thiebou_dieune_rouge', 'persil',              5, 'g',  0, 'assaisonnement', false, 13, null),
+    ('thiebou_dieune_rouge', 'yet',                 2, 'g',  0, 'assaisonnement', false, 14, null),
+    ('thiebou_dieune_rouge', 'guedj',               5, 'g',  0, 'assaisonnement', false, 15, null),
+    ('thiebou_dieune_rouge', 'netetou',             2, 'g',  0, 'assaisonnement', false, 16, null),
+    ('thiebou_dieune_rouge', 'tamarin',             3, 'g',  0, 'assaisonnement', true,  17, null),
+    ('thiebou_dieune_rouge', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 18, 'Servi \xE0 part'),
+    ('thiebou_dieune_rouge', 'sel',                 4, 'g',  0, 'assaisonnement', false, 19, null),
+    ('thiebou_dieune_rouge', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 20, null),
+    ('thiebou_dieune_rouge', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 21, null),
+
+    -- Thi\xE9bou dieune blanc
+    ('thiebou_dieune_blanc', 'riz_brise',         150, 'g',  0, 'base',           false, 1,  null),
+    ('thiebou_dieune_blanc', 'poisson_entier',    180, 'g', 20, 'proteine',       false, 2,  null),
+    ('thiebou_dieune_blanc', 'oignon',             40, 'g', 10, 'legume',         false, 3,  null),
+    ('thiebou_dieune_blanc', 'huile',              25, 'ml', 0, 'matiere_grasse', false, 4,  null),
+    ('thiebou_dieune_blanc', 'chou',               60, 'g', 12, 'legume',         false, 5,  null),
+    ('thiebou_dieune_blanc', 'carotte',            50, 'g', 12, 'legume',         false, 6,  null),
+    ('thiebou_dieune_blanc', 'manioc',             50, 'g', 25, 'legume',         false, 7,  null),
+    ('thiebou_dieune_blanc', 'patate_douce',       40, 'g', 20, 'legume',         false, 8,  null),
+    ('thiebou_dieune_blanc', 'gombo',              20, 'g',  5, 'legume',         true,  9,  null),
+    ('thiebou_dieune_blanc', 'citron_vert',        10, 'g',  0, 'assaisonnement', false, 10, null),
+    ('thiebou_dieune_blanc', 'ail',                 3, 'g', 15, 'assaisonnement', false, 11, null),
+    ('thiebou_dieune_blanc', 'persil',              5, 'g',  0, 'assaisonnement', false, 12, null),
+    ('thiebou_dieune_blanc', 'yet',                 2, 'g',  0, 'assaisonnement', false, 13, null),
+    ('thiebou_dieune_blanc', 'guedj',               5, 'g',  0, 'assaisonnement', false, 14, null),
+    ('thiebou_dieune_blanc', 'netetou',             2, 'g',  0, 'assaisonnement', false, 15, null),
+    ('thiebou_dieune_blanc', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 16, null),
+    ('thiebou_dieune_blanc', 'sel',                 4, 'g',  0, 'assaisonnement', false, 17, null),
+    ('thiebou_dieune_blanc', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 18, null),
+    ('thiebou_dieune_blanc', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 19, null),
+
+    -- Thi\xE9bou yapp
+    ('thiebou_yapp', 'riz_brise',         150, 'g',  0, 'base',           false, 1,  null),
+    ('thiebou_yapp', 'viande_boeuf_os',   150, 'g',  0, 'proteine',       false, 2,  'Poids avec os, comme \xE0 l''achat'),
+    ('thiebou_yapp', 'tomate_concentree',  20, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('thiebou_yapp', 'oignon',             60, 'g', 10, 'legume',         false, 4,  null),
+    ('thiebou_yapp', 'huile',              25, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('thiebou_yapp', 'carotte',            40, 'g', 12, 'legume',         false, 6,  null),
+    ('thiebou_yapp', 'chou',               50, 'g', 12, 'legume',         false, 7,  null),
+    ('thiebou_yapp', 'pomme_de_terre',     50, 'g', 20, 'legume',         false, 8,  null),
+    ('thiebou_yapp', 'ail',                 3, 'g', 15, 'assaisonnement', false, 9,  null),
+    ('thiebou_yapp', 'laurier',           0.3, 'g',  0, 'assaisonnement', false, 10, null),
+    ('thiebou_yapp', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('thiebou_yapp', 'netetou',             1, 'g',  0, 'assaisonnement', false, 12, null),
+    ('thiebou_yapp', 'sel',                 4, 'g',  0, 'assaisonnement', false, 13, null),
+    ('thiebou_yapp', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 14, null),
+    ('thiebou_yapp', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 15, null),
+
+    -- Thi\xE9bou guinar
+    ('thiebou_guinar', 'riz_brise',         150, 'g',  0, 'base',           false, 1,  null),
+    ('thiebou_guinar', 'poulet',            200, 'g',  0, 'proteine',       false, 2,  'D\xE9coupe en 8'),
+    ('thiebou_guinar', 'tomate_concentree',  20, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('thiebou_guinar', 'oignon',             60, 'g', 10, 'legume',         false, 4,  null),
+    ('thiebou_guinar', 'huile',              25, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('thiebou_guinar', 'carotte',            40, 'g', 12, 'legume',         false, 6,  null),
+    ('thiebou_guinar', 'chou',               50, 'g', 12, 'legume',         false, 7,  null),
+    ('thiebou_guinar', 'pomme_de_terre',     50, 'g', 20, 'legume',         false, 8,  null),
+    ('thiebou_guinar', 'poivron_vert',       15, 'g',  8, 'legume',         false, 9,  null),
+    ('thiebou_guinar', 'ail',                 3, 'g', 15, 'assaisonnement', false, 10, null),
+    ('thiebou_guinar', 'laurier',           0.3, 'g',  0, 'assaisonnement', false, 11, null),
+    ('thiebou_guinar', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 12, null),
+    ('thiebou_guinar', 'sel',                 4, 'g',  0, 'assaisonnement', false, 13, null),
+    ('thiebou_guinar', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 14, null),
+    ('thiebou_guinar', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 15, null),
+
+    -- Maf\xE9 viande
+    ('maffe_yapp', 'viande_boeuf_os',   150, 'g',  0, 'proteine',       false, 1,  'Poids avec os'),
+    ('maffe_yapp', 'pate_arachide',      30, 'g',  0, 'base',           false, 2,  null),
+    ('maffe_yapp', 'oignon',             40, 'g', 10, 'legume',         false, 3,  null),
+    ('maffe_yapp', 'tomate_concentree',  15, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('maffe_yapp', 'huile',              15, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('maffe_yapp', 'pomme_de_terre',     50, 'g', 20, 'legume',         false, 6,  null),
+    ('maffe_yapp', 'carotte',            30, 'g', 12, 'legume',         false, 7,  null),
+    ('maffe_yapp', 'patate_douce',       30, 'g', 20, 'legume',         false, 8,  null),
+    ('maffe_yapp', 'ail',                 3, 'g', 15, 'assaisonnement', false, 9,  null),
+    ('maffe_yapp', 'laurier',           0.3, 'g',  0, 'assaisonnement', false, 10, null),
+    ('maffe_yapp', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('maffe_yapp', 'netetou',             1, 'g',  0, 'assaisonnement', false, 12, null),
+    ('maffe_yapp', 'yet',                 1, 'g',  0, 'assaisonnement', true,  13, null),
+    ('maffe_yapp', 'sel',                 3, 'g',  0, 'assaisonnement', false, 14, null),
+    ('maffe_yapp', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 15, null),
+    ('maffe_yapp', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 16, null),
+    ('maffe_yapp', 'riz_brise',         150, 'g',  0, 'accompagnement', false, 17, 'Cuit \xE0 part'),
+
+    -- Maf\xE9 poulet
+    ('maffe_guinar', 'poulet',            200, 'g',  0, 'proteine',       false, 1,  null),
+    ('maffe_guinar', 'pate_arachide',      30, 'g',  0, 'base',           false, 2,  null),
+    ('maffe_guinar', 'oignon',             40, 'g', 10, 'legume',         false, 3,  null),
+    ('maffe_guinar', 'tomate_concentree',  15, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('maffe_guinar', 'huile',              15, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('maffe_guinar', 'pomme_de_terre',     50, 'g', 20, 'legume',         false, 6,  null),
+    ('maffe_guinar', 'carotte',            30, 'g', 12, 'legume',         false, 7,  null),
+    ('maffe_guinar', 'patate_douce',       30, 'g', 20, 'legume',         false, 8,  null),
+    ('maffe_guinar', 'ail',                 3, 'g', 15, 'assaisonnement', false, 9,  null),
+    ('maffe_guinar', 'laurier',           0.3, 'g',  0, 'assaisonnement', false, 10, null),
+    ('maffe_guinar', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('maffe_guinar', 'sel',                 3, 'g',  0, 'assaisonnement', false, 12, null),
+    ('maffe_guinar', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 13, null),
+    ('maffe_guinar', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 14, null),
+    ('maffe_guinar', 'riz_brise',         150, 'g',  0, 'accompagnement', false, 15, 'Cuit \xE0 part'),
+
+    -- Yassa poulet
+    ('yassa_poulet', 'poulet',         200, 'g',  0, 'proteine',       false, 1,  null),
+    ('yassa_poulet', 'oignon',         180, 'g', 10, 'base',           false, 2,  'Le plat EST un plat d''oignon'),
+    ('yassa_poulet', 'huile',           25, 'ml', 0, 'matiere_grasse', false, 3,  null),
+    ('yassa_poulet', 'moutarde',        10, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('yassa_poulet', 'citron_vert',     20, 'g',  0, 'assaisonnement', false, 5,  null),
+    ('yassa_poulet', 'vinaigre',         5, 'ml', 0, 'assaisonnement', false, 6,  null),
+    ('yassa_poulet', 'poivron_vert',    15, 'g',  8, 'legume',         true,  7,  null),
+    ('yassa_poulet', 'laurier',        0.3, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('yassa_poulet', 'ail',              3, 'g', 15, 'assaisonnement', false, 9,  null),
+    ('yassa_poulet', 'piment_frais',     2, 'g',  0, 'assaisonnement', false, 10, null),
+    ('yassa_poulet', 'sel',              3, 'g',  0, 'assaisonnement', false, 11, null),
+    ('yassa_poulet', 'bouillon_cube',    2, 'g',  0, 'assaisonnement', false, 12, null),
+    ('yassa_poulet', 'poivre',         0.3, 'g',  0, 'assaisonnement', false, 13, null),
+    ('yassa_poulet', 'riz_brise',      150, 'g',  0, 'accompagnement', false, 14, null),
+
+    -- Yassa poisson
+    ('yassa_poisson', 'poisson_entier', 180, 'g', 20, 'proteine',       false, 1,  null),
+    ('yassa_poisson', 'oignon',         180, 'g', 10, 'base',           false, 2,  null),
+    ('yassa_poisson', 'huile',           25, 'ml', 0, 'matiere_grasse', false, 3,  null),
+    ('yassa_poisson', 'moutarde',        10, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('yassa_poisson', 'citron_vert',     20, 'g',  0, 'assaisonnement', false, 5,  null),
+    ('yassa_poisson', 'vinaigre',         5, 'ml', 0, 'assaisonnement', false, 6,  null),
+    ('yassa_poisson', 'laurier',        0.3, 'g',  0, 'assaisonnement', false, 7,  null),
+    ('yassa_poisson', 'ail',              3, 'g', 15, 'assaisonnement', false, 8,  null),
+    ('yassa_poisson', 'piment_frais',     2, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('yassa_poisson', 'sel',              3, 'g',  0, 'assaisonnement', false, 10, null),
+    ('yassa_poisson', 'bouillon_cube',    2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('yassa_poisson', 'poivre',         0.3, 'g',  0, 'assaisonnement', false, 12, null),
+    ('yassa_poisson', 'riz_brise',      150, 'g',  0, 'accompagnement', false, 13, null),
+
+    -- Domoda
+    ('domoda_viande', 'viande_boeuf_os',    150, 'g',  0, 'proteine',       false, 1,  null),
+    ('domoda_viande', 'farine_patissiere',   20, 'g',  0, 'base',           false, 2,  'Liaison, d\xE9lay\xE9e \xE0 froid'),
+    ('domoda_viande', 'tomate_concentree',   15, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('domoda_viande', 'oignon',              40, 'g', 10, 'legume',         false, 4,  null),
+    ('domoda_viande', 'huile',               15, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('domoda_viande', 'citron_vert',         15, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('domoda_viande', 'pomme_de_terre',      50, 'g', 20, 'legume',         false, 7,  null),
+    ('domoda_viande', 'carotte',             30, 'g', 12, 'legume',         false, 8,  null),
+    ('domoda_viande', 'ail',                  3, 'g', 15, 'assaisonnement', false, 9,  null),
+    ('domoda_viande', 'piment_frais',         2, 'g',  0, 'assaisonnement', false, 10, null),
+    ('domoda_viande', 'sel',                  3, 'g',  0, 'assaisonnement', false, 11, null),
+    ('domoda_viande', 'bouillon_cube',        2, 'g',  0, 'assaisonnement', false, 12, null),
+    ('domoda_viande', 'poivre',             0.3, 'g',  0, 'assaisonnement', false, 13, null),
+    ('domoda_viande', 'riz_brise',          150, 'g',  0, 'accompagnement', false, 14, null),
+
+    -- Soupou kandia
+    ('soupou_kandia', 'gombo',           120, 'g',  5, 'base',           false, 1,  'Hach\xE9 tr\xE8s fin ou r\xE2p\xE9'),
+    ('soupou_kandia', 'poisson_entier',  150, 'g', 20, 'proteine',       false, 2,  null),
+    ('soupou_kandia', 'huile_palme',      40, 'ml', 0, 'matiere_grasse', false, 3,  'Indispensable au plat'),
+    ('soupou_kandia', 'crevette_sechee',  10, 'g',  0, 'proteine',       false, 4,  null),
+    ('soupou_kandia', 'guedj',            10, 'g',  0, 'assaisonnement', false, 5,  null),
+    ('soupou_kandia', 'kong_fume',        15, 'g',  0, 'proteine',       false, 6,  null),
+    ('soupou_kandia', 'oignon',           20, 'g', 10, 'legume',         false, 7,  null),
+    ('soupou_kandia', 'yet',               2, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('soupou_kandia', 'netetou',           2, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('soupou_kandia', 'piment_frais',      3, 'g',  0, 'assaisonnement', false, 10, null),
+    ('soupou_kandia', 'sel',               3, 'g',  0, 'assaisonnement', false, 11, null),
+    ('soupou_kandia', 'bouillon_cube',     2, 'g',  0, 'assaisonnement', false, 12, null),
+    ('soupou_kandia', 'riz_brise',       150, 'g',  0, 'accompagnement', false, 13, null),
+
+    -- Thiou rouge
+    ('thiou_rouge', 'viande_boeuf_os',   140, 'g',  0, 'proteine',       false, 1,  null),
+    ('thiou_rouge', 'tomate_concentree',  25, 'g',  0, 'base',           false, 2,  null),
+    ('thiou_rouge', 'oignon',             50, 'g', 10, 'legume',         false, 3,  null),
+    ('thiou_rouge', 'huile',              20, 'ml', 0, 'matiere_grasse', false, 4,  null),
+    ('thiou_rouge', 'chou',               60, 'g', 12, 'legume',         false, 5,  null),
+    ('thiou_rouge', 'carotte',            50, 'g', 12, 'legume',         false, 6,  null),
+    ('thiou_rouge', 'pomme_de_terre',     60, 'g', 20, 'legume',         false, 7,  null),
+    ('thiou_rouge', 'aubergine_amere',    30, 'g', 10, 'legume',         true,  8,  null),
+    ('thiou_rouge', 'ail',                 3, 'g', 15, 'assaisonnement', false, 9,  null),
+    ('thiou_rouge', 'laurier',           0.3, 'g',  0, 'assaisonnement', false, 10, null),
+    ('thiou_rouge', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('thiou_rouge', 'netetou',             1, 'g',  0, 'assaisonnement', false, 12, null),
+    ('thiou_rouge', 'sel',                 4, 'g',  0, 'assaisonnement', false, 13, null),
+    ('thiou_rouge', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 14, null),
+    ('thiou_rouge', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 15, null),
+    ('thiou_rouge', 'riz_brise',         150, 'g',  0, 'accompagnement', false, 16, null),
+
+    -- Caldou
+    ('caldou', 'poisson_entier', 180, 'g', 20, 'proteine',       false, 1,  null),
+    ('caldou', 'citron_vert',     25, 'g',  0, 'base',           false, 2,  'Ajout\xE9 hors du feu'),
+    ('caldou', 'oignon',          50, 'g', 10, 'legume',         false, 3,  null),
+    ('caldou', 'huile',           15, 'ml', 0, 'matiere_grasse', false, 4,  null),
+    ('caldou', 'poivron_vert',    20, 'g',  8, 'legume',         false, 5,  null),
+    ('caldou', 'gombo',           20, 'g',  5, 'legume',         true,  6,  null),
+    ('caldou', 'ail',              3, 'g', 15, 'assaisonnement', false, 7,  null),
+    ('caldou', 'piment_frais',     3, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('caldou', 'sel',              3, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('caldou', 'bouillon_cube',    2, 'g',  0, 'assaisonnement', false, 10, null),
+    ('caldou', 'poivre',         0.3, 'g',  0, 'assaisonnement', false, 11, null),
+    ('caldou', 'riz_brise',      150, 'g',  0, 'accompagnement', false, 12, null),
+
+    -- Ndamb\xE9
+    ('ndambe', 'niebe',             100, 'g',  0, 'base',           false, 1,  'Tremp\xE9 la veille'),
+    ('ndambe', 'huile',              20, 'ml', 0, 'matiere_grasse', false, 2,  null),
+    ('ndambe', 'tomate_concentree',  15, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('ndambe', 'oignon',             50, 'g', 10, 'legume',         false, 4,  null),
+    ('ndambe', 'ail',                 3, 'g', 15, 'assaisonnement', false, 5,  null),
+    ('ndambe', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('ndambe', 'sel',                 3, 'g',  0, 'assaisonnement', false, 7,  'Sal\xE9 en fin de cuisson'),
+    ('ndambe', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('ndambe', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('ndambe', 'pain_arabe',          1, 'piece', 0, 'accompagnement', true, 10, 'Si servi en sandwich'),
+
+    -- Vermicelle \xE0 la viande
+    ('vermicelle_viande', 'vermicelle',        120, 'g',  0, 'base',           false, 1,  null),
+    ('vermicelle_viande', 'viande_boeuf_os',   140, 'g',  0, 'proteine',       false, 2,  null),
+    ('vermicelle_viande', 'tomate_concentree',  15, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('vermicelle_viande', 'oignon',             50, 'g', 10, 'legume',         false, 4,  null),
+    ('vermicelle_viande', 'huile',              20, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('vermicelle_viande', 'carotte',            30, 'g', 12, 'legume',         false, 6,  null),
+    ('vermicelle_viande', 'petit_pois',         20, 'g',  0, 'legume',         true,  7,  null),
+    ('vermicelle_viande', 'ail',                 3, 'g', 15, 'assaisonnement', false, 8,  null),
+    ('vermicelle_viande', 'laurier',           0.3, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('vermicelle_viande', 'sel',                 3, 'g',  0, 'assaisonnement', false, 10, null),
+    ('vermicelle_viande', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('vermicelle_viande', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 12, null),
+
+    -- Spaghetti bolognaise
+    ('spaghetti_bolognaise', 'spaghetti',         120, 'g',  0, 'base',           false, 1,  null),
+    ('spaghetti_bolognaise', 'viande_hachee',     100, 'g',  0, 'proteine',       false, 2,  null),
+    ('spaghetti_bolognaise', 'tomate_fraiche',     80, 'g',  5, 'legume',         false, 3,  null),
+    ('spaghetti_bolognaise', 'tomate_concentree',  15, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('spaghetti_bolognaise', 'oignon',             40, 'g', 10, 'legume',         false, 5,  null),
+    ('spaghetti_bolognaise', 'huile',              15, 'ml', 0, 'matiere_grasse', false, 6,  null),
+    ('spaghetti_bolognaise', 'carotte',            30, 'g', 12, 'legume',         false, 7,  null),
+    ('spaghetti_bolognaise', 'ail',                 3, 'g', 15, 'assaisonnement', false, 8,  null),
+    ('spaghetti_bolognaise', 'herbes_provence',     1, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('spaghetti_bolognaise', 'paprika',             1, 'g',  0, 'assaisonnement', false, 10, null),
+    ('spaghetti_bolognaise', 'sel',                 3, 'g',  0, 'assaisonnement', false, 11, null),
+    ('spaghetti_bolognaise', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 12, null),
+    ('spaghetti_bolognaise', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 13, null),
+
+    -- Poisson frit et oignons
+    ('poisson_firire', 'poisson_frire',     200, 'g', 10, 'proteine',       false, 1,  null),
+    ('poisson_firire', 'huile',              40, 'ml', 0, 'matiere_grasse', false, 2,  'Consommation r\xE9elle de friture'),
+    ('poisson_firire', 'oignon',            120, 'g', 10, 'legume',         false, 3,  null),
+    ('poisson_firire', 'tomate_concentree',  10, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('poisson_firire', 'citron_vert',        15, 'g',  0, 'assaisonnement', false, 5,  null),
+    ('poisson_firire', 'moutarde',            5, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('poisson_firire', 'ail',                 3, 'g', 15, 'assaisonnement', false, 7,  null),
+    ('poisson_firire', 'piment_frais',        2, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('poisson_firire', 'sel',                 3, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('poisson_firire', 'bouillon_cube',       2, 'g',  0, 'assaisonnement', false, 10, null),
+    ('poisson_firire', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 11, null),
+    ('poisson_firire', 'riz_brise',         150, 'g',  0, 'accompagnement', false, 12, null),
+
+    -- Hamburger b\u0153uf
+    ('burger_boeuf', 'pain_burger',     1, 'piece', 0, 'base',           false, 1,  null),
+    ('burger_boeuf', 'viande_hachee',  120, 'g',  0, 'proteine',       false, 2,  null),
+    ('burger_boeuf', 'salade',          15, 'g', 20, 'legume',         false, 3,  null),
+    ('burger_boeuf', 'tomate_fraiche',  30, 'g',  5, 'legume',         false, 4,  null),
+    ('burger_boeuf', 'oignon',          25, 'g', 10, 'legume',         false, 5,  null),
+    ('burger_boeuf', 'ketchup',         10, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('burger_boeuf', 'mayonnaise',      10, 'g',  0, 'assaisonnement', false, 7,  null),
+    ('burger_boeuf', 'huile',            5, 'ml', 0, 'matiere_grasse', false, 8,  null),
+    ('burger_boeuf', 'sel',            1.5, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('burger_boeuf', 'poivre',         0.2, 'g',  0, 'assaisonnement', false, 10, null),
+    ('burger_boeuf', 'sachet_emporte',   1, 'piece', 0, 'autre',       true,  11, 'Vente \xE0 emporter'),
+
+    -- Chawarma poulet
+    ('chawarma_poulet', 'pain_arabe',        1, 'piece', 0, 'base',           false, 1,  null),
+    ('chawarma_poulet', 'poulet',          150, 'g',  0, 'proteine',       false, 2,  '\xC9minc\xE9, marin\xE9 2 h'),
+    ('chawarma_poulet', 'oignon',           30, 'g', 10, 'legume',         false, 3,  null),
+    ('chawarma_poulet', 'salade',           20, 'g', 20, 'legume',         false, 4,  null),
+    ('chawarma_poulet', 'tomate_fraiche',   30, 'g',  5, 'legume',         false, 5,  null),
+    ('chawarma_poulet', 'concombre',        15, 'g', 10, 'legume',         false, 6,  null),
+    ('chawarma_poulet', 'mayonnaise',       15, 'g',  0, 'assaisonnement', false, 7,  null),
+    ('chawarma_poulet', 'sauce_algerienne', 10, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('chawarma_poulet', 'huile',             5, 'ml', 0, 'matiere_grasse', false, 9,  null),
+    ('chawarma_poulet', 'curry',             1, 'g',  0, 'assaisonnement', false, 10, null),
+    ('chawarma_poulet', 'paprika',           1, 'g',  0, 'assaisonnement', false, 11, null),
+    ('chawarma_poulet', 'citron_vert',       5, 'g',  0, 'assaisonnement', false, 12, null),
+    ('chawarma_poulet', 'sel',             1.5, 'g',  0, 'assaisonnement', false, 13, null),
+    ('chawarma_poulet', 'poivre',          0.2, 'g',  0, 'assaisonnement', false, 14, null),
+    ('chawarma_poulet', 'sachet_emporte',    1, 'piece', 0, 'autre',       true,  15, null),
+
+    -- Pizza margherita
+    ('pizza_margherita', 'farine_patissiere', 200, 'g',  0, 'base',           false, 1,  null),
+    ('pizza_margherita', 'levure',              4, 'g',  0, 'base',           false, 2,  null),
+    ('pizza_margherita', 'huile',              15, 'ml', 0, 'matiere_grasse', false, 3,  null),
+    ('pizza_margherita', 'tomate_concentree',  50, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('pizza_margherita', 'fromage_rape',       80, 'g',  0, 'proteine',       false, 5,  null),
+    ('pizza_margherita', 'olive_verte',        10, 'g',  0, 'legume',         true,  6,  null),
+    ('pizza_margherita', 'herbes_provence',     1, 'g',  0, 'assaisonnement', false, 7,  null),
+    ('pizza_margherita', 'sel',                 4, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('pizza_margherita', 'carton_pizza',        1, 'piece', 0, 'autre',       false, 9,  null),
+
+    -- Pizza reine
+    ('pizza_reine', 'farine_patissiere', 200, 'g',  0, 'base',           false, 1,  null),
+    ('pizza_reine', 'levure',              4, 'g',  0, 'base',           false, 2,  null),
+    ('pizza_reine', 'huile',              15, 'ml', 0, 'matiere_grasse', false, 3,  null),
+    ('pizza_reine', 'tomate_concentree',  50, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('pizza_reine', 'fromage_rape',       80, 'g',  0, 'proteine',       false, 5,  null),
+    ('pizza_reine', 'jambon',             40, 'g',  0, 'proteine',       false, 6,  null),
+    ('pizza_reine', 'champignon',         30, 'g',  0, 'legume',         false, 7,  null),
+    ('pizza_reine', 'olive_noire',        10, 'g',  0, 'legume',         false, 8,  null),
+    ('pizza_reine', 'herbes_provence',     1, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('pizza_reine', 'sel',                 4, 'g',  0, 'assaisonnement', false, 10, null),
+    ('pizza_reine', 'carton_pizza',        1, 'piece', 0, 'autre',       false, 11, null),
+
+    -- Tacos poulet
+    ('tacos_poulet', 'tacos_galette',      1, 'piece', 0, 'base',           false, 1,  null),
+    ('tacos_poulet', 'poulet',           120, 'g',  0, 'proteine',       false, 2,  null),
+    ('tacos_poulet', 'pomme_de_terre',   120, 'g', 20, 'legume',         false, 3,  'Frites, dans le tacos'),
+    ('tacos_poulet', 'fromage_rape',      30, 'g',  0, 'proteine',       false, 4,  null),
+    ('tacos_poulet', 'creme_liquide',     20, 'ml', 0, 'assaisonnement', false, 5,  null),
+    ('tacos_poulet', 'sauce_algerienne',  15, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('tacos_poulet', 'oignon',            20, 'g', 10, 'legume',         false, 7,  null),
+    ('tacos_poulet', 'huile',             25, 'ml', 0, 'matiere_grasse', false, 8,  'Friture des frites'),
+    ('tacos_poulet', 'curry',              1, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('tacos_poulet', 'sel',              1.5, 'g',  0, 'assaisonnement', false, 10, null),
+    ('tacos_poulet', 'poivre',           0.2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('tacos_poulet', 'sachet_emporte',     1, 'piece', 0, 'autre',       true,  12, null),
+
+    -- Sandwich thon
+    ('sandwich_thon', 'pain_arabe',       1, 'piece', 0, 'base',           false, 1,  null),
+    ('sandwich_thon', 'thon',            80, 'g',  0, 'proteine',       false, 2,  'Bien \xE9goutt\xE9'),
+    ('sandwich_thon', 'mayonnaise',      15, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('sandwich_thon', 'oignon',          20, 'g', 10, 'legume',         false, 4,  null),
+    ('sandwich_thon', 'salade',          15, 'g', 20, 'legume',         false, 5,  null),
+    ('sandwich_thon', 'tomate_fraiche',  25, 'g',  5, 'legume',         false, 6,  null),
+    ('sandwich_thon', 'olive_verte',     10, 'g',  0, 'legume',         false, 7,  null),
+    ('sandwich_thon', 'maicedoine',      30, 'g',  0, 'legume',         true,  8,  null),
+    ('sandwich_thon', 'citron_vert',      5, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('sandwich_thon', 'sel',              1, 'g',  0, 'assaisonnement', false, 10, null),
+    ('sandwich_thon', 'poivre',         0.2, 'g',  0, 'assaisonnement', false, 11, null),
+    ('sandwich_thon', 'papier_sandwich',  1, 'piece', 0, 'autre',       true,  12, null),
+
+    -- Brochette de b\u0153uf
+    ('brochette_boeuf', 'viande_boeuf_os', 120, 'g',  0, 'proteine',       false, 1,  'Morceau sans os'),
+    ('brochette_boeuf', 'oignon',           30, 'g', 10, 'legume',         false, 2,  null),
+    ('brochette_boeuf', 'poivron_vert',     25, 'g',  8, 'legume',         false, 3,  null),
+    ('brochette_boeuf', 'huile',             8, 'ml', 0, 'matiere_grasse', false, 4,  null),
+    ('brochette_boeuf', 'moutarde',          5, 'g',  0, 'assaisonnement', false, 5,  null),
+    ('brochette_boeuf', 'ail',               2, 'g', 15, 'assaisonnement', false, 6,  null),
+    ('brochette_boeuf', 'paprika',         0.5, 'g',  0, 'assaisonnement', false, 7,  null),
+    ('brochette_boeuf', 'sel',             1.5, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('brochette_boeuf', 'poivre',          0.2, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('brochette_boeuf', 'pick_brochette',    1, 'piece', 0, 'autre',       false, 10, null),
+    ('brochette_boeuf', 'charbon',          25, 'g',  0, 'autre',         true,  11, 'Cuisson sur braise'),
+
+    -- Poulet frit et frites
+    ('poulet_frit_frites', 'poulet',            250, 'g',  0, 'proteine',       false, 1,  'Un quart de poulet'),
+    ('poulet_frit_frites', 'farine_patissiere',  30, 'g',  0, 'base',           false, 2,  'Panure'),
+    ('poulet_frit_frites', 'pomme_de_terre',    200, 'g', 20, 'legume',         false, 3,  null),
+    ('poulet_frit_frites', 'huile',              60, 'ml', 0, 'matiere_grasse', false, 4,  'Consommation r\xE9elle de friture'),
+    ('poulet_frit_frites', 'paprika',             1, 'g',  0, 'assaisonnement', false, 5,  null),
+    ('poulet_frit_frites', 'curry',               1, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('poulet_frit_frites', 'ail',                 2, 'g', 15, 'assaisonnement', false, 7,  null),
+    ('poulet_frit_frites', 'sel',                 3, 'g',  0, 'assaisonnement', false, 8,  null),
+    ('poulet_frit_frites', 'poivre',            0.3, 'g',  0, 'assaisonnement', false, 9,  null),
+    ('poulet_frit_frites', 'ketchup',            15, 'g',  0, 'assaisonnement', true,  10, null),
+    ('poulet_frit_frites', 'sachet_emporte',      1, 'piece', 0, 'autre',       true,  11, null),
+
+    -- Croissant
+    ('croissant', 'farine_patissiere',  45, 'g',  0, 'base',           false, 1,  null),
+    ('croissant', 'beurre',             25, 'g',  0, 'matiere_grasse', false, 2,  'Beurre de tourage'),
+    ('croissant', 'sucre',               4, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('croissant', 'lait_poudre',         2, 'g',  0, 'base',           false, 4,  null),
+    ('croissant', 'levure',              1, 'g',  0, 'base',           false, 5,  null),
+    ('croissant', 'sel',               0.8, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('croissant', 'oeuf',              0.1, 'piece', 0, 'base',        false, 7,  'Dorure'),
+    ('croissant', 'sachet_croissant',    1, 'piece', 0, 'autre',       true,  8,  null),
+
+    -- Pain au chocolat
+    ('pain_chocolat', 'farine_patissiere', 45, 'g',  0, 'base',           false, 1,  null),
+    ('pain_chocolat', 'beurre',            25, 'g',  0, 'matiere_grasse', false, 2,  null),
+    ('pain_chocolat', 'chocolat',          12, 'g',  0, 'base',           false, 3,  'Deux barres'),
+    ('pain_chocolat', 'sucre',              4, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('pain_chocolat', 'lait_poudre',        2, 'g',  0, 'base',           false, 5,  null),
+    ('pain_chocolat', 'levure',             1, 'g',  0, 'base',           false, 6,  null),
+    ('pain_chocolat', 'sel',              0.8, 'g',  0, 'assaisonnement', false, 7,  null),
+    ('pain_chocolat', 'oeuf',             0.1, 'piece', 0, 'base',        false, 8,  'Dorure'),
+
+    -- Cake nature
+    ('cake_nature', 'farine_patissiere', 40, 'g',  0, 'base',           false, 1,  null),
+    ('cake_nature', 'sucre',             30, 'g',  0, 'base',           false, 2,  null),
+    ('cake_nature', 'beurre',            25, 'g',  0, 'matiere_grasse', false, 3,  null),
+    ('cake_nature', 'oeuf',             0.6, 'piece', 0, 'proteine',    false, 4,  null),
+    ('cake_nature', 'levure',             1, 'g',  0, 'base',           false, 5,  null),
+    ('cake_nature', 'vanille',          0.5, 'ml', 0, 'assaisonnement', false, 6,  null),
+    ('cake_nature', 'lait_poudre',        3, 'g',  0, 'base',           false, 7,  null),
+    ('cake_nature', 'sel',              0.3, 'g',  0, 'assaisonnement', false, 8,  null),
+
+    -- Beignet sucr\xE9
+    ('beignet_sucre', 'farine_patissiere', 35, 'g',  0, 'base',           false, 1,  null),
+    ('beignet_sucre', 'sucre',             16, 'g',  0, 'base',           false, 2,  'P\xE2te et enrobage'),
+    ('beignet_sucre', 'levure',             1, 'g',  0, 'base',           false, 3,  null),
+    ('beignet_sucre', 'oeuf',            0.15, 'piece', 0, 'proteine',    false, 4,  null),
+    ('beignet_sucre', 'lait_poudre',        3, 'g',  0, 'base',           false, 5,  null),
+    ('beignet_sucre', 'huile',             15, 'ml', 0, 'matiere_grasse', false, 6,  'Consommation r\xE9elle de friture'),
+    ('beignet_sucre', 'fleur_oranger',    0.5, 'ml', 0, 'assaisonnement', true,  7,  null),
+    ('beignet_sucre', 'sel',              0.3, 'g',  0, 'assaisonnement', false, 8,  null),
+
+    -- G\xE2teau au chocolat
+    ('gateau_chocolat', 'chocolat',          35, 'g',  0, 'base',           false, 1,  null),
+    ('gateau_chocolat', 'farine_patissiere', 30, 'g',  0, 'base',           false, 2,  null),
+    ('gateau_chocolat', 'sucre',             28, 'g',  0, 'base',           false, 3,  null),
+    ('gateau_chocolat', 'beurre',            25, 'g',  0, 'matiere_grasse', false, 4,  null),
+    ('gateau_chocolat', 'oeuf',             0.8, 'piece', 0, 'proteine',    false, 5,  null),
+    ('gateau_chocolat', 'cacao',              5, 'g',  0, 'assaisonnement', false, 6,  null),
+    ('gateau_chocolat', 'creme_liquide',     10, 'ml', 0, 'base',           true,  7,  'Ganache'),
+    ('gateau_chocolat', 'levure',             1, 'g',  0, 'base',           false, 8,  null),
+    ('gateau_chocolat', 'sel',              0.3, 'g',  0, 'assaisonnement', false, 9,  null),
+
+    -- Omelette aux l\xE9gumes
+    ('omelette_legumes', 'oeuf',             2, 'piece', 0, 'proteine',    false, 1,  null),
+    ('omelette_legumes', 'oignon',          20, 'g', 10, 'legume',         false, 2,  null),
+    ('omelette_legumes', 'tomate_fraiche',  25, 'g',  5, 'legume',         false, 3,  null),
+    ('omelette_legumes', 'poivron_vert',    15, 'g',  8, 'legume',         false, 4,  null),
+    ('omelette_legumes', 'huile',           10, 'ml', 0, 'matiere_grasse', false, 5,  null),
+    ('omelette_legumes', 'persil',           2, 'g',  0, 'assaisonnement', true,  6,  null),
+    ('omelette_legumes', 'sel',            1.5, 'g',  0, 'assaisonnement', false, 7,  null),
+    ('omelette_legumes', 'poivre',         0.2, 'g',  0, 'assaisonnement', false, 8,  null),
+
+    -- Caf\xE9 au lait
+    ('cafe_au_lait', 'cafe',         8, 'g',  0, 'base',           false, 1,  null),
+    ('cafe_au_lait', 'lait_poudre', 15, 'g',  0, 'base',           false, 2,  null),
+    ('cafe_au_lait', 'sucre',       12, 'g',  0, 'assaisonnement', false, 3,  null),
+    ('cafe_au_lait', 'gobelet',      1, 'piece', 0, 'autre',       true,  4,  'Vente \xE0 emporter'),
+
+    -- Bouillie au bouye
+    ('bouillie_bouye', 'couscous_thiere', 60, 'g',  0, 'base',           false, 1,  'Couscous de mil'),
+    ('bouillie_bouye', 'bouye',           25, 'g',  0, 'base',           false, 2,  'Tamis\xE9'),
+    ('bouillie_bouye', 'lait_poudre',     20, 'g',  0, 'base',           false, 3,  null),
+    ('bouillie_bouye', 'sucre',           20, 'g',  0, 'assaisonnement', false, 4,  null),
+    ('bouillie_bouye', 'vanille',        0.2, 'ml', 0, 'assaisonnement', true,  5,  null),
+    ('bouillie_bouye', 'sel',            0.2, 'g',  0, 'assaisonnement', false, 6,  null)
+  ) as d(tkey, ikey, qty, unit, loss, irole, opt, pos, note)
+  join public.recipe_templates t on t.organization_id is null and t.key = d.tkey
+on conflict (template_id, ingredient_key) do update
+  set quantity_per_portion = excluded.quantity_per_portion,
+      unit_code            = excluded.unit_code,
+      loss_pct             = excluded.loss_pct,
+      role                 = excluded.role,
+      is_optional          = excluded.is_optional,
+      position             = excluded.position,
+      note                 = excluded.note;
+`}],ge=[{reference:"CDT-001",name:"Crevette sechee",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 2"},{reference:"CDT-002",name:"Guedj beurre",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 3"},{reference:"CDT-003",name:"Guedj kong",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 4"},{reference:"CDT-004",name:"Keithia",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 5"},{reference:"CDT-005",name:"Kong fume",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 6"},{reference:"CDT-006",name:"Pagne",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 7"},{reference:"CDT-007",name:"Yet",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 8"},{reference:"CDT-008",name:"Yet bou sew",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 9"},{reference:"CSM-003",name:"Carton pizza",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 12"},{reference:"CSM-004",name:"Charbon",category:"Consommables",category_kind:"consumable",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 13"},{reference:"CSM-005",name:"Gant",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 14"},{reference:"CSM-006",name:"Gobelet cafe",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 15"},{reference:"CSM-008",name:"Moule gratin",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 17"},{reference:"CSM-009",name:"Papier alu gm",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 18"},{reference:"CSM-010",name:"Papier film",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"paquet",package_factor:"",source:"Revue ligne 19"},{reference:"CSM-011",name:"Papier sandwich",category:"Consommables",category_kind:"consumable",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 20"},{reference:"CSM-012",name:"Pick brochette deco",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 21"},{reference:"CSM-013",name:"Pick brochette gm",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 22"},{reference:"CSM-014",name:"Pot pizza gobelets",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 23"},{reference:"CSM-015",name:"Sachet croissant",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 24"},{reference:"CSM-016",name:"Sachet emporte",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 25"},{reference:"CSM-017",name:"Sachet jaune de 100f",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 26"},{reference:"CSM-018",name:"Serviette de table",category:"Consommables",category_kind:"consumable",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 27"},{reference:"ENT-001",name:"Ballaie",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 51"},{reference:"ENT-002",name:"Creme a recurer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 52"},{reference:"ENT-003",name:"Eau de javel",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 53"},{reference:"ENT-004",name:"Eponge en fer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 54"},{reference:"ENT-005",name:"Lave vitre",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 55"},{reference:"ENT-006",name:"Madar gm",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 56"},{reference:"ENT-007",name:"Raclette",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 57"},{reference:"ENT-008",name:"Serpillere",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 58"},{reference:"FRO-001",name:"Capitaine",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 59"},{reference:"FRO-002",name:"Poisson dorade",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 60"},{reference:"FRO-003",name:"Poisson gm",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 61"},{reference:"FRO-004",name:"Poisson lotte",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 62"},{reference:"FRO-005",name:"Poulet blanc",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 63"},{reference:"FRO-006",name:"Poulets",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 64"},{reference:"FRO-007",name:"Viande hachee",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 65"},{reference:"FRO-009",name:"Viande locale",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 67"},{reference:"LEG-001",name:"Bissap kouthia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 68"},{reference:"LEG-002",name:"Brocolis",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 69"},{reference:"LEG-003",name:"Carotte",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 70"},{reference:"LEG-004",name:"Chou",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 71"},{reference:"LEG-005",name:"Citron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 72"},{reference:"LEG-006",name:"Concombre",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 73"},{reference:"LEG-007",name:"Courgette",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 74"},{reference:"LEG-008",name:"Gombon",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 75"},{reference:"LEG-009",name:"Haricot vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 76"},{reference:"LEG-010",name:"Manioc",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 77"},{reference:"LEG-011",name:"Oignon vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 78"},{reference:"LEG-012",name:"Patate",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 79"},{reference:"LEG-013",name:"Peril ordinnaire",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 80"},{reference:"LEG-014",name:"Persil chinois",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 81"},{reference:"LEG-015",name:"Petit bpois surgele",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 82"},{reference:"LEG-016",name:"Piment gouana sofia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 83"},{reference:"LEG-018",name:"Poivron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 85"},{reference:"LEG-019",name:"Salade",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"bassine",purchase_unit:"",package_factor:"",source:"Revue ligne 86"},{reference:"LEG-020",name:"Tomate fraiche",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 87"},{reference:"SEC-003",name:"Ail",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 90"},{reference:"SEC-004",name:"Amora",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 91"},{reference:"SEC-005",name:"Ataya",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 92"},{reference:"SEC-006",name:"Athieke",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 93"},{reference:"SEC-009",name:"Bouye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 96"},{reference:"SEC-011",name:"Calamar",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 98"},{reference:"SEC-012",name:"Canette pressesa",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 99"},{reference:"SEC-013",name:"Carry",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 100"},{reference:"SEC-014",name:"Champignon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 101"},{reference:"SEC-015",name:"Citron liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 102"},{reference:"SEC-017",name:"Creme liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 104"},{reference:"SEC-018",name:"Crevette n\xB01",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 105"},{reference:"SEC-019",name:"Crevette n\xB02",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 106"},{reference:"SEC-021",name:"Curcuman",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 108"},{reference:"SEC-023",name:"Epice curry",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 110"},{reference:"SEC-024",name:"Epice paprika",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 111"},{reference:"SEC-025",name:"Epice thyn",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 112"},{reference:"SEC-026",name:"Essence menthe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 113"},{reference:"SEC-027",name:"Essence vanille",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 114"},{reference:"SEC-028",name:"Farine patissier",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 115"},{reference:"SEC-029",name:"Fleur d'orange",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 116"},{reference:"SEC-030",name:"Foster mangue",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 117"},{reference:"SEC-031",name:"Foster vimto",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 118"},{reference:"SEC-035",name:"Herbe de province",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 122"},{reference:"SEC-039",name:"Jambon",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 126"},{reference:"SEC-040",name:"Ketchup",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 127"},{reference:"SEC-041",name:"Lait en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"sac",package_factor:"",source:"Revue ligne 128"},{reference:"SEC-042",name:"Laurier",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 129"},{reference:"SEC-043",name:"Lentille",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 130"},{reference:"SEC-045",name:"Maicedoine",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 132"},{reference:"SEC-046",name:"Mayonnaise",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 133"},{reference:"SEC-047",name:"Moutarde",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 134"},{reference:"SEC-048",name:"Netetou en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 135"},{reference:"SEC-049",name:"Niebe",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 136"},{reference:"SEC-050",name:"Noflaye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 137"},{reference:"SEC-051",name:"\u0152uf",category:"Produits secs",category_kind:"food",stock_unit:"tablette",purchase_unit:"",package_factor:"",source:"Revue ligne 138"},{reference:"SEC-052",name:"Oignon blanc",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 139"},{reference:"SEC-053",name:"Oignon locale",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 140"},{reference:"SEC-054",name:"Olive",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 141"},{reference:"SEC-055",name:"Olive noire gm",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 142"},{reference:"SEC-056",name:"Oro",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 143"},{reference:"SEC-057",name:"Pain arabe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 144"},{reference:"SEC-058",name:"Pate d'arachide",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 145"},{reference:"SEC-059",name:"Petit pois",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 146"},{reference:"SEC-060",name:"Piment en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 147"},{reference:"SEC-061",name:"Poisson frire",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 148"},{reference:"SEC-063",name:"Pomme de terre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 150"},{reference:"SEC-065",name:"Riz parfume pithibi",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 152"},{reference:"SEC-066",name:"Sauce algerienne",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 153"},{reference:"SEC-067",name:"Sauce chili",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 154"},{reference:"SEC-068",name:"Saucisson",category:"Produits secs",category_kind:"food",stock_unit:"barre",purchase_unit:"",package_factor:"",source:"Revue ligne 155"},{reference:"SEC-069",name:"Sel grain",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 156"},{reference:"SEC-070",name:"Soja",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 157"},{reference:"SEC-071",name:"Spaguetty",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 158"},{reference:"SEC-072",name:"Sucre en morceaux",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 159"},{reference:"SEC-073",name:"Sucre en poudre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 160"},{reference:"SEC-074",name:"Sunquick",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 161"},{reference:"SEC-075",name:"Tacos",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 162"},{reference:"SEC-076",name:"Tamarin",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 163"},{reference:"SEC-077",name:"Tandori",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 164"},{reference:"SEC-078",name:"Thon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 165"},{reference:"SEC-079",name:"Tomate concentree",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 166"},{reference:"SEC-080",name:"Vermicelle",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 167"},{reference:"SEC-081",name:"Vinaigre",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 168"}];var fe,X=(async()=>{let r=performance.now(),c=new Re({extensions:{pgcrypto:Le}});await re(c,me),ie(c);let l=await ce(c,{rows:ge});fe=_e(c),console.info(`[GesCatering] d\xE9monstration pr\xEAte en ${Math.round(performance.now()-r)} ms`,`\u2014 ${l.products} produits, ${l.stocked} en stock`)})();X.catch(r=>console.error("[GesCatering] la d\xE9monstration n'a pas pu d\xE9marrer",r));window.gcDemo={ready:X,async call(r,c,l,h){await X;let C=await fe({method:r,path:c,body:l?JSON.parse(l):{},user:h||void 0});return JSON.stringify(C)}};
