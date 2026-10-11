@@ -1,27 +1,44 @@
-import{PGlite as Ee}from"@electric-sql/pglite";import{pgcrypto as Se}from"@electric-sql/pglite/contrib/pgcrypto";async function re(o,d){for(let u of d)try{await o.exec(u.sql)}catch(v){throw new Error(`\xC9chec de ${u.name} : ${v.message}`)}}function ie(o){for(let d of["query","exec"]){let u=o[d].bind(o);o[d]=(...v)=>o.__gcInTransaction?Promise.reject(new Error(`db.${d}() appel\xE9 pendant une transaction asUser : utiliser \`tx\`, ou sortir l'appel de la transaction.`)):u(...v)}return o}async function R(o,d,u){o.__gcInTransaction=!0;try{return await o.transaction(async v=>(await v.query("select set_config('request.jwt.claim.sub', $1, true)",[d]),await v.query("select set_config('request.jwt.claim.role', 'authenticated', true)"),await v.exec("set local role authenticated"),u(v)))}finally{o.__gcInTransaction=!1}}var K=[{name:"Grossiste Dakar (d\xE9mo)",contact:"M. Ndiaye",phone:"+221 70 000 00 01",lead:3,categories:["Produits secs","Condiments"]},{name:"Mara\xEEchers des Niayes (d\xE9mo)",contact:"Mme Sarr",phone:"+221 70 000 00 02",lead:1,categories:["Fruits et l\xE9gumes"]},{name:"Boucherie Centrale (d\xE9mo)",contact:"M. Diop",phone:"+221 70 000 00 03",lead:2,categories:["Froid - viandes et poissons"]},{name:"Hygi\xE8ne Services Plus (d\xE9mo)",contact:"Mme Fall",phone:"+221 70 000 00 04",lead:5,categories:["Produits d'entretien"]},{name:"Emballages du Cap-Vert (d\xE9mo)",contact:"M. Ba",phone:"+221 70 000 00 05",lead:4,categories:["Consommables"]},{name:"Import Alimentaire Ouest (d\xE9mo)",contact:"M. Kane",phone:"+221 70 000 00 06",lead:7,categories:[]}],ke={"Produits secs":900,Condiments:1500,"Fruits et l\xE9gumes":700,"Froid - viandes et poissons":4200,"Produits d'entretien":1800,Consommables:350},ae=["fastfood@demo.local","patisserie@demo.local","petitdej@demo.local","cuisine@demo.local"],xe=["Casse \xE0 la manutention","Produit p\xE9rim\xE9","\xC9cart d'inventaire","Ab\xEEm\xE9 \xE0 la livraison"];function we(o){let d=o>>>0;return()=>{d=d+1831565813>>>0;let u=d;return u=Math.imul(u^u>>>15,u|1),u^=u+Math.imul(u^u>>>7,u|61),((u^u>>>14)>>>0)/4294967296}}async function oe(o,{org:d,site:u,users:v,departments:C}){let _=we(20261011),m=e=>e[Math.floor(_()*e.length)],q=(e,n)=>R(o,v[e].id,n),b=async(e,n,t)=>(await e.query(n,t)).rows[0],x=async(e,n,t)=>q(e,async i=>(await i.query(n,t)).rows[0]),z="admin@demo.local",w="direction@demo.local",$="magasin@demo.local",y="achats@demo.local",k=0,a=e=>`demo-${e}-${++k}`,c=async()=>(await o.query("select clock_timestamp() as t")).rows[0].t,p=async(e,n,t=[])=>{await o.query("set session_replication_role = replica");try{for(let[i,s]of[["stock_movements","created_at"],["stock_reservations","created_at"],["receipts","received_at"],["supply_requests","created_at"]])await o.query(`update public.${i} set ${s} = $2 where organization_id = $3 and ${s} >= $1`,[e,n,d]);for(let[i,s]of t)await o.query(i,s)}finally{await o.query("set session_replication_role = origin")}},r=(e,n=9,t=0)=>{let i=new Date;return i.setDate(i.getDate()-e),i.setHours(n,t,0,0),i},h=e=>e.toISOString().slice(0,10),l=(await o.query(`select p.id, p.reference, p.name, p.stock_unit_id, c.name as category, coalesce(p.min_stock, 0) as min_stock
+import{PGlite as Pe}from"@electric-sql/pglite";import{pgcrypto as Ie}from"@electric-sql/pglite/contrib/pgcrypto";async function re(r,l){for(let u of l)try{await r.exec(u.sql)}catch(h){throw new Error(`\xC9chec de ${u.name} : ${h.message}`)}}function ie(r){for(let l of["query","exec"]){let u=r[l].bind(r);r[l]=(...h)=>r.__gcInTransaction?Promise.reject(new Error(`db.${l}() appel\xE9 pendant une transaction asUser : utiliser \`tx\`, ou sortir l'appel de la transaction.`)):u(...h)}return r}async function E(r,l,u){r.__gcInTransaction=!0;try{return await r.transaction(async h=>(await h.query("select set_config('request.jwt.claim.sub', $1, true)",[l]),await h.query("select set_config('request.jwt.claim.role', 'authenticated', true)"),await h.exec("set local role authenticated"),u(h)))}finally{r.__gcInTransaction=!1}}var K=[{name:"Grossiste Dakar (d\xE9mo)",contact:"M. Ndiaye",phone:"+221 70 000 00 01",lead:3,categories:["Produits secs","Condiments"]},{name:"Mara\xEEchers des Niayes (d\xE9mo)",contact:"Mme Sarr",phone:"+221 70 000 00 02",lead:1,categories:["Fruits et l\xE9gumes"]},{name:"Boucherie Centrale (d\xE9mo)",contact:"M. Diop",phone:"+221 70 000 00 03",lead:2,categories:["Froid - viandes et poissons"]},{name:"Hygi\xE8ne Services Plus (d\xE9mo)",contact:"Mme Fall",phone:"+221 70 000 00 04",lead:5,categories:["Produits d'entretien"]},{name:"Emballages du Cap-Vert (d\xE9mo)",contact:"M. Ba",phone:"+221 70 000 00 05",lead:4,categories:["Consommables"]},{name:"Import Alimentaire Ouest (d\xE9mo)",contact:"M. Kane",phone:"+221 70 000 00 06",lead:7,categories:[]}],we={"Produits secs":900,Condiments:1500,"Fruits et l\xE9gumes":700,"Froid - viandes et poissons":4200,"Produits d'entretien":1800,Consommables:350},ae=["fastfood@demo.local","patisserie@demo.local","petitdej@demo.local","cuisine@demo.local"],ze=["Casse \xE0 la manutention","Produit p\xE9rim\xE9","\xC9cart d'inventaire","Ab\xEEm\xE9 \xE0 la livraison"];function $e(r){let l=r>>>0;return()=>{l=l+1831565813>>>0;let u=l;return u=Math.imul(u^u>>>15,u|1),u^=u+Math.imul(u^u>>>7,u|61),((u^u>>>14)>>>0)/4294967296}}async function oe(r,{org:l,site:u,users:h,departments:R}){let g=$e(20261011),v=e=>e[Math.floor(g()*e.length)],y=(e,n)=>E(r,h[e].id,n),f=async(e,n,i)=>(await e.query(n,i)).rows[0],x=async(e,n,i)=>y(e,async o=>(await o.query(n,i)).rows[0]),w="admin@demo.local",z="direction@demo.local",$="magasin@demo.local",s="achats@demo.local",m=0,_=e=>`demo-${e}-${++m}`,a=async()=>(await r.query("select clock_timestamp() as t")).rows[0].t,d=async(e,n,i=[])=>{await r.query("set session_replication_role = replica");try{for(let[o,c]of[["stock_movements","created_at"],["stock_reservations","created_at"],["receipts","received_at"],["supply_requests","created_at"]])await r.query(`update public.${o} set ${c} = $2 where organization_id = $3 and ${c} >= $1`,[e,n,l]);for(let[o,c]of i)await r.query(o,c)}finally{await r.query("set session_replication_role = origin")}},t=(e,n=9,i=0)=>{let o=new Date;return o.setDate(o.getDate()-e),o.setHours(n,i,0,0),o},b=e=>e.toISOString().slice(0,10),p=(await r.query(`select p.id, p.reference, p.name, p.stock_unit_id, c.name as category, coalesce(p.min_stock, 0) as min_stock
        from public.products p left join public.product_categories c on c.id = p.category_id
-      where p.organization_id = $1 order by p.reference`,[d])).rows,E=async()=>new Map((await o.query("select product_id, on_hand - reserved as available from public.stock_levels where site_id = $1",[u])).rows.map(e=>[e.product_id,Number(e.available)])),S={},P=new Map,L=new Map;await q(z,async e=>{for(let n of K){let t=await b(e,"select id from public.suppliers where organization_id = $1 and name = $2",[d,n.name]);S[n.name]=t?(await b(e,"update public.suppliers set contact_name = $2, phone = $3 where id = $1 returning id",[t.id,n.contact,n.phone])).id:(await b(e,`insert into public.suppliers (organization_id, name, contact_name, phone)
-                          values ($1, $2, $3, $4) returning id`,[d,n.name,n.contact,n.phone])).id}for(let n of l){let t=K.find(f=>f.categories.includes(n.category))??K[0],i=ke[n.category]??1e3,s=Math.round(i*(.5+_()*1.5)/25)*25;P.set(n.id,s),L.set(n.id,t.name),await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
+      where p.organization_id = $1 order by p.reference`,[l])).rows,S=async()=>new Map((await r.query("select product_id, on_hand - reserved as available from public.stock_levels where site_id = $1",[u])).rows.map(e=>[e.product_id,Number(e.available)])),C={},P=new Map,L=new Map;await y(w,async e=>{for(let n of K){let i=await f(e,"select id from public.suppliers where organization_id = $1 and name = $2",[l,n.name]);C[n.name]=i?(await f(e,"update public.suppliers set contact_name = $2, phone = $3 where id = $1 returning id",[i.id,n.contact,n.phone])).id:(await f(e,`insert into public.suppliers (organization_id, name, contact_name, phone)
+                          values ($1, $2, $3, $4) returning id`,[l,n.name,n.contact,n.phone])).id}for(let n of p){let i=K.find(k=>k.categories.includes(n.category))??K[0],o=we[n.category]??1e3,c=Math.round(o*(.5+g()*1.5)/25)*25;P.set(n.id,c),L.set(n.id,i.name),await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
                                                lead_time_days, is_preferred, price_updated_at)
-         values ($1, $2, $3, $4, $5, $6, true, now())`,[d,S[t.name],n.id,n.stock_unit_id,s,t.lead]),_()<.25&&await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
+         values ($1, $2, $3, $4, $5, $6, true, now())`,[l,C[i.name],n.id,n.stock_unit_id,c,i.lead]),g()<.25&&await e.query(`insert into public.supplier_products (organization_id, supplier_id, product_id, unit_id, unit_price,
                                                  lead_time_days, is_preferred, price_updated_at)
-           values ($1, $2, $3, $4, $5, 7, false, now())`,[d,S["Import Alimentaire Ouest (d\xE9mo)"],n.id,n.stock_unit_id,Math.round(s*1.12/25)*25])}});let F=async(e,n,{urgency:t="normal",slot:i=null,comment:s=null}={})=>q(e,async f=>{let A=C[v[e].department],J=await b(f,`insert into public.requests (department_id, site_id, urgency, needed_slot, comment)
-         values ($1, $2, $3, $4, $5) returning id, reference`,[A,u,t,i,s]);for(let te of n)await f.query("insert into public.request_lines (request_id, product_id, quantity) values ($1, $2, $3)",[J.id,te.product.id,te.quantity]);return await f.query("select public.submit_request($1)",[J.id]),J}),Q=e=>x(w,"select public.approve_request($1, true)",[e]),ge=(e,n)=>x(w,"select public.approve_request($1, false, $2)",[e,n]),W=(e,n=1)=>q($,async t=>{let i=(await t.query("select line_id, reserved from public.v_request_lines where request_id = $1",[e])).rows.filter(s=>Number(s.reserved)>0).map(s=>({line_id:s.line_id,quantity:n===1?Number(s.reserved):Math.max(1,Math.floor(Number(s.reserved)*n))}));return i.length?(await t.query("select public.serve_request($1, $2, $3) as s",[e,JSON.stringify(i),a("serve")])).rows[0].s:null}),Z=(e,n,{approved:t,served:i,neededOn:s,slot:f}={})=>[`update public.requests set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
+           values ($1, $2, $3, $4, $5, 7, false, now())`,[l,C["Import Alimentaire Ouest (d\xE9mo)"],n.id,n.stock_unit_id,Math.round(c*1.12/25)*25])}});let F=async(e,n,{urgency:i="normal",slot:o=null,comment:c=null}={})=>y(e,async k=>{let A=R[h[e].department],J=await f(k,`insert into public.requests (department_id, site_id, urgency, needed_slot, comment)
+         values ($1, $2, $3, $4, $5) returning id, reference`,[A,u,i,o,c]);for(let te of n)await k.query("insert into public.request_lines (request_id, product_id, quantity) values ($1, $2, $3)",[J.id,te.product.id,te.quantity]);return await k.query("select public.submit_request($1)",[J.id]),J}),Q=e=>x(z,"select public.approve_request($1, true)",[e]),ve=(e,n)=>x(z,"select public.approve_request($1, false, $2)",[e,n]),W=(e,n=1)=>y($,async i=>{let o=(await i.query("select line_id, reserved from public.v_request_lines where request_id = $1",[e])).rows.filter(c=>Number(c.reserved)>0).map(c=>({line_id:c.line_id,quantity:n===1?Number(c.reserved):Math.max(1,Math.floor(Number(c.reserved)*n))}));return o.length?(await i.query("select public.serve_request($1, $2, $3) as s",[e,JSON.stringify(o),_("serve")])).rows[0].s:null}),Z=(e,n,{approved:i,served:o,neededOn:c,slot:k}={})=>[`update public.requests set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
             updated_at = coalesce($4::timestamptz, $3::timestamptz, $2::timestamptz),
             approved_at = case when approved_at is null then null else $3::timestamptz end,
             served_at = case when served_at is null then null else $4::timestamptz end,
             needed_on = $5::date
-      where id = $1`,[e,n,t??n,i??null,s??h(n)]],N=async(e,n,{notes:t=null}={})=>q(y,async i=>{let s=await b(i,`insert into public.purchase_orders (supplier_id, site_id, notes)
-                              values ($1, $2, $3) returning id, reference`,[S[e],u,t]);for(let f of n)await i.query(`insert into public.purchase_order_lines (purchase_order_id, product_id, quantity, unit_price)
-                      values ($1, $2, $3, $4)`,[s.id,f.product.id,f.quantity,P.get(f.product.id)]);return s}),U=e=>x(y,"select public.submit_purchase_order($1)",[e]),M=e=>x(w,"select public.approve_purchase_order($1, true)",[e]),V=(e,n)=>x(y,"select public.mark_purchase_order_ordered($1, $2)",[e,n]),ee=(e,n=1,t=null)=>q($,async i=>{let s=(await i.query("select id, quantity_stock - received_quantity as rest from public.purchase_order_lines where purchase_order_id = $1",[e])).rows.map(f=>({line_id:f.id,quantity:n===1?Number(f.rest):Math.max(1,Math.floor(Number(f.rest)*n))}));return(await i.query("select public.receive_purchase_order($1, $2, $3, $4)",[e,JSON.stringify(s),a("receipt"),t])).rows[0]}),O=(e,n,{approved:t,ordered:i,expected:s})=>[`update public.purchase_orders set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
+      where id = $1`,[e,n,i??n,o??null,c??b(n)]],N=async(e,n,{notes:i=null}={})=>y(s,async o=>{let c=await f(o,`insert into public.purchase_orders (supplier_id, site_id, notes)
+                              values ($1, $2, $3) returning id, reference`,[C[e],u,i]);for(let k of n)await o.query(`insert into public.purchase_order_lines (purchase_order_id, product_id, quantity, unit_price)
+                      values ($1, $2, $3, $4)`,[c.id,k.product.id,k.quantity,P.get(k.product.id)]);return c}),U=e=>x(s,"select public.submit_purchase_order($1)",[e]),M=e=>x(z,"select public.approve_purchase_order($1, true)",[e]),V=(e,n)=>x(s,"select public.mark_purchase_order_ordered($1, $2)",[e,n]),ee=(e,n=1,i=null)=>y($,async o=>{let c=(await o.query("select id, quantity_stock - received_quantity as rest from public.purchase_order_lines where purchase_order_id = $1",[e])).rows.map(k=>({line_id:k.id,quantity:n===1?Number(k.rest):Math.max(1,Math.floor(Number(k.rest)*n))}));return(await o.query("select public.receive_purchase_order($1, $2, $3, $4)",[e,JSON.stringify(c),_("receipt"),i])).rows[0]}),O=(e,n,{approved:i,ordered:o,expected:c})=>[`update public.purchase_orders set created_at = $2::timestamptz, submitted_at = $2::timestamptz,
             updated_at = coalesce($4::timestamptz, $3::timestamptz, $2::timestamptz),
             approved_at = case when approved_at is null then null else $3::timestamptz end,
             ordered_at = case when ordered_at is null then null else $4::timestamptz end,
             expected_date = coalesce($5::date, expected_date)
-      where id = $1`,[e,n,t??n,i??null,s??null]],fe=async e=>{let n=await E();return l.filter(t=>(n.get(t.id)??0)>=e)},B=async(e,n)=>{let t=await fe(n),i=new Map;for(;i.size<Math.min(e,t.length);){let s=m(t);i.set(s.id,{product:s,quantity:1+Math.floor(_()*n)})}return[...i.values()]},ve=e=>{let n=new Map;for(let t of e){let i=L.get(t.product.id);n.set(i,[...n.get(i)??[],t])}return n};await p(new Date(0),r(15,7));let j={requests:0,orders:0,losses:0};for(let e=14;e>=1;e--){if(e%3===2){let n=l.filter(i=>i.category!=="Consommables"),t=[];for(let i=0;i<4+Math.floor(_()*4);i++){let s=m(n);t.some(f=>f.product.id===s.id)||t.push({product:s,quantity:10+Math.floor(_()*30)})}for(let[i,s]of ve(t)){let f=await c(),A=await N(i,s);await U(A.id),await M(A.id),await V(A.id,h(r(e))),await ee(A.id,1,`BL-${1e3+e*7+j.orders}`),await p(f,r(e,8,30),[O(A.id,r(e+2,10),{approved:r(e+2,15),ordered:r(e+1,9),expected:h(r(e))})]),j.orders++}}for(let n of ae){if(_()<.3)continue;let t=await B(2+Math.floor(_()*3),4);if(!t.length)continue;let i=await c(),s=m(["morning","noon","evening"]),f=await F(n,t,{slot:s,urgency:_()<.1?"urgent":"normal"});await Q(f.id),await W(f.id),await p(i,r(e,10,15),[Z(f.id,r(e+1,16),{approved:r(e,8),served:r(e,10,15),neededOn:h(r(e)),slot:s})]),j.requests++}if(e===9||e===4){let n=await B(2,3),t=await c(),i=await F(m(ae),n);await ge(i.id,e===9?"Doublon avec la demande de la veille":"Quantit\xE9 trop \xE9lev\xE9e pour un samedi"),await p(t,r(e,9),[Z(i.id,r(e+1,17),{approved:r(e,9),neededOn:h(r(e))})])}if(e%4===0){let[n]=await B(1,2);if(n){let t=await c();await x($,"select public.record_stock_movement($1, $2, 'adjustment_out', $3, null, $4, $5)",[u,n.product.id,n.quantity,m(xe),a("loss")]),await p(t,r(e,18)),j.losses++}}}let he=l.filter(e=>e.category==="Fruits et l\xE9gumes"),be=l.filter(e=>e.category==="Froid - viandes et poissons"),H=l.filter(e=>e.category==="Produits secs"),ye=l.filter(e=>e.category==="Produits d'entretien"),G=(e,n,t)=>e.slice(0,n).map((i,s)=>({product:i,quantity:t+s*5})),I=await c(),g=await N("Grossiste Dakar (d\xE9mo)",G(H.slice(10),4,20));await U(g.id),await M(g.id),await V(g.id,h(r(2))),await ee(g.id,.5,"BL-2291"),await p(I,r(1,11),[O(g.id,r(5,10),{approved:r(5,14),ordered:r(4,9),expected:h(r(2))})]),I=await c(),g=await N("Boucherie Centrale (d\xE9mo)",G(be,3,15)),await U(g.id),await M(g.id),await V(g.id,h(r(1))),await p(I,r(3,9),[O(g.id,r(3,9),{approved:r(3,11),ordered:r(3,12),expected:h(r(1))})]),I=await c(),g=await N("Mara\xEEchers des Niayes (d\xE9mo)",G(he.slice(3),5,10)),await U(g.id),await M(g.id),await V(g.id,h(r(-2))),await p(I,r(1,9),[O(g.id,r(1,9),{approved:r(1,10),ordered:r(1,11),expected:h(r(-2))})]),I=await c(),g=await N("Hygi\xE8ne Services Plus (d\xE9mo)",G(ye,3,6),{notes:"Livrer avant la prestation de vendredi"}),await U(g.id),await M(g.id),await p(I,r(0,8),[O(g.id,r(1,15),{approved:r(0,8)})]),I=await c(),g=await N("Emballages du Cap-Vert (d\xE9mo)",G(l.filter(e=>e.category==="Consommables"),4,50)),await U(g.id),await p(I,r(0,8,30),[O(g.id,r(0,8,30),{})]),j.orders+=5;let qe=[["fastfood@demo.local","submitted",{urgency:"urgent",slot:"noon",comment:"Rush du midi : 200 couverts"}],["patisserie@demo.local","submitted",{slot:"morning"}],["petitdej@demo.local","submitted",{slot:"morning"}],["cuisine@demo.local","approved",{slot:"noon"}],["fastfood@demo.local","approved",{slot:"evening"}],["patisserie@demo.local","partial",{slot:"noon"}]];for(let[e,n,t]of qe){let i=await B(2+Math.floor(_()*3),5),s=await F(e,i,t);n!=="submitted"&&await Q(s.id),n==="partial"&&await W(s.id,.5),j.requests++}{let e=await E(),n=H.find(i=>(e.get(i.id)??0)>0&&(e.get(i.id)??0)<30)??H[0],t=await F("cuisine@demo.local",[{product:n,quantity:Math.ceil((e.get(n.id)??0)+15)}],{slot:"noon",comment:"Prestation sp\xE9ciale : mariage de samedi"});await Q(t.id)}let ne=(await q($,e=>e.query("select product_id, to_order from public.v_supply_needs where site_id = $1 and to_order > 0 order by product_name",[u]))).rows.slice(0,5);ne.length&&await x($,"select public.transmit_supply_needs($1, $2, $3)",[u,JSON.stringify(ne.map(e=>({product_id:e.product_id,quantity:Number(e.to_order)}))),"Point stock du matin"]);let Y=(await q(y,e=>e.query("select line_id, product_id from public.v_open_supply_needs order by product_name"))).rows;if(Y.length>=2){let e=Y[0],n=Y.filter(t=>L.get(t.product_id)===L.get(e.product_id)).slice(0,2);await x(y,"select public.create_purchase_order_from_needs($1, $2)",[n.map(t=>t.line_id),S[L.get(e.product_id)]]),j.orders++}return j}var T=[{email:"admin@demo.local",id:"10000000-0000-0000-0000-000000000001",role:"owner",label:"Administrateur",icon:"admin"},{email:"direction@demo.local",id:"10000000-0000-0000-0000-000000000002",role:"ops_director",label:"Direction d'exploitation",icon:"director"},{email:"magasin@demo.local",id:"10000000-0000-0000-0000-000000000003",role:"storekeeper",label:"Magasinier",icon:"store"},{email:"achats@demo.local",id:"10000000-0000-0000-0000-000000000004",role:"purchasing",label:"Achats",icon:"purchase"},{email:"cuisine@demo.local",id:"10000000-0000-0000-0000-000000000005",role:"kitchen",label:"Cuisine centrale",icon:"kitchen",department:"Cuisine centrale"},{email:"fastfood@demo.local",id:"10000000-0000-0000-0000-000000000006",role:"requester",label:"Service Fast food",icon:"service",department:"Fast food"},{email:"patisserie@demo.local",id:"10000000-0000-0000-0000-000000000007",role:"requester",label:"Service P\xE2tisserie",icon:"service",department:"P\xE2tisserie"},{email:"petitdej@demo.local",id:"10000000-0000-0000-0000-000000000008",role:"requester",label:"Service Petit d\xE9jeuner",icon:"service",department:"Petit d\xE9jeuner"}],ze=["Fast food","P\xE2tisserie","Petit d\xE9jeuner","Cuisine centrale"];function se(o){let d=2166136261;for(let u of o)d=Math.imul(d^u.charCodeAt(0),16777619);return(d>>>0)/4294967295}async function ue(o,{rows:d,history:u=!0}){let v=async(a,c)=>(await o.query(a,c)).rows[0],C=T[0];for(let a of T)await o.query("insert into auth.users (id, email, raw_user_meta_data) values ($1, $2, $3)",[a.id,a.email,{full_name:a.label}]);let{org:_}=await v("select platform.provision_organization($1, 'gescatering', 'SESA Catering (d\xE9mo)') as org",[C.id]);await o.query("select public.init_catering_organization($1)",[_]);let m=async a=>(await v("select id from platform.roles where is_system and key = $1",[a])).id,q=(await v("select id from public.sites where organization_id = $1",[_])).id,b={};for(let a of ze)b[a]=(await v("insert into public.departments (organization_id, site_id, name) values ($1, $2, $3) returning id",[_,q,a])).id;for(let a of T.slice(1)){let{id:c}=await v(`insert into platform.memberships (user_id, organization_id, role_id, status, joined_at)
-       values ($1, $2, $3, 'active', now()) returning id`,[a.id,_,await m(a.role)]);a.department&&await o.query("insert into platform.membership_scopes (membership_id, scope_type, scope_id) values ($1, 'department', $2)",[c,b[a.department]])}let x=await R(o,C.id,async a=>{let c=(await a.query("select public.stage_catalog_import($1, 'revue-demo.xlsx', $2) as id",[_,JSON.stringify(d)])).rows[0].id;return(await a.query("select public.confirm_catalog_import($1) as r",[c])).rows[0].r}),z=(await o.query("select id, reference from public.products where organization_id = $1 order by reference",[_])).rows,w=T.find(a=>a.role==="storekeeper"),$=0;await R(o,C.id,async a=>{for(let c of z){let p=se(c.reference);p<.5&&await a.query("update public.products set min_stock = $2 where id = $1",[c.id,Math.ceil(p*20)+2])}}),await R(o,w.id,async a=>{for(let c of z){let p=se(c.reference+":stock");p<.7&&(await a.query("select public.record_stock_movement($1, $2, 'receipt', $3, null, 'Stock initial (d\xE9mo)', $4)",[q,c.id,Math.ceil(p*60),`demo-init-${c.reference}`]),$++)}}),await o.query("insert into public.suppliers (organization_id, name, phone) values ($1, 'Grossiste Dakar (d\xE9mo)', '+221 00 000 00 00')",[_]);let y=Object.fromEntries(T.map(a=>[a.email,a])),k=u?await oe(o,{org:_,site:q,users:y,departments:b}):null;return{org:_,site:q,departments:b,imported:x,stocked:$,products:z.length,activity:k}}var $e=new Set(["requests","request_lines","v_request_lines","v_request_consolidation","v_stock_position","v_supply_needs","products","product_categories","departments","sites","units","supply_request_lines","supply_requests","purchase_orders","purchase_order_lines","suppliers","catering_settings","stock_movements","v_open_supply_needs","v_purchase_orders","v_purchase_order_lines","receipts","supplier_products"]),ce=new Set(["requests","request_lines","purchase_orders","purchase_order_lines"]),D=/^[a-z_][a-z0-9_]*$/,le={eq:"=",neq:"<>",gt:">",gte:">=",lt:"<",lte:"<="};function de(o){let d=new Map(T.map(m=>[m.email,m])),u=new Map;async function v(m){if(!u.has(m)){let q=await o.query(`select a.name, format_type(a.type, null) as type
+      where id = $1`,[e,n,i??n,o??null,c??null]],he=async e=>{let n=await S();return p.filter(i=>(n.get(i.id)??0)>=e)},B=async(e,n)=>{let i=await he(n),o=new Map;for(;o.size<Math.min(e,i.length);){let c=v(i);o.set(c.id,{product:c,quantity:1+Math.floor(g()*n)})}return[...o.values()]},be=e=>{let n=new Map;for(let i of e){let o=L.get(i.product.id);n.set(o,[...n.get(o)??[],i])}return n};await d(new Date(0),t(15,7));let j={requests:0,orders:0,losses:0};for(let e=14;e>=1;e--){if(e%3===2){let n=p.filter(o=>o.category!=="Consommables"),i=[];for(let o=0;o<4+Math.floor(g()*4);o++){let c=v(n);i.some(k=>k.product.id===c.id)||i.push({product:c,quantity:10+Math.floor(g()*30)})}for(let[o,c]of be(i)){let k=await a(),A=await N(o,c);await U(A.id),await M(A.id),await V(A.id,b(t(e))),await ee(A.id,1,`BL-${1e3+e*7+j.orders}`),await d(k,t(e,8,30),[O(A.id,t(e+2,10),{approved:t(e+2,15),ordered:t(e+1,9),expected:b(t(e))})]),j.orders++}}for(let n of ae){if(g()<.3)continue;let i=await B(2+Math.floor(g()*3),4);if(!i.length)continue;let o=await a(),c=v(["morning","noon","evening"]),k=await F(n,i,{slot:c,urgency:g()<.1?"urgent":"normal"});await Q(k.id),await W(k.id),await d(o,t(e,10,15),[Z(k.id,t(e+1,16),{approved:t(e,8),served:t(e,10,15),neededOn:b(t(e)),slot:c})]),j.requests++}if(e===9||e===4){let n=await B(2,3),i=await a(),o=await F(v(ae),n);await ve(o.id,e===9?"Doublon avec la demande de la veille":"Quantit\xE9 trop \xE9lev\xE9e pour un samedi"),await d(i,t(e,9),[Z(o.id,t(e+1,17),{approved:t(e,9),neededOn:b(t(e))})])}if(e%4===0){let[n]=await B(1,2);if(n){let i=await a();await x($,"select public.record_stock_movement($1, $2, 'adjustment_out', $3, null, $4, $5)",[u,n.product.id,n.quantity,v(ze),_("loss")]),await d(i,t(e,18)),j.losses++}}}let ye=p.filter(e=>e.category==="Fruits et l\xE9gumes"),qe=p.filter(e=>e.category==="Froid - viandes et poissons"),H=p.filter(e=>e.category==="Produits secs"),ke=p.filter(e=>e.category==="Produits d'entretien"),G=(e,n,i)=>e.slice(0,n).map((o,c)=>({product:o,quantity:i+c*5})),I=await a(),q=await N("Grossiste Dakar (d\xE9mo)",G(H.slice(10),4,20));await U(q.id),await M(q.id),await V(q.id,b(t(2))),await ee(q.id,.5,"BL-2291"),await d(I,t(1,11),[O(q.id,t(5,10),{approved:t(5,14),ordered:t(4,9),expected:b(t(2))})]),I=await a(),q=await N("Boucherie Centrale (d\xE9mo)",G(qe,3,15)),await U(q.id),await M(q.id),await V(q.id,b(t(1))),await d(I,t(3,9),[O(q.id,t(3,9),{approved:t(3,11),ordered:t(3,12),expected:b(t(1))})]),I=await a(),q=await N("Mara\xEEchers des Niayes (d\xE9mo)",G(ye.slice(3),5,10)),await U(q.id),await M(q.id),await V(q.id,b(t(-2))),await d(I,t(1,9),[O(q.id,t(1,9),{approved:t(1,10),ordered:t(1,11),expected:b(t(-2))})]),I=await a(),q=await N("Hygi\xE8ne Services Plus (d\xE9mo)",G(ke,3,6),{notes:"Livrer avant la prestation de vendredi"}),await U(q.id),await M(q.id),await d(I,t(0,8),[O(q.id,t(1,15),{approved:t(0,8)})]),I=await a(),q=await N("Emballages du Cap-Vert (d\xE9mo)",G(p.filter(e=>e.category==="Consommables"),4,50)),await U(q.id),await d(I,t(0,8,30),[O(q.id,t(0,8,30),{})]),j.orders+=5;let xe=[["fastfood@demo.local","submitted",{urgency:"urgent",slot:"noon",comment:"Rush du midi : 200 couverts"}],["patisserie@demo.local","submitted",{slot:"morning"}],["petitdej@demo.local","submitted",{slot:"morning"}],["cuisine@demo.local","approved",{slot:"noon"}],["fastfood@demo.local","approved",{slot:"evening"}],["patisserie@demo.local","partial",{slot:"noon"}]];for(let[e,n,i]of xe){let o=await B(2+Math.floor(g()*3),5),c=await F(e,o,i);n!=="submitted"&&await Q(c.id),n==="partial"&&await W(c.id,.5),j.requests++}{let e=await S(),n=H.find(o=>(e.get(o.id)??0)>0&&(e.get(o.id)??0)<30)??H[0],i=await F("cuisine@demo.local",[{product:n,quantity:Math.ceil((e.get(n.id)??0)+15)}],{slot:"noon",comment:"Prestation sp\xE9ciale : mariage de samedi"});await Q(i.id)}let ne=(await y($,e=>e.query("select product_id, to_order from public.v_supply_needs where site_id = $1 and to_order > 0 order by product_name",[u]))).rows.slice(0,5);ne.length&&await x($,"select public.transmit_supply_needs($1, $2, $3)",[u,JSON.stringify(ne.map(e=>({product_id:e.product_id,quantity:Number(e.to_order)}))),"Point stock du matin"]);let Y=(await y(s,e=>e.query("select line_id, product_id from public.v_open_supply_needs order by product_name"))).rows;if(Y.length>=2){let e=Y[0],n=Y.filter(i=>L.get(i.product_id)===L.get(e.product_id)).slice(0,2);await x(s,"select public.create_purchase_order_from_needs($1, $2)",[n.map(i=>i.line_id),C[L.get(e.product_id)]]),j.orders++}return j}var Ee={"Riz parfume pithibi":18e3,"Oignon locale":11e3,"Pomme de terre":11e3,"Viande locale":4800,"Pate d'arachide":1200,Carotte:1200,Patate:500,"Poivron vert":1800,Yet:4e3,"Netetou en poudre":2e3,Soja:1300,"Piment gouana sofia":5e3,"Poulet blanc":3e3,"Citron vert":1500,Laurier:3e3,Moutarde:9e3,Spaguetty:1e3,"Viande hachee":5e3,"Tomate fraiche":800,"Herbe de province":6e3,"Epice paprika":5e3},Se=["Riz parfume pithibi","Oignon locale","Pomme de terre"],se=[{name:"Maff\xE9 Yapp",category:"Plat chaud",portions:1,sale:2500,target:35,validate:!1,notes:"Relev\xE9 de la fiche SESA du 19/09 (vid\xE9o du 11/10). \xC0 compl\xE9ter : huile, Maggi, poivre moulu et sel fin sont absents du catalogue ; tomate concentr\xE9e, ail, oignon vert, amora et vinaigre attendent le contenu de leur conditionnement. Food cost \xE0 surveiller : la viande seule p\xE8se plus de 80 % du budget mati\xE8re.",steps:`1. Couper la viande en morceaux, assaisonner (ail, poivre, Maggi).
+2. Faire revenir dans l'huile, ajouter l'oignon et la tomate concentr\xE9e.
+3. D\xE9layer la p\xE2te d'arachide, mouiller, laisser mijoter 45 min.
+4. Ajouter carotte, patate douce, pomme de terre ; cuire 20 min.
+5. Rectifier (yett, n\xE9t\xE9tou, piment).
+6. Servir avec le riz cuit \xE0 part.`,lines:[["Viande locale",.15,"kg"],["Riz parfume pithibi",.15,"kg"],["Pate d'arachide",.02,"kg"],["Tomate concentree",.01,"kg"],["Oignon locale",.005,"kg"],["Patate",.015,"kg"],["Pomme de terre",.015,"kg"],["Carotte",.015,"kg"],["Ail",.004,"kg"],["Oignon vert",.01,"kg"],["Poivron vert",.01,"kg"],["Piment gouana sofia",.001,"kg"],["Yet",.001,"kg"],["Netetou en poudre",.001,"kg"],["Soja",.001,"bouteille"],["Amora",.001,"bouteille"],["Vinaigre",.001,"l"]]},{name:"Yassa poulet",category:"Plat chaud",portions:10,sale:2600,target:35,validate:!0,notes:"Fiche de d\xE9monstration.",steps:`1. Mariner le poulet (citron, oignon \xE9minc\xE9, moutarde, piment) la veille.
+2. Griller le poulet.
+3. Confire l'oignon dans la marinade 30 min, ajouter le laurier.
+4. Remettre le poulet, mijoter 15 min.
+5. Servir avec le riz.`,lines:[["Poulet blanc",2,"kg"],["Oignon locale",1.5,"kg"],["Citron vert",300,"g"],["Riz parfume pithibi",1.5,"kg"],["Piment gouana sofia",50,"g"],["Laurier",10,"g"],["Poivron vert",200,"g"]]},{name:"Spaghetti bolognaise",category:"Plat chaud",portions:10,sale:2500,target:30,validate:!0,notes:"Fiche de d\xE9monstration.",steps:`1. Faire revenir la viande hach\xE9e.
+2. Ajouter carotte et tomate concass\xE9e, les herbes et le paprika ; mijoter 30 min.
+3. Cuire les spaghetti al dente.
+4. Napper de sauce au service.`,lines:[["Spaguetty",1.2,"kg"],["Viande hachee",1,"kg"],["Tomate fraiche",800,"g"],["Carotte",300,"g"],["Herbe de province",10,"g"],["Epice paprika",10,"g"]]}];async function ue(r,{org:l,users:u}){let h=u["admin@demo.local"].id,R=u["cuisine@demo.local"].id,g=u["direction@demo.local"].id,v=new Map((await r.query("select id, name from public.products where organization_id = $1",[l])).rows.map(s=>[s.name,s.id])),y=new Map((await r.query("select id, code from public.units where organization_id is null or organization_id = $1",[l])).rows.map(s=>[s.code,s.id])),f=s=>{let m=v.get(s);if(!m)throw new Error(`Produit de d\xE9monstration introuvable au catalogue : ${s}`);return m};await E(r,h,async s=>{for(let[m,_]of Object.entries(Ee))await s.query("update public.supplier_products set unit_price = $2 where product_id = $1 and is_preferred",[f(m),_]);for(let m of Se)await s.query(`insert into public.product_unit_conversions (product_id, unit_id, factor, is_validated)
+         values ($1, $2, 0.04, true) on conflict (product_id, unit_id) do nothing`,[f(m),y.get("kg")])});let x=u["magasin@demo.local"].id,w=(await r.query("select id from public.sites where organization_id = $1 limit 1",[l])).rows[0].id,z=[...new Set(se.flatMap(s=>s.lines.map(([m])=>m)))];await E(r,x,async s=>{for(let m of z){let{rows:[_]}=await s.query(`select p.id, u.dimension, coalesce(l.on_hand - l.reserved, 0) as available
+           from public.products p join public.units u on u.id = p.stock_unit_id
+           left join public.stock_levels l on l.product_id = p.id and l.site_id = $2
+          where p.id = $1`,[f(m),w]);Number(_.available)>0||await s.query("select public.record_stock_movement($1, $2, 'receipt', $3, null, 'R\xE9approvisionnement (d\xE9mo)', $4)",[w,_.id,_.dimension==="package"?4:15,`demo-recipe-stock-${_.id}`])}});let $=0;for(let s of se){let m=await E(r,R,async _=>{let{id:a}=(await _.query(`insert into public.recipes (name, category, portions, sale_price, target_food_cost_pct, steps, notes)
+         values ($1, $2, $3, $4, $5, $6, $7) returning id`,[s.name,s.category,s.portions,s.sale,s.target,s.steps,s.notes])).rows[0],d=0;for(let[t,b,p]of s.lines)await _.query("insert into public.recipe_lines (recipe_id, product_id, quantity, unit_id, position) values ($1, $2, $3, $4, $5)",[a,f(t),b,y.get(p),d++]);return a});s.validate&&await E(r,g,_=>_.query("select public.validate_recipe($1)",[m])),$++}return $}var T=[{email:"admin@demo.local",id:"10000000-0000-0000-0000-000000000001",role:"owner",label:"Administrateur",icon:"admin"},{email:"direction@demo.local",id:"10000000-0000-0000-0000-000000000002",role:"ops_director",label:"Production",icon:"director"},{email:"magasin@demo.local",id:"10000000-0000-0000-0000-000000000003",role:"storekeeper",label:"Stock",icon:"store"},{email:"achats@demo.local",id:"10000000-0000-0000-0000-000000000004",role:"purchasing",label:"Achats",icon:"purchase"},{email:"cuisine@demo.local",id:"10000000-0000-0000-0000-000000000005",role:"kitchen",label:"Cuisine centrale",icon:"kitchen",department:"Cuisine centrale"},{email:"fastfood@demo.local",id:"10000000-0000-0000-0000-000000000006",role:"requester",label:"Service Fast food",icon:"service",department:"Fast food"},{email:"patisserie@demo.local",id:"10000000-0000-0000-0000-000000000007",role:"requester",label:"Service P\xE2tisserie",icon:"service",department:"P\xE2tisserie"},{email:"petitdej@demo.local",id:"10000000-0000-0000-0000-000000000008",role:"requester",label:"Service Petit d\xE9jeuner",icon:"service",department:"Petit d\xE9jeuner"}],Re=["Fast food","P\xE2tisserie","Petit d\xE9jeuner","Cuisine centrale"];function ce(r){let l=2166136261;for(let u of r)l=Math.imul(l^u.charCodeAt(0),16777619);return(l>>>0)/4294967295}async function le(r,{rows:l,history:u=!0}){let h=async(a,d)=>(await r.query(a,d)).rows[0],R=T[0];for(let a of T)await r.query("insert into auth.users (id, email, raw_user_meta_data) values ($1, $2, $3)",[a.id,a.email,{full_name:a.label}]);let{org:g}=await h("select platform.provision_organization($1, 'gescatering', 'SESA Catering (d\xE9mo)') as org",[R.id]);await r.query("select public.init_catering_organization($1)",[g]);let v=async a=>(await h("select id from platform.roles where is_system and key = $1",[a])).id,y=(await h("select id from public.sites where organization_id = $1",[g])).id,f={};for(let a of Re)f[a]=(await h("insert into public.departments (organization_id, site_id, name) values ($1, $2, $3) returning id",[g,y,a])).id;for(let a of T.slice(1)){let{id:d}=await h(`insert into platform.memberships (user_id, organization_id, role_id, status, joined_at)
+       values ($1, $2, $3, 'active', now()) returning id`,[a.id,g,await v(a.role)]);a.department&&await r.query("insert into platform.membership_scopes (membership_id, scope_type, scope_id) values ($1, 'department', $2)",[d,f[a.department]])}let x=await E(r,R.id,async a=>{let d=(await a.query("select public.stage_catalog_import($1, 'revue-demo.xlsx', $2) as id",[g,JSON.stringify(l)])).rows[0].id;return(await a.query("select public.confirm_catalog_import($1) as r",[d])).rows[0].r}),w=(await r.query("select id, reference from public.products where organization_id = $1 order by reference",[g])).rows,z=T.find(a=>a.role==="storekeeper"),$=0;await E(r,R.id,async a=>{for(let d of w){let t=ce(d.reference);t<.5&&await a.query("update public.products set min_stock = $2 where id = $1",[d.id,Math.ceil(t*20)+2])}}),await E(r,z.id,async a=>{for(let d of w){let t=ce(d.reference+":stock");t<.7&&(await a.query("select public.record_stock_movement($1, $2, 'receipt', $3, null, 'Stock initial (d\xE9mo)', $4)",[y,d.id,Math.ceil(t*60),`demo-init-${d.reference}`]),$++)}}),await r.query("insert into public.suppliers (organization_id, name, phone) values ($1, 'Grossiste Dakar (d\xE9mo)', '+221 00 000 00 00')",[g]);let s=Object.fromEntries(T.map(a=>[a.email,a])),m=u?await oe(r,{org:g,site:y,users:s,departments:f}):null,_=u?await ue(r,{org:g,users:s}):0;return{org:g,site:y,departments:f,imported:x,stocked:$,products:w.length,activity:m,recipes:_}}var Ce=new Set(["requests","request_lines","v_request_lines","v_request_consolidation","v_stock_position","v_supply_needs","products","product_categories","departments","sites","units","supply_request_lines","supply_requests","purchase_orders","purchase_order_lines","suppliers","catering_settings","stock_movements","v_open_supply_needs","v_purchase_orders","v_purchase_order_lines","receipts","supplier_products","recipes","recipe_lines","v_recipes","v_recipe_lines","product_unit_conversions"]),de=new Set(["requests","request_lines","purchase_orders","purchase_order_lines","recipes","recipe_lines"]),D=/^[a-z_][a-z0-9_]*$/,pe={eq:"=",neq:"<>",gt:">",gte:">=",lt:"<",lte:"<="};function _e(r){let l=new Map(T.map(v=>[v.email,v])),u=new Map;async function h(v){if(!u.has(v)){let y=await r.query(`select a.name, format_type(a.type, null) as type
            from pg_proc p, unnest(p.proargnames, p.proargtypes::oid[]) with ordinality as a(name, type, n)
-          where p.pronamespace = 'public'::regnamespace and p.proname = $1`,[m]);u.set(m,new Map(q.rows.map(b=>[b.name,b.type])))}return u.get(m)}async function C({method:m,path:q,body:b={},user:x}){let z=new URL(q,"http://demo.local/"),w=z.pathname.split("/").filter(Boolean);if(w[0]==="users"&&m==="GET")return{status:200,body:T.map(({id:k,...a})=>a)};let $=d.get(x);if(!$)return{status:401,body:{message:"Choisir un compte de d\xE9monstration."}};let y=w[1];if(!y||!D.test(y))return{status:400,body:{message:"Nom invalide"}};if(w[0]==="from"&&m==="GET"){if(!$e.has(y))return{status:403,body:{message:"Relation non expos\xE9e"}};let k=[],a=[],c="",p=500;for(let[l,E]of z.searchParams)if(l==="order"){let[S,P]=E.split(".");if(!D.test(S))return{status:400,body:{message:"Tri invalide"}};c=` order by ${S} ${P==="desc"?"desc":"asc"}`}else if(l==="limit")p=Math.min(Number(E)||500,1e3);else{if(!D.test(l))return{status:400,body:{message:"Filtre invalide"}};let S=E.indexOf("."),P=E.slice(0,S),L=E.slice(S+1);if(P==="in")a.push(L.replace(/^\(|\)$/g,"").split(",").filter(Boolean)),k.push(`${l}::text = any($${a.length}::text[])`);else if(le[P])a.push(L),k.push(`${l}::text ${le[P]} $${a.length}`);else return{status:400,body:{message:`Op\xE9rateur inconnu : ${P}`}}}let r=`select * from public.${y}${k.length?" where "+k.join(" and "):""}${c} limit ${p}`;return{status:200,body:await R(o,$.id,async l=>(await l.query(r,a)).rows)}}if(w[0]==="insert"&&m==="POST")return ce.has(y)?{status:201,body:await R(o,$.id,async a=>{let c=[];for(let p of b.rows??[]){let r=Object.keys(p);if(!r.length||!r.every(l=>D.test(l)))throw new Error("Colonnes invalides");let h=await a.query(`insert into public.${y} (${r.join(", ")}) values (${r.map((l,E)=>`$${E+1}`).join(", ")}) returning *`,r.map(l=>p[l]));c.push(h.rows[0])}return c})}:{status:403,body:{message:"Table non \xE9crivable"}};if((w[0]==="update"||w[0]==="delete")&&m==="POST"){if(!ce.has(y))return{status:403,body:{message:"Table non \xE9crivable"}};let{id:k,values:a={}}=b;if(!k)return{status:400,body:{message:"Identifiant manquant"}};let c=await R(o,$.id,async p=>{if(w[0]==="delete")return(await p.query(`delete from public.${y} where id = $1 returning *`,[k])).rows;let r=Object.keys(a);if(!r.length||!r.every(h=>D.test(h)))throw new Error("Colonnes invalides");return(await p.query(`update public.${y} set ${r.map((h,l)=>`${h} = $${l+2}`).join(", ")} where id = $1 returning *`,[k,...r.map(h=>a[h])])).rows});return c.length?{status:200,body:c}:{status:403,body:{message:"Modification impossible : cette ligne n'est plus modifiable."}}}if(w[0]==="rpc"&&m==="POST"){let k=await v(y),a=b.args??{},c=Object.keys(a);if(!c.every(l=>D.test(l)&&k.has(l)))return{status:400,body:{message:"Arguments invalides pour "+y}};let p=c.map(l=>k.get(l)==="jsonb"?JSON.stringify(a[l]):a[l]),r=`select * from public.${y}(${c.map((l,E)=>`${l} => $${E+1}`).join(", ")})`;return{status:200,body:await R(o,$.id,async l=>(await l.query(r,p)).rows)}}return{status:404,body:{message:"Introuvable"}}}let _=Promise.resolve();return function(q){let b=async()=>{try{return await C(q)}catch(z){return{status:z.code==="42501"?403:z.code==="P0002"?404:400,body:{message:z.message,code:z.code??null,hint:z.hint??null}}}},x=_.then(b,b);return _=x,x}}var pe=[{name:"local/supabase_shim.sql",sql:`-- =====================================================================
+          where p.pronamespace = 'public'::regnamespace and p.proname = $1`,[v]);u.set(v,new Map(y.rows.map(f=>[f.name,f.type])))}return u.get(v)}async function R({method:v,path:y,body:f={},user:x}){let w=new URL(y,"http://demo.local/"),z=w.pathname.split("/").filter(Boolean);if(z[0]==="users"&&v==="GET")return{status:200,body:T.map(({id:m,..._})=>_)};let $=l.get(x);if(!$)return{status:401,body:{message:"Choisir un compte de d\xE9monstration."}};let s=z[1];if(!s||!D.test(s))return{status:400,body:{message:"Nom invalide"}};if(z[0]==="from"&&v==="GET"){if(!Ce.has(s))return{status:403,body:{message:"Relation non expos\xE9e"}};let m=[],_=[],a="",d=500;for(let[p,S]of w.searchParams)if(p==="order"){let[C,P]=S.split(".");if(!D.test(C))return{status:400,body:{message:"Tri invalide"}};a=` order by ${C} ${P==="desc"?"desc":"asc"}`}else if(p==="limit")d=Math.min(Number(S)||500,1e3);else{if(!D.test(p))return{status:400,body:{message:"Filtre invalide"}};let C=S.indexOf("."),P=S.slice(0,C),L=S.slice(C+1);if(P==="in")_.push(L.replace(/^\(|\)$/g,"").split(",").filter(Boolean)),m.push(`${p}::text = any($${_.length}::text[])`);else if(pe[P])_.push(L),m.push(`${p}::text ${pe[P]} $${_.length}`);else return{status:400,body:{message:`Op\xE9rateur inconnu : ${P}`}}}let t=`select * from public.${s}${m.length?" where "+m.join(" and "):""}${a} limit ${d}`;return{status:200,body:await E(r,$.id,async p=>(await p.query(t,_)).rows)}}if(z[0]==="insert"&&v==="POST")return de.has(s)?{status:201,body:await E(r,$.id,async _=>{let a=[];for(let d of f.rows??[]){let t=Object.keys(d);if(!t.length||!t.every(p=>D.test(p)))throw new Error("Colonnes invalides");let b=await _.query(`insert into public.${s} (${t.join(", ")}) values (${t.map((p,S)=>`$${S+1}`).join(", ")}) returning *`,t.map(p=>d[p]));a.push(b.rows[0])}return a})}:{status:403,body:{message:"Table non \xE9crivable"}};if((z[0]==="update"||z[0]==="delete")&&v==="POST"){if(!de.has(s))return{status:403,body:{message:"Table non \xE9crivable"}};let{id:m,values:_={}}=f;if(!m)return{status:400,body:{message:"Identifiant manquant"}};let a=await E(r,$.id,async d=>{if(z[0]==="delete")return(await d.query(`delete from public.${s} where id = $1 returning *`,[m])).rows;let t=Object.keys(_);if(!t.length||!t.every(b=>D.test(b)))throw new Error("Colonnes invalides");return(await d.query(`update public.${s} set ${t.map((b,p)=>`${b} = $${p+2}`).join(", ")} where id = $1 returning *`,[m,...t.map(b=>_[b])])).rows});return a.length?{status:200,body:a}:{status:403,body:{message:"Modification impossible : cette ligne n'est plus modifiable."}}}if(z[0]==="rpc"&&v==="POST"){let m=await h(s),_=f.args??{},a=Object.keys(_);if(!a.every(p=>D.test(p)&&m.has(p)))return{status:400,body:{message:"Arguments invalides pour "+s}};let d=a.map(p=>m.get(p)==="jsonb"?JSON.stringify(_[p]):_[p]),t=`select * from public.${s}(${a.map((p,S)=>`${p} => $${S+1}`).join(", ")})`;return{status:200,body:await E(r,$.id,async p=>(await p.query(t,d)).rows)}}return{status:404,body:{message:"Introuvable"}}}let g=Promise.resolve();return function(y){let f=async()=>{try{return await R(y)}catch(w){return{status:w.code==="42501"?403:w.code==="P0002"?404:400,body:{message:w.message,code:w.code??null,hint:w.hint??null}}}},x=g.then(f,f);return g=x,x}}var me=[{name:"local/supabase_shim.sql",sql:`-- =====================================================================
 --  Simulation locale de Supabase \u2014 UNIQUEMENT pour les tests (PGlite)
 --
 --  Reproduit ce dont les migrations et la RLS d\xE9pendent :
@@ -2531,132 +2548,132 @@ returns text
 language sql
 immutable
 as $$ select 'P0001-P0013 \xB7 build 2026-08-02.1' $$;
-`},{name:"migrations/C0001__roles_permissions.sql",sql:`-- =====================================================================
---  C0001 \u2014 GesCatering : permissions et r\xF4les m\xE9tier
---
---  Le produit s'appuie sur le socle \`platform\` (gespro-db) et ne le
---  modifie pas : il y D\xC9CLARE ses permissions et ses r\xF4les.
---
---  R\xF4les (rang : plus bas = plus puissant, base de la d\xE9l\xE9gation) :
---    ops_director  25  Direction d'exploitation \u2014 VALIDE demandes et commandes
---    storekeeper   35  Magasinier \u2014 stock, r\xE9servations, r\xE9ceptions
---    purchasing    35  Achats \u2014 pr\xE9pare et passe les commandes
---    kitchen       40  Cuisine / production \u2014 planifie, consulte les fiches
---    requester     45  Service demandeur \u2014 cr\xE9e et suit ses demandes
---  owner (10) et admin (20) du socle re\xE7oivent toutes les permissions.
---
---  \u26A0\uFE0F S\xE9paration des t\xE2ches voulue :
---     - les achats PR\xC9PARENT une commande, la direction d'exploitation la
---       VALIDE, les achats la PASSENT. Personne d'autre que owner/admin ne
---       cumule pr\xE9paration et validation.
---     - un service demandeur n'a AUCUNE permission de stock ni d'achat :
---       c'est le sc\xE9nario 7 du cahier des charges, test\xE9 en base.
--- =====================================================================
-
-insert into platform.permissions (key, domain, action, label, description, product) values
-  -- R\xE9f\xE9rentiel
-  ('catalog.manage',     'catalog',    'manage',   'G\xE9rer le catalogue',
-     'Produits, cat\xE9gories, unit\xE9s, conversions, fournisseurs, sites, services', 'gescatering'),
-  ('catalog.read',       'catalog',    'read',     'Voir le catalogue', null, 'gescatering'),
-  -- Stock
-  ('stock.read',         'stock',      'read',     'Voir le stock', null, 'gescatering'),
-  ('stock.move',         'stock',      'write',    'Enregistrer entr\xE9es, sorties et retours', null, 'gescatering'),
-  ('stock.reserve',      'stock',      'write',    'R\xE9server et lib\xE9rer du stock', null, 'gescatering'),
-  ('stock.adjust',       'stock',      'validate', 'Ajuster le stock (inventaire, correction)',
-     'Motif obligatoire, op\xE9ration trac\xE9e', 'gescatering'),
-  ('stock.transfer',     'stock',      'write',    'Transf\xE9rer du stock entre sites', null, 'gescatering'),
-  -- Demandes internes
-  ('request.create',     'request',    'write',    'Cr\xE9er une demande', null, 'gescatering'),
-  ('request.read_all',   'request',    'read',     'Voir toutes les demandes', null, 'gescatering'),
-  ('request.approve',    'request',    'validate', 'Valider ou refuser une demande', null, 'gescatering'),
-  -- Production
-  ('recipe.manage',      'recipe',     'manage',   'G\xE9rer les fiches techniques', null, 'gescatering'),
-  ('recipe.validate',    'recipe',     'validate', 'Valider une fiche technique', null, 'gescatering'),
-  ('production.plan',    'production', 'write',    'Planifier la production', null, 'gescatering'),
-  ('production.approve', 'production', 'validate', 'Valider un planning de production', null, 'gescatering'),
-  -- Prestations sp\xE9ciales
-  ('event.manage',       'event',      'manage',   'G\xE9rer les prestations sp\xE9ciales', null, 'gescatering'),
-  -- Approvisionnement
-  ('need.transmit',      'need',       'write',    'Transmettre des besoins aux achats', null, 'gescatering'),
-  ('purchase.read',      'purchase',   'read',     'Voir les commandes fournisseurs', null, 'gescatering'),
-  ('purchase.prepare',   'purchase',   'write',    'Pr\xE9parer une commande fournisseur', null, 'gescatering'),
-  ('purchase.approve',   'purchase',   'validate', 'Valider une commande fournisseur', null, 'gescatering'),
-  ('purchase.order',     'purchase',   'write',    'Passer la commande au fournisseur',
-     'Uniquement une commande valid\xE9e', 'gescatering'),
-  ('reception.record',   'reception',  'write',    'Enregistrer une r\xE9ception', null, 'gescatering')
-on conflict (key) do update
-  set label       = excluded.label,
-      description = excluded.description,
-      domain      = excluded.domain,
-      action      = excluded.action,
-      product     = excluded.product;
-
-insert into platform.roles (organization_id, product, key, label, description, rank, is_system) values
-  (null, 'gescatering', 'ops_director', 'Direction d''exploitation',
-     'Valide les demandes, les plannings et les commandes fournisseurs', 25, true),
-  (null, 'gescatering', 'storekeeper',  'Magasinier',
-     'Stock, r\xE9servations, sorties, r\xE9ceptions, transmission des besoins', 35, true),
-  (null, 'gescatering', 'purchasing',   'Achats',
-     'Pr\xE9pare et passe les commandes fournisseurs', 35, true),
-  (null, 'gescatering', 'kitchen',      'Cuisine',
-     'Planifie la production et consulte les fiches techniques', 40, true),
-  (null, 'gescatering', 'requester',    'Service demandeur',
-     'Cr\xE9e et suit les demandes de son service', 45, true)
-on conflict on constraint uq_roles_scope do update
-  set label       = excluded.label,
-      description = excluded.description,
-      rank        = excluded.rank;
-
-do $$
-declare
-  v_role uuid;
-  r record;
-begin
-  -- owner et admin : tout le catalogue GesCatering
-  for v_role in
-    select id from platform.roles where is_system and product is null and key in ('owner','admin')
-  loop
-    insert into platform.role_permissions (role_id, permission_key)
-    select v_role, key from platform.permissions where product = 'gescatering'
-    on conflict do nothing;
-  end loop;
-
-  for r in
-    select * from (values
-      -- Direction d'exploitation : valide, voit tout, ne passe pas la commande
-      ('ops_director', array[
-         'organization.read','settings.read','member.read','member.invite','audit.read',
-         'report.read','report.export','document.read','document.create',
-         'catalog.read','stock.read','stock.adjust',
-         'request.create','request.read_all','request.approve',
-         'recipe.manage','recipe.validate','production.plan','production.approve',
-         'event.manage','purchase.read','purchase.approve']),
-      ('storekeeper', array[
-         'organization.read','settings.read','member.read','report.read',
-         'document.read','document.create',
-         'catalog.read','catalog.manage',
-         'stock.read','stock.move','stock.reserve','stock.adjust','stock.transfer',
-         'request.read_all','need.transmit','purchase.read','reception.record']),
-      ('purchasing', array[
-         'organization.read','settings.read','member.read','report.read',
-         'document.read','document.create',
-         'catalog.read','stock.read','purchase.read','purchase.prepare','purchase.order']),
-      ('kitchen', array[
-         'organization.read','settings.read','member.read',
-         'catalog.read','stock.read','request.create',
-         'recipe.manage','production.plan','event.manage']),
-      ('requester', array[
-         'organization.read','settings.read',
-         'catalog.read','request.create'])
-    ) as t(role_key, perms)
-  loop
-    select id into v_role from platform.roles
-     where is_system and product = 'gescatering' and key = r.role_key;
-    insert into platform.role_permissions (role_id, permission_key)
-    select v_role, unnest(r.perms)
-    on conflict do nothing;
-  end loop;
-end $$;
+`},{name:"migrations/C0001__roles_permissions.sql",sql:`-- =====================================================================\r
+--  C0001 \u2014 GesCatering : permissions et r\xF4les m\xE9tier\r
+--\r
+--  Le produit s'appuie sur le socle \`platform\` (gespro-db) et ne le\r
+--  modifie pas : il y D\xC9CLARE ses permissions et ses r\xF4les.\r
+--\r
+--  R\xF4les (rang : plus bas = plus puissant, base de la d\xE9l\xE9gation) :\r
+--    ops_director  25  Direction d'exploitation \u2014 VALIDE demandes et commandes\r
+--    storekeeper   35  Magasinier \u2014 stock, r\xE9servations, r\xE9ceptions\r
+--    purchasing    35  Achats \u2014 pr\xE9pare et passe les commandes\r
+--    kitchen       40  Cuisine / production \u2014 planifie, consulte les fiches\r
+--    requester     45  Service demandeur \u2014 cr\xE9e et suit ses demandes\r
+--  owner (10) et admin (20) du socle re\xE7oivent toutes les permissions.\r
+--\r
+--  \u26A0\uFE0F S\xE9paration des t\xE2ches voulue :\r
+--     - les achats PR\xC9PARENT une commande, la direction d'exploitation la\r
+--       VALIDE, les achats la PASSENT. Personne d'autre que owner/admin ne\r
+--       cumule pr\xE9paration et validation.\r
+--     - un service demandeur n'a AUCUNE permission de stock ni d'achat :\r
+--       c'est le sc\xE9nario 7 du cahier des charges, test\xE9 en base.\r
+-- =====================================================================\r
+\r
+insert into platform.permissions (key, domain, action, label, description, product) values\r
+  -- R\xE9f\xE9rentiel\r
+  ('catalog.manage',     'catalog',    'manage',   'G\xE9rer le catalogue',\r
+     'Produits, cat\xE9gories, unit\xE9s, conversions, fournisseurs, sites, services', 'gescatering'),\r
+  ('catalog.read',       'catalog',    'read',     'Voir le catalogue', null, 'gescatering'),\r
+  -- Stock\r
+  ('stock.read',         'stock',      'read',     'Voir le stock', null, 'gescatering'),\r
+  ('stock.move',         'stock',      'write',    'Enregistrer entr\xE9es, sorties et retours', null, 'gescatering'),\r
+  ('stock.reserve',      'stock',      'write',    'R\xE9server et lib\xE9rer du stock', null, 'gescatering'),\r
+  ('stock.adjust',       'stock',      'validate', 'Ajuster le stock (inventaire, correction)',\r
+     'Motif obligatoire, op\xE9ration trac\xE9e', 'gescatering'),\r
+  ('stock.transfer',     'stock',      'write',    'Transf\xE9rer du stock entre sites', null, 'gescatering'),\r
+  -- Demandes internes\r
+  ('request.create',     'request',    'write',    'Cr\xE9er une demande', null, 'gescatering'),\r
+  ('request.read_all',   'request',    'read',     'Voir toutes les demandes', null, 'gescatering'),\r
+  ('request.approve',    'request',    'validate', 'Valider ou refuser une demande', null, 'gescatering'),\r
+  -- Production\r
+  ('recipe.manage',      'recipe',     'manage',   'G\xE9rer les fiches techniques', null, 'gescatering'),\r
+  ('recipe.validate',    'recipe',     'validate', 'Valider une fiche technique', null, 'gescatering'),\r
+  ('production.plan',    'production', 'write',    'Planifier la production', null, 'gescatering'),\r
+  ('production.approve', 'production', 'validate', 'Valider un planning de production', null, 'gescatering'),\r
+  -- Prestations sp\xE9ciales\r
+  ('event.manage',       'event',      'manage',   'G\xE9rer les prestations sp\xE9ciales', null, 'gescatering'),\r
+  -- Approvisionnement\r
+  ('need.transmit',      'need',       'write',    'Transmettre des besoins aux achats', null, 'gescatering'),\r
+  ('purchase.read',      'purchase',   'read',     'Voir les commandes fournisseurs', null, 'gescatering'),\r
+  ('purchase.prepare',   'purchase',   'write',    'Pr\xE9parer une commande fournisseur', null, 'gescatering'),\r
+  ('purchase.approve',   'purchase',   'validate', 'Valider une commande fournisseur', null, 'gescatering'),\r
+  ('purchase.order',     'purchase',   'write',    'Passer la commande au fournisseur',\r
+     'Uniquement une commande valid\xE9e', 'gescatering'),\r
+  ('reception.record',   'reception',  'write',    'Enregistrer une r\xE9ception', null, 'gescatering')\r
+on conflict (key) do update\r
+  set label       = excluded.label,\r
+      description = excluded.description,\r
+      domain      = excluded.domain,\r
+      action      = excluded.action,\r
+      product     = excluded.product;\r
+\r
+insert into platform.roles (organization_id, product, key, label, description, rank, is_system) values\r
+  (null, 'gescatering', 'ops_director', 'Production',\r
+     'Valide les demandes, les plannings et les commandes fournisseurs', 25, true),\r
+  (null, 'gescatering', 'storekeeper',  'Stock',\r
+     'Stock, r\xE9servations, sorties, r\xE9ceptions, transmission des besoins', 35, true),\r
+  (null, 'gescatering', 'purchasing',   'Achats',\r
+     'Pr\xE9pare et passe les commandes fournisseurs', 35, true),\r
+  (null, 'gescatering', 'kitchen',      'Cuisine',\r
+     'Planifie la production et consulte les fiches techniques', 40, true),\r
+  (null, 'gescatering', 'requester',    'Service demandeur',\r
+     'Cr\xE9e et suit les demandes de son service', 45, true)\r
+on conflict on constraint uq_roles_scope do update\r
+  set label       = excluded.label,\r
+      description = excluded.description,\r
+      rank        = excluded.rank;\r
+\r
+do $$\r
+declare\r
+  v_role uuid;\r
+  r record;\r
+begin\r
+  -- owner et admin : tout le catalogue GesCatering\r
+  for v_role in\r
+    select id from platform.roles where is_system and product is null and key in ('owner','admin')\r
+  loop\r
+    insert into platform.role_permissions (role_id, permission_key)\r
+    select v_role, key from platform.permissions where product = 'gescatering'\r
+    on conflict do nothing;\r
+  end loop;\r
+\r
+  for r in\r
+    select * from (values\r
+      -- Direction d'exploitation : valide, voit tout, ne passe pas la commande\r
+      ('ops_director', array[\r
+         'organization.read','settings.read','member.read','member.invite','audit.read',\r
+         'report.read','report.export','document.read','document.create',\r
+         'catalog.read','stock.read','stock.adjust',\r
+         'request.create','request.read_all','request.approve',\r
+         'recipe.manage','recipe.validate','production.plan','production.approve',\r
+         'event.manage','purchase.read','purchase.approve']),\r
+      ('storekeeper', array[\r
+         'organization.read','settings.read','member.read','report.read',\r
+         'document.read','document.create',\r
+         'catalog.read','catalog.manage',\r
+         'stock.read','stock.move','stock.reserve','stock.adjust','stock.transfer',\r
+         'request.read_all','need.transmit','purchase.read','reception.record']),\r
+      ('purchasing', array[\r
+         'organization.read','settings.read','member.read','report.read',\r
+         'document.read','document.create',\r
+         'catalog.read','stock.read','purchase.read','purchase.prepare','purchase.order']),\r
+      ('kitchen', array[\r
+         'organization.read','settings.read','member.read',\r
+         'catalog.read','stock.read','request.create',\r
+         'recipe.manage','production.plan','event.manage']),\r
+      ('requester', array[\r
+         'organization.read','settings.read',\r
+         'catalog.read','request.create'])\r
+    ) as t(role_key, perms)\r
+  loop\r
+    select id into v_role from platform.roles\r
+     where is_system and product = 'gescatering' and key = r.role_key;\r
+    insert into platform.role_permissions (role_id, permission_key)\r
+    select v_role, unnest(r.perms)\r
+    on conflict do nothing;\r
+  end loop;\r
+end $$;\r
 `},{name:"migrations/C0002__reference_data.sql",sql:`-- =====================================================================
 --  C0002 \u2014 R\xE9f\xE9rentiel : param\xE8tres, sites, services, unit\xE9s, catalogue,
 --          fournisseurs
@@ -5471,7 +5488,7 @@ declare\r
 begin\r
   v_req := gescatering_internal.lock_request(p_request_id);\r
   if not platform.has_permission(v_req.organization_id, 'request.approve') then\r
-    perform gescatering_internal.deny('Op\xE9ration refus\xE9e : la validation revient \xE0 la direction d''exploitation.');\r
+    perform gescatering_internal.deny('Op\xE9ration refus\xE9e : la validation revient \xE0 la Production.');\r
   end if;\r
   if v_req.status <> 'submitted' then\r
     raise exception 'Cette demande n''est pas en attente de validation.' using errcode = '22023';\r
@@ -5614,7 +5631,7 @@ begin\r
   elsif v_req.status = 'approved' then\r
     if not platform.has_permission(v_req.organization_id, 'request.approve')\r
        and not platform.has_permission(v_req.organization_id, 'stock.reserve') then\r
-      perform gescatering_internal.deny('Une demande valid\xE9e ne peut \xEAtre annul\xE9e que par la direction ou le magasin.');\r
+      perform gescatering_internal.deny('Une demande valid\xE9e ne peut \xEAtre annul\xE9e que par la Production ou le Stock.');\r
     end if;\r
     if exists (select 1 from public.request_lines l\r
                  join public.stock_reservations r on r.id = l.reservation_id\r
@@ -6466,4 +6483,314 @@ left join public.units ou on ou.id = l.unit_id;
 
 revoke all on public.v_open_supply_needs, public.v_purchase_orders, public.v_purchase_order_lines from anon;
 grant select on public.v_open_supply_needs, public.v_purchase_orders, public.v_purchase_order_lines to authenticated;
-`}],_e=[{reference:"CDT-001",name:"Crevette sechee",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 2"},{reference:"CDT-002",name:"Guedj beurre",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 3"},{reference:"CDT-003",name:"Guedj kong",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 4"},{reference:"CDT-004",name:"Keithia",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 5"},{reference:"CDT-005",name:"Kong fume",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 6"},{reference:"CDT-006",name:"Pagne",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 7"},{reference:"CDT-007",name:"Yet",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 8"},{reference:"CDT-008",name:"Yet bou sew",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 9"},{reference:"CSM-003",name:"Carton pizza",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 12"},{reference:"CSM-004",name:"Charbon",category:"Consommables",category_kind:"consumable",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 13"},{reference:"CSM-005",name:"Gant",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 14"},{reference:"CSM-006",name:"Gobelet cafe",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 15"},{reference:"CSM-008",name:"Moule gratin",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 17"},{reference:"CSM-009",name:"Papier alu gm",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 18"},{reference:"CSM-010",name:"Papier film",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"paquet",package_factor:"",source:"Revue ligne 19"},{reference:"CSM-011",name:"Papier sandwich",category:"Consommables",category_kind:"consumable",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 20"},{reference:"CSM-012",name:"Pick brochette deco",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 21"},{reference:"CSM-013",name:"Pick brochette gm",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 22"},{reference:"CSM-014",name:"Pot pizza gobelets",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 23"},{reference:"CSM-015",name:"Sachet croissant",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 24"},{reference:"CSM-016",name:"Sachet emporte",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 25"},{reference:"CSM-017",name:"Sachet jaune de 100f",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 26"},{reference:"CSM-018",name:"Serviette de table",category:"Consommables",category_kind:"consumable",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 27"},{reference:"ENT-001",name:"Ballaie",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 51"},{reference:"ENT-002",name:"Creme a recurer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 52"},{reference:"ENT-003",name:"Eau de javel",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 53"},{reference:"ENT-004",name:"Eponge en fer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 54"},{reference:"ENT-005",name:"Lave vitre",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 55"},{reference:"ENT-006",name:"Madar gm",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 56"},{reference:"ENT-007",name:"Raclette",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 57"},{reference:"ENT-008",name:"Serpillere",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 58"},{reference:"FRO-001",name:"Capitaine",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 59"},{reference:"FRO-002",name:"Poisson dorade",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 60"},{reference:"FRO-003",name:"Poisson gm",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 61"},{reference:"FRO-004",name:"Poisson lotte",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 62"},{reference:"FRO-005",name:"Poulet blanc",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 63"},{reference:"FRO-006",name:"Poulets",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 64"},{reference:"FRO-007",name:"Viande hachee",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 65"},{reference:"FRO-009",name:"Viande locale",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 67"},{reference:"LEG-001",name:"Bissap kouthia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 68"},{reference:"LEG-002",name:"Brocolis",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 69"},{reference:"LEG-003",name:"Carotte",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 70"},{reference:"LEG-004",name:"Chou",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 71"},{reference:"LEG-005",name:"Citron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 72"},{reference:"LEG-006",name:"Concombre",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 73"},{reference:"LEG-007",name:"Courgette",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 74"},{reference:"LEG-008",name:"Gombon",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 75"},{reference:"LEG-009",name:"Haricot vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 76"},{reference:"LEG-010",name:"Manioc",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 77"},{reference:"LEG-011",name:"Oignon vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 78"},{reference:"LEG-012",name:"Patate",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 79"},{reference:"LEG-013",name:"Peril ordinnaire",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 80"},{reference:"LEG-014",name:"Persil chinois",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 81"},{reference:"LEG-015",name:"Petit bpois surgele",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 82"},{reference:"LEG-016",name:"Piment gouana sofia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 83"},{reference:"LEG-018",name:"Poivron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 85"},{reference:"LEG-019",name:"Salade",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"bassine",purchase_unit:"",package_factor:"",source:"Revue ligne 86"},{reference:"LEG-020",name:"Tomate fraiche",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 87"},{reference:"SEC-003",name:"Ail",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 90"},{reference:"SEC-004",name:"Amora",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 91"},{reference:"SEC-005",name:"Ataya",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 92"},{reference:"SEC-006",name:"Athieke",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 93"},{reference:"SEC-009",name:"Bouye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 96"},{reference:"SEC-011",name:"Calamar",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 98"},{reference:"SEC-012",name:"Canette pressesa",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 99"},{reference:"SEC-013",name:"Carry",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 100"},{reference:"SEC-014",name:"Champignon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 101"},{reference:"SEC-015",name:"Citron liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 102"},{reference:"SEC-017",name:"Creme liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 104"},{reference:"SEC-018",name:"Crevette n\xB01",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 105"},{reference:"SEC-019",name:"Crevette n\xB02",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 106"},{reference:"SEC-021",name:"Curcuman",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 108"},{reference:"SEC-023",name:"Epice curry",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 110"},{reference:"SEC-024",name:"Epice paprika",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 111"},{reference:"SEC-025",name:"Epice thyn",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 112"},{reference:"SEC-026",name:"Essence menthe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 113"},{reference:"SEC-027",name:"Essence vanille",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 114"},{reference:"SEC-028",name:"Farine patissier",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 115"},{reference:"SEC-029",name:"Fleur d'orange",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 116"},{reference:"SEC-030",name:"Foster mangue",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 117"},{reference:"SEC-031",name:"Foster vimto",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 118"},{reference:"SEC-035",name:"Herbe de province",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 122"},{reference:"SEC-039",name:"Jambon",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 126"},{reference:"SEC-040",name:"Ketchup",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 127"},{reference:"SEC-041",name:"Lait en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"sac",package_factor:"",source:"Revue ligne 128"},{reference:"SEC-042",name:"Laurier",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 129"},{reference:"SEC-043",name:"Lentille",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 130"},{reference:"SEC-045",name:"Maicedoine",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 132"},{reference:"SEC-046",name:"Mayonnaise",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 133"},{reference:"SEC-047",name:"Moutarde",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 134"},{reference:"SEC-048",name:"Netetou en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 135"},{reference:"SEC-049",name:"Niebe",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 136"},{reference:"SEC-050",name:"Noflaye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 137"},{reference:"SEC-051",name:"\u0152uf",category:"Produits secs",category_kind:"food",stock_unit:"tablette",purchase_unit:"",package_factor:"",source:"Revue ligne 138"},{reference:"SEC-052",name:"Oignon blanc",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 139"},{reference:"SEC-053",name:"Oignon locale",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 140"},{reference:"SEC-054",name:"Olive",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 141"},{reference:"SEC-055",name:"Olive noire gm",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 142"},{reference:"SEC-056",name:"Oro",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 143"},{reference:"SEC-057",name:"Pain arabe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 144"},{reference:"SEC-058",name:"Pate d'arachide",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 145"},{reference:"SEC-059",name:"Petit pois",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 146"},{reference:"SEC-060",name:"Piment en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 147"},{reference:"SEC-061",name:"Poisson frire",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 148"},{reference:"SEC-063",name:"Pomme de terre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 150"},{reference:"SEC-065",name:"Riz parfume pithibi",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 152"},{reference:"SEC-066",name:"Sauce algerienne",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 153"},{reference:"SEC-067",name:"Sauce chili",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 154"},{reference:"SEC-068",name:"Saucisson",category:"Produits secs",category_kind:"food",stock_unit:"barre",purchase_unit:"",package_factor:"",source:"Revue ligne 155"},{reference:"SEC-069",name:"Sel grain",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 156"},{reference:"SEC-070",name:"Soja",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 157"},{reference:"SEC-071",name:"Spaguetty",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 158"},{reference:"SEC-072",name:"Sucre en morceaux",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 159"},{reference:"SEC-073",name:"Sucre en poudre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 160"},{reference:"SEC-074",name:"Sunquick",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 161"},{reference:"SEC-075",name:"Tacos",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 162"},{reference:"SEC-076",name:"Tamarin",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 163"},{reference:"SEC-077",name:"Tandori",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 164"},{reference:"SEC-078",name:"Thon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 165"},{reference:"SEC-079",name:"Tomate concentree",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 166"},{reference:"SEC-080",name:"Vermicelle",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 167"},{reference:"SEC-081",name:"Vinaigre",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 168"}];var me,X=(async()=>{let o=performance.now(),d=new Ee({extensions:{pgcrypto:Se}});await re(d,pe),ie(d);let u=await ue(d,{rows:_e});me=de(d),console.info(`[GesCatering] d\xE9monstration pr\xEAte en ${Math.round(performance.now()-o)} ms`,`\u2014 ${u.products} produits, ${u.stocked} en stock`)})();X.catch(o=>console.error("[GesCatering] la d\xE9monstration n'a pas pu d\xE9marrer",o));window.gcDemo={ready:X,async call(o,d,u,v){await X;let C=await me({method:o,path:d,body:u?JSON.parse(u):{},user:v||void 0});return JSON.stringify(C)}};
+`},{name:"migrations/C0010__recipes.sql",sql:`-- =====================================================================\r
+--  C0010 \u2014 FICHES TECHNIQUES\r
+--\r
+--  Une fiche d\xE9crit un plat pour un nombre de portions : ses ingr\xE9dients,\r
+--  leurs quantit\xE9s, les \xE9tapes, le prix de vente et le food cost vis\xE9.\r
+--\r
+--  R\xE8gles :\r
+--  \u2022 UN INGR\xC9DIENT EST UN PRODUIT DU STOCK (product_id obligatoire). Pas\r
+--    de texte libre : une ligne en toutes lettres ne se chiffre pas et ne\r
+--    se transforme pas en besoin d'achat.\r
+--  \u2022 L'unit\xE9 de la recette est libre (g, kg, l, cl, pi\xE8ce\u2026). La conversion\r
+--    vers l'unit\xE9 de stock est CALCUL\xC9E \xC0 LA LECTURE (vues ci-dessous) :\r
+--    m\xEAme dimension \u2192 facteur exact ; conditionnement (sac, carton\u2026) \u2192\r
+--    conversion produit VALID\xC9E. Sans conversion, la ligne est enregistr\xE9e\r
+--    mais signal\xE9e \xAB conversion manquante \xBB : co\xFBt et besoins incomplets.\r
+--    D\xE8s que le magasin renseigne la conversion, la fiche se corrige seule.\r
+--  \u2022 LE CO\xDBT N'EST JAMAIS STOCK\xC9 : prix du fournisseur habituel, relu \xE0\r
+--    chaque affichage. Les vues sont en security_invoker : seuls ceux qui\r
+--    voient les prix (purchase.read / catalog.manage) voient les co\xFBts.\r
+--  \u2022 Modifiable en BROUILLON seulement. La validation (recipe.validate,\r
+--    direction) exige au moins un ingr\xE9dient et AUCUNE conversion\r
+--    manquante : une fiche valid\xE9e doit pouvoir calculer des besoins.\r
+-- =====================================================================\r
+\r
+create table if not exists public.recipes (\r
+  id                   uuid primary key default gen_random_uuid(),\r
+  organization_id      uuid not null references platform.organizations(id) on delete cascade,\r
+  reference            text,\r
+  name                 text not null check (length(trim(name)) > 0),\r
+  category             text,\r
+  portions             numeric(10,2) not null default 10 check (portions > 0),\r
+  sale_price           numeric(14,2) check (sale_price >= 0),         -- par portion\r
+  target_food_cost_pct numeric(5,2) check (target_food_cost_pct > 0 and target_food_cost_pct <= 100),\r
+  steps                text,\r
+  notes                text,\r
+  status               text not null default 'draft' check (status in ('draft', 'validated', 'archived')),\r
+  created_by           uuid references auth.users(id) on delete set null default auth.uid(),\r
+  validated_by         uuid references auth.users(id) on delete set null,\r
+  validated_at         timestamptz,\r
+  reopen_reason        text,\r
+  created_at           timestamptz not null default now(),\r
+  updated_at           timestamptz not null default now(),\r
+  constraint uq_recipes_id_org unique (id, organization_id),\r
+  constraint uq_recipes_reference unique (organization_id, reference),\r
+  constraint ck_recipes_validated check (status <> 'validated' or (validated_by is not null and validated_at is not null))\r
+);\r
+\r
+create table if not exists public.recipe_lines (\r
+  id              uuid primary key default gen_random_uuid(),\r
+  organization_id uuid not null references platform.organizations(id) on delete cascade,\r
+  recipe_id       uuid not null,\r
+  product_id      uuid not null,\r
+  quantity        numeric(14,4) not null check (quantity > 0),   -- pour \`recipes.portions\` portions\r
+  unit_id         uuid not null references public.units(id),\r
+  position        integer not null default 0,\r
+  note            text,\r
+  created_at      timestamptz not null default now(),\r
+  updated_at      timestamptz not null default now(),\r
+  constraint uq_recipe_lines_id_org unique (id, organization_id),\r
+  -- Un produit une seule fois par fiche : deux lignes fausseraient les besoins.\r
+  constraint uq_recipe_line_product unique (recipe_id, product_id),\r
+  constraint fk_rl_recipe foreign key (recipe_id, organization_id)\r
+    references public.recipes (id, organization_id) on delete cascade,\r
+  constraint fk_rl_product foreign key (product_id, organization_id)\r
+    references public.products (id, organization_id)\r
+);\r
+create index if not exists idx_recipe_lines_recipe on public.recipe_lines (recipe_id, position);\r
+create index if not exists idx_recipe_lines_product on public.recipe_lines (product_id);\r
+\r
+do $$\r
+begin\r
+  perform platform.attach_updated_at('public', 'recipes');\r
+  perform platform.attach_org_immutability('public', 'recipes');\r
+  perform platform.attach_org_default('public', 'recipes');\r
+  perform platform.attach_updated_at('public', 'recipe_lines');\r
+  perform platform.attach_org_immutability('public', 'recipe_lines');\r
+  perform platform.attach_org_default('public', 'recipe_lines');\r
+end $$;\r
+select platform.attach_audit('public', 'recipes');\r
+select platform.attach_audit('public', 'recipe_lines');\r
+\r
+-- R\xE9f\xE9rence attribu\xE9e par la base, APR\xC8S l'organisation (ordre alphab\xE9tique : trg_zz_).\r
+create or replace function gescatering_internal.assign_recipe_reference()\r
+returns trigger language plpgsql security definer set search_path = '' as $$\r
+begin\r
+  new.reference := gescatering_internal.next_reference(new.organization_id, 'recipe', 'FT');\r
+  return new;\r
+end $$;\r
+drop trigger if exists trg_zz_recipe_reference on public.recipes;\r
+create trigger trg_zz_recipe_reference before insert on public.recipes\r
+  for each row execute function gescatering_internal.assign_recipe_reference();\r
+\r
+drop trigger if exists trg_zz_rl_unit_visible on public.recipe_lines;\r
+create trigger trg_zz_rl_unit_visible before insert or update on public.recipe_lines\r
+  for each row execute function public.check_unit_visible('unit_id');\r
+\r
+-- ---------------------------------------------------------------------\r
+--  RLS \u2014 lecture : tout membre qui lit le catalogue ; \xE9criture : brouillons,\r
+--  recipe.manage. Le statut ne s'\xE9crit que par les RPC.\r
+-- ---------------------------------------------------------------------\r
+create or replace function gescatering_internal.recipe_is_editable_draft(p_recipe_id uuid)\r
+returns boolean language sql stable security definer set search_path = '' as $$\r
+  select exists (select 1 from public.recipes r\r
+                  where r.id = p_recipe_id and r.status = 'draft'\r
+                    and platform.has_permission(r.organization_id, 'recipe.manage'));\r
+$$;\r
+revoke all on function gescatering_internal.recipe_is_editable_draft(uuid) from public, anon;\r
+grant execute on function gescatering_internal.recipe_is_editable_draft(uuid) to authenticated;\r
+\r
+alter table public.recipes      enable row level security;\r
+alter table public.recipe_lines enable row level security;\r
+\r
+drop policy if exists recipes_select on public.recipes;\r
+create policy recipes_select on public.recipes for select to authenticated\r
+  using (platform.has_permission(organization_id, 'catalog.read'));\r
+drop policy if exists recipes_insert on public.recipes;\r
+create policy recipes_insert on public.recipes for insert to authenticated\r
+  with check (status = 'draft' and platform.has_permission(organization_id, 'recipe.manage'));\r
+drop policy if exists recipes_update on public.recipes;\r
+create policy recipes_update on public.recipes for update to authenticated\r
+  using      (status = 'draft' and platform.has_permission(organization_id, 'recipe.manage'))\r
+  with check (status = 'draft' and platform.has_permission(organization_id, 'recipe.manage'));\r
+drop policy if exists recipes_delete on public.recipes;\r
+create policy recipes_delete on public.recipes for delete to authenticated\r
+  using (status = 'draft' and platform.has_permission(organization_id, 'recipe.manage'));\r
+\r
+drop policy if exists recipe_lines_select on public.recipe_lines;\r
+create policy recipe_lines_select on public.recipe_lines for select to authenticated\r
+  using (exists (select 1 from public.recipes r where r.id = recipe_id));\r
+drop policy if exists recipe_lines_insert on public.recipe_lines;\r
+create policy recipe_lines_insert on public.recipe_lines for insert to authenticated\r
+  with check (gescatering_internal.recipe_is_editable_draft(recipe_id));\r
+drop policy if exists recipe_lines_update on public.recipe_lines;\r
+create policy recipe_lines_update on public.recipe_lines for update to authenticated\r
+  using      (gescatering_internal.recipe_is_editable_draft(recipe_id))\r
+  with check (gescatering_internal.recipe_is_editable_draft(recipe_id));\r
+drop policy if exists recipe_lines_delete on public.recipe_lines;\r
+create policy recipe_lines_delete on public.recipe_lines for delete to authenticated\r
+  using (gescatering_internal.recipe_is_editable_draft(recipe_id));\r
+\r
+revoke all on public.recipes, public.recipe_lines from anon, authenticated;\r
+grant select, delete on public.recipes, public.recipe_lines to authenticated;\r
+grant insert (organization_id, name, category, portions, sale_price, target_food_cost_pct, steps, notes)\r
+  on public.recipes to authenticated;\r
+grant update (name, category, portions, sale_price, target_food_cost_pct, steps, notes)\r
+  on public.recipes to authenticated;\r
+grant insert (organization_id, recipe_id, product_id, quantity, unit_id, position, note)\r
+  on public.recipe_lines to authenticated;\r
+grant update (quantity, unit_id, position, note) on public.recipe_lines to authenticated;\r
+\r
+-- ---------------------------------------------------------------------\r
+--  CALCULS (\xE0 la lecture)\r
+-- ---------------------------------------------------------------------\r
+-- Conversion \xAB douce \xBB : NULL au lieu d'une erreur quand elle est inconnue.\r
+create or replace function gescatering_internal.try_convert_to_stock_unit(\r
+  p_product_id uuid, p_unit_id uuid, p_quantity numeric)\r
+returns numeric language plpgsql stable set search_path = '' as $$\r
+begin\r
+  return public.convert_to_stock_unit(p_product_id, p_unit_id, p_quantity);\r
+exception when others then\r
+  return null;\r
+end $$;\r
+grant execute on function gescatering_internal.try_convert_to_stock_unit(uuid, uuid, numeric) to authenticated;\r
+\r
+create or replace view public.v_recipe_lines\r
+with (security_invoker = true)\r
+as\r
+with base as (\r
+  select l.id as line_id, l.organization_id, l.recipe_id, l.position, l.product_id, l.quantity, l.unit_id, l.note,\r
+         r.portions,\r
+         p.name as product_name, p.reference as product_reference, c.name as category_name,\r
+         su.code as stock_unit_code, u.code as unit_code, u.label as unit_label,\r
+         gescatering_internal.try_convert_to_stock_unit(l.product_id, l.unit_id, l.quantity) as quantity_stock,\r
+         (select sp.unit_price from public.supplier_products sp\r
+           where sp.product_id = l.product_id and sp.unit_id = p.stock_unit_id and sp.unit_price is not null\r
+           order by sp.is_preferred desc, sp.unit_price limit 1) as unit_price,\r
+         -- Disponible tous sites ; 0 si aucun stock, NULL si le r\xF4le ne voit pas le stock.\r
+         case when platform.has_permission(l.organization_id, 'stock.read')\r
+              then coalesce((select sum(sl.on_hand - sl.reserved) from public.stock_levels sl\r
+                              where sl.product_id = l.product_id), 0) end as available\r
+    from public.recipe_lines l\r
+    join public.recipes r    on r.id = l.recipe_id\r
+    join public.products p   on p.id = l.product_id\r
+    left join public.product_categories c on c.id = p.category_id\r
+    join public.units su     on su.id = p.stock_unit_id\r
+    join public.units u      on u.id = l.unit_id\r
+)\r
+select b.*,\r
+       b.quantity_stock is null                       as conversion_missing,\r
+       b.quantity_stock * b.unit_price                as line_cost,\r
+       b.quantity_stock / b.portions                  as stock_per_portion,\r
+       case when b.quantity_stock > 0 and b.available is not null\r
+            then floor(greatest(b.available, 0) / (b.quantity_stock / b.portions)) end as portions_possible\r
+  from base b;\r
+\r
+create or replace view public.v_recipes\r
+with (security_invoker = true)\r
+as\r
+select r.id, r.organization_id, r.reference, r.name, r.category, r.portions, r.sale_price,\r
+       r.target_food_cost_pct, r.steps, r.notes, r.status, r.validated_at, r.reopen_reason,\r
+       r.created_at, r.updated_at,\r
+       count(l.line_id)                                             as line_count,\r
+       count(l.line_id) filter (where l.conversion_missing)         as missing_conversions,\r
+       count(l.line_id) filter (where l.unit_price is null)         as unpriced_lines,\r
+       coalesce(sum(l.line_cost), 0)                                as material_cost_known,\r
+       (count(l.line_id) > 0 and bool_and(l.line_cost is not null)) as cost_complete,\r
+       coalesce(sum(l.line_cost), 0) / r.portions                   as cost_per_portion_known,\r
+       case when r.sale_price > 0 then 100 * coalesce(sum(l.line_cost), 0) / r.portions / r.sale_price end\r
+                                                                    as food_cost_pct,\r
+       case when r.sale_price > 0 and r.target_food_cost_pct is not null\r
+            then r.sale_price * r.target_food_cost_pct / 100 end    as target_cost_per_portion,\r
+       min(l.portions_possible)                                     as portions_possible,\r
+       (array_agg(l.product_name order by l.portions_possible nulls last))[1] as limiting_product\r
+  from public.recipes r\r
+  left join public.v_recipe_lines l on l.recipe_id = r.id\r
+ group by r.id;\r
+\r
+grant select on public.v_recipes, public.v_recipe_lines to authenticated;\r
+revoke all on public.v_recipes, public.v_recipe_lines from anon;\r
+\r
+-- ---------------------------------------------------------------------\r
+--  CYCLE DE VIE\r
+-- ---------------------------------------------------------------------\r
+create or replace function public.validate_recipe(p_recipe_id uuid)\r
+returns text language plpgsql volatile security definer set search_path = '' as $$\r
+declare\r
+  v public.recipes;\r
+  v_lines int;\r
+  v_missing text;\r
+begin\r
+  select * into v from public.recipes where id = p_recipe_id for update;\r
+  if v.id is null or not (v.organization_id = any (platform.current_org_ids())) then\r
+    raise exception 'Fiche introuvable.' using errcode = 'P0002';\r
+  end if;\r
+  if not platform.has_permission(v.organization_id, 'recipe.validate') then\r
+    raise exception 'Seule la Production valide une fiche technique.' using errcode = '42501';\r
+  end if;\r
+  if v.status <> 'draft' then\r
+    raise exception 'Cette fiche n''est pas un brouillon.' using errcode = '22023';\r
+  end if;\r
+  select count(*) into v_lines from public.recipe_lines where recipe_id = p_recipe_id;\r
+  if v_lines = 0 then\r
+    raise exception 'Une fiche sans ingr\xE9dient ne se valide pas.' using errcode = '22023';\r
+  end if;\r
+  select string_agg(p.name, ', ' order by p.name) into v_missing\r
+    from public.recipe_lines l join public.products p on p.id = l.product_id\r
+   where l.recipe_id = p_recipe_id\r
+     and gescatering_internal.try_convert_to_stock_unit(l.product_id, l.unit_id, l.quantity) is null;\r
+  if v_missing is not null then\r
+    raise exception 'Conversion manquante pour : %. Le Stock doit renseigner le contenu du conditionnement.', v_missing\r
+      using errcode = '22023';\r
+  end if;\r
+  update public.recipes\r
+     set status = 'validated', validated_by = auth.uid(), validated_at = now(), reopen_reason = null\r
+   where id = p_recipe_id;\r
+  return 'validated';\r
+end $$;\r
+\r
+create or replace function public.reopen_recipe(p_recipe_id uuid, p_reason text)\r
+returns text language plpgsql volatile security definer set search_path = '' as $$\r
+declare v public.recipes;\r
+begin\r
+  select * into v from public.recipes where id = p_recipe_id for update;\r
+  if v.id is null or not (v.organization_id = any (platform.current_org_ids())) then\r
+    raise exception 'Fiche introuvable.' using errcode = 'P0002';\r
+  end if;\r
+  if not (platform.has_permission(v.organization_id, 'recipe.manage')\r
+          or platform.has_permission(v.organization_id, 'recipe.validate')) then\r
+    raise exception 'Droit insuffisant pour modifier une fiche technique.' using errcode = '42501';\r
+  end if;\r
+  if v.status <> 'validated' then\r
+    raise exception 'Seule une fiche valid\xE9e se remet en brouillon.' using errcode = '22023';\r
+  end if;\r
+  if nullif(trim(p_reason), '') is null then\r
+    raise exception 'Le motif est obligatoire.' using errcode = '22023';\r
+  end if;\r
+  update public.recipes\r
+     set status = 'draft', validated_by = null, validated_at = null, reopen_reason = trim(p_reason)\r
+   where id = p_recipe_id;\r
+  return 'draft';\r
+end $$;\r
+\r
+-- Copie d'une fiche (brouillon), pour d\xE9cliner un plat.\r
+create or replace function public.duplicate_recipe(p_recipe_id uuid)\r
+returns uuid language plpgsql volatile security definer set search_path = '' as $$\r
+declare v public.recipes; v_new uuid;\r
+begin\r
+  select * into v from public.recipes where id = p_recipe_id;\r
+  if v.id is null or not (v.organization_id = any (platform.current_org_ids())) then\r
+    raise exception 'Fiche introuvable.' using errcode = 'P0002';\r
+  end if;\r
+  if not platform.has_permission(v.organization_id, 'recipe.manage') then\r
+    raise exception 'Droit insuffisant pour cr\xE9er une fiche technique.' using errcode = '42501';\r
+  end if;\r
+  insert into public.recipes (organization_id, name, category, portions, sale_price, target_food_cost_pct,\r
+                              steps, notes, created_by)\r
+  values (v.organization_id, v.name || ' (copie)', v.category, v.portions, v.sale_price,\r
+          v.target_food_cost_pct, v.steps, v.notes, auth.uid())\r
+  returning id into v_new;\r
+  insert into public.recipe_lines (organization_id, recipe_id, product_id, quantity, unit_id, position, note)\r
+  select organization_id, v_new, product_id, quantity, unit_id, position, note\r
+    from public.recipe_lines where recipe_id = p_recipe_id;\r
+  return v_new;\r
+end $$;\r
+\r
+revoke all on function public.validate_recipe(uuid), public.reopen_recipe(uuid, text),\r
+  public.duplicate_recipe(uuid) from public, anon;\r
+grant execute on function public.validate_recipe(uuid), public.reopen_recipe(uuid, text),\r
+  public.duplicate_recipe(uuid) to authenticated;\r
+revoke all on function gescatering_internal.assign_recipe_reference() from public, anon, authenticated;\r
+`}],ge=[{reference:"CDT-001",name:"Crevette sechee",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 2"},{reference:"CDT-002",name:"Guedj beurre",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 3"},{reference:"CDT-003",name:"Guedj kong",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 4"},{reference:"CDT-004",name:"Keithia",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 5"},{reference:"CDT-005",name:"Kong fume",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 6"},{reference:"CDT-006",name:"Pagne",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 7"},{reference:"CDT-007",name:"Yet",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 8"},{reference:"CDT-008",name:"Yet bou sew",category:"Condiments",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 9"},{reference:"CSM-003",name:"Carton pizza",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 12"},{reference:"CSM-004",name:"Charbon",category:"Consommables",category_kind:"consumable",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 13"},{reference:"CSM-005",name:"Gant",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 14"},{reference:"CSM-006",name:"Gobelet cafe",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 15"},{reference:"CSM-008",name:"Moule gratin",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 17"},{reference:"CSM-009",name:"Papier alu gm",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 18"},{reference:"CSM-010",name:"Papier film",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"paquet",package_factor:"",source:"Revue ligne 19"},{reference:"CSM-011",name:"Papier sandwich",category:"Consommables",category_kind:"consumable",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 20"},{reference:"CSM-012",name:"Pick brochette deco",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 21"},{reference:"CSM-013",name:"Pick brochette gm",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 22"},{reference:"CSM-014",name:"Pot pizza gobelets",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 23"},{reference:"CSM-015",name:"Sachet croissant",category:"Consommables",category_kind:"consumable",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 24"},{reference:"CSM-016",name:"Sachet emporte",category:"Consommables",category_kind:"consumable",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 25"},{reference:"CSM-017",name:"Sachet jaune de 100f",category:"Consommables",category_kind:"consumable",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 26"},{reference:"CSM-018",name:"Serviette de table",category:"Consommables",category_kind:"consumable",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 27"},{reference:"ENT-001",name:"Ballaie",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 51"},{reference:"ENT-002",name:"Creme a recurer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 52"},{reference:"ENT-003",name:"Eau de javel",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 53"},{reference:"ENT-004",name:"Eponge en fer",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 54"},{reference:"ENT-005",name:"Lave vitre",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 55"},{reference:"ENT-006",name:"Madar gm",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 56"},{reference:"ENT-007",name:"Raclette",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 57"},{reference:"ENT-008",name:"Serpillere",category:"Produits d'entretien",category_kind:"maintenance",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 58"},{reference:"FRO-001",name:"Capitaine",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 59"},{reference:"FRO-002",name:"Poisson dorade",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 60"},{reference:"FRO-003",name:"Poisson gm",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 61"},{reference:"FRO-004",name:"Poisson lotte",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 62"},{reference:"FRO-005",name:"Poulet blanc",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 63"},{reference:"FRO-006",name:"Poulets",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 64"},{reference:"FRO-007",name:"Viande hachee",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 65"},{reference:"FRO-009",name:"Viande locale",category:"Froid - viandes et poissons",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 67"},{reference:"LEG-001",name:"Bissap kouthia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 68"},{reference:"LEG-002",name:"Brocolis",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 69"},{reference:"LEG-003",name:"Carotte",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 70"},{reference:"LEG-004",name:"Chou",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 71"},{reference:"LEG-005",name:"Citron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 72"},{reference:"LEG-006",name:"Concombre",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 73"},{reference:"LEG-007",name:"Courgette",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 74"},{reference:"LEG-008",name:"Gombon",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 75"},{reference:"LEG-009",name:"Haricot vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 76"},{reference:"LEG-010",name:"Manioc",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 77"},{reference:"LEG-011",name:"Oignon vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 78"},{reference:"LEG-012",name:"Patate",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 79"},{reference:"LEG-013",name:"Peril ordinnaire",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 80"},{reference:"LEG-014",name:"Persil chinois",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"tas",purchase_unit:"",package_factor:"",source:"Revue ligne 81"},{reference:"LEG-015",name:"Petit bpois surgele",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 82"},{reference:"LEG-016",name:"Piment gouana sofia",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 83"},{reference:"LEG-018",name:"Poivron vert",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 85"},{reference:"LEG-019",name:"Salade",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"bassine",purchase_unit:"",package_factor:"",source:"Revue ligne 86"},{reference:"LEG-020",name:"Tomate fraiche",category:"Fruits et l\xE9gumes",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 87"},{reference:"SEC-003",name:"Ail",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 90"},{reference:"SEC-004",name:"Amora",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 91"},{reference:"SEC-005",name:"Ataya",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 92"},{reference:"SEC-006",name:"Athieke",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 93"},{reference:"SEC-009",name:"Bouye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 96"},{reference:"SEC-011",name:"Calamar",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 98"},{reference:"SEC-012",name:"Canette pressesa",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 99"},{reference:"SEC-013",name:"Carry",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 100"},{reference:"SEC-014",name:"Champignon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 101"},{reference:"SEC-015",name:"Citron liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 102"},{reference:"SEC-017",name:"Creme liquide",category:"Produits secs",category_kind:"food",stock_unit:"l",purchase_unit:"",package_factor:"",source:"Revue ligne 104"},{reference:"SEC-018",name:"Crevette n\xB01",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 105"},{reference:"SEC-019",name:"Crevette n\xB02",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 106"},{reference:"SEC-021",name:"Curcuman",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 108"},{reference:"SEC-023",name:"Epice curry",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 110"},{reference:"SEC-024",name:"Epice paprika",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 111"},{reference:"SEC-025",name:"Epice thyn",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 112"},{reference:"SEC-026",name:"Essence menthe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 113"},{reference:"SEC-027",name:"Essence vanille",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 114"},{reference:"SEC-028",name:"Farine patissier",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 115"},{reference:"SEC-029",name:"Fleur d'orange",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 116"},{reference:"SEC-030",name:"Foster mangue",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 117"},{reference:"SEC-031",name:"Foster vimto",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 118"},{reference:"SEC-035",name:"Herbe de province",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 122"},{reference:"SEC-039",name:"Jambon",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 126"},{reference:"SEC-040",name:"Ketchup",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 127"},{reference:"SEC-041",name:"Lait en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"sac",package_factor:"",source:"Revue ligne 128"},{reference:"SEC-042",name:"Laurier",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 129"},{reference:"SEC-043",name:"Lentille",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 130"},{reference:"SEC-045",name:"Maicedoine",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 132"},{reference:"SEC-046",name:"Mayonnaise",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 133"},{reference:"SEC-047",name:"Moutarde",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 134"},{reference:"SEC-048",name:"Netetou en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 135"},{reference:"SEC-049",name:"Niebe",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 136"},{reference:"SEC-050",name:"Noflaye",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 137"},{reference:"SEC-051",name:"\u0152uf",category:"Produits secs",category_kind:"food",stock_unit:"tablette",purchase_unit:"",package_factor:"",source:"Revue ligne 138"},{reference:"SEC-052",name:"Oignon blanc",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 139"},{reference:"SEC-053",name:"Oignon locale",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 140"},{reference:"SEC-054",name:"Olive",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 141"},{reference:"SEC-055",name:"Olive noire gm",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 142"},{reference:"SEC-056",name:"Oro",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 143"},{reference:"SEC-057",name:"Pain arabe",category:"Produits secs",category_kind:"food",stock_unit:"paquet",purchase_unit:"",package_factor:"",source:"Revue ligne 144"},{reference:"SEC-058",name:"Pate d'arachide",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 145"},{reference:"SEC-059",name:"Petit pois",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 146"},{reference:"SEC-060",name:"Piment en poudre",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 147"},{reference:"SEC-061",name:"Poisson frire",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 148"},{reference:"SEC-063",name:"Pomme de terre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 150"},{reference:"SEC-065",name:"Riz parfume pithibi",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 152"},{reference:"SEC-066",name:"Sauce algerienne",category:"Produits secs",category_kind:"food",stock_unit:"seau",purchase_unit:"",package_factor:"",source:"Revue ligne 153"},{reference:"SEC-067",name:"Sauce chili",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 154"},{reference:"SEC-068",name:"Saucisson",category:"Produits secs",category_kind:"food",stock_unit:"barre",purchase_unit:"",package_factor:"",source:"Revue ligne 155"},{reference:"SEC-069",name:"Sel grain",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 156"},{reference:"SEC-070",name:"Soja",category:"Produits secs",category_kind:"food",stock_unit:"bouteille",purchase_unit:"",package_factor:"",source:"Revue ligne 157"},{reference:"SEC-071",name:"Spaguetty",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 158"},{reference:"SEC-072",name:"Sucre en morceaux",category:"Produits secs",category_kind:"food",stock_unit:"piece",purchase_unit:"",package_factor:"",source:"Revue ligne 159"},{reference:"SEC-073",name:"Sucre en poudre",category:"Produits secs",category_kind:"food",stock_unit:"sac",purchase_unit:"",package_factor:"",source:"Revue ligne 160"},{reference:"SEC-074",name:"Sunquick",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 161"},{reference:"SEC-075",name:"Tacos",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 162"},{reference:"SEC-076",name:"Tamarin",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 163"},{reference:"SEC-077",name:"Tandori",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 164"},{reference:"SEC-078",name:"Thon",category:"Produits secs",category_kind:"food",stock_unit:"pot",purchase_unit:"",package_factor:"",source:"Revue ligne 165"},{reference:"SEC-079",name:"Tomate concentree",category:"Produits secs",category_kind:"food",stock_unit:"pack",purchase_unit:"",package_factor:"",source:"Revue ligne 166"},{reference:"SEC-080",name:"Vermicelle",category:"Produits secs",category_kind:"food",stock_unit:"kg",purchase_unit:"",package_factor:"",source:"Revue ligne 167"},{reference:"SEC-081",name:"Vinaigre",category:"Produits secs",category_kind:"food",stock_unit:"carton",purchase_unit:"",package_factor:"",source:"Revue ligne 168"}];var fe,X=(async()=>{let r=performance.now(),l=new Pe({extensions:{pgcrypto:Ie}});await re(l,me),ie(l);let u=await le(l,{rows:ge});fe=_e(l),console.info(`[GesCatering] d\xE9monstration pr\xEAte en ${Math.round(performance.now()-r)} ms`,`\u2014 ${u.products} produits, ${u.stocked} en stock`)})();X.catch(r=>console.error("[GesCatering] la d\xE9monstration n'a pas pu d\xE9marrer",r));window.gcDemo={ready:X,async call(r,l,u,h){await X;let R=await fe({method:r,path:l,body:u?JSON.parse(u):{},user:h||void 0});return JSON.stringify(R)}};

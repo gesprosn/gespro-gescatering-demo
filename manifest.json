@@ -1,11 +1,11 @@
 {
-    "name": "gescatering_app",
-    "short_name": "gescatering_app",
+    "name": "SESA CATERING",
+    "short_name": "SESA",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "GesCatering — application terrain",
+    "background_color": "#FFFFFF",
+    "theme_color": "#1B4F89",
+    "description": "SESA CATERING — gestion des opérations",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
